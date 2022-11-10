@@ -1,0 +1,8 @@
+*.o
+*.dll
+*.exe
+
+build
+.xmake
+.vscode
+.DS_Store
