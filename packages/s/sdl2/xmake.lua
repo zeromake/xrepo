@@ -52,9 +52,6 @@ package("sdl2")
     on_install("windows", "macosx", function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
-        if package:config("shared") then
-            configs.kind = "shared"
-        end
         import("package.tools.xmake").install(package, configs)
     end)
     on_test(function (package)

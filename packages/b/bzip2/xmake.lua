@@ -7,7 +7,7 @@ package("bzip2")
     add_versions("1.0.8", "ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269")
 
     add_includedirs("include")
-    on_install("windows", "macosx", "linux", function (package)
+    on_install("windows", "mingw", "macosx", "linux", function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("bzip2")
@@ -26,9 +26,6 @@ package("bzip2")
                 end
         ]])
         local configs = {}
-        if package:config("shared") then
-            configs.kind = "shared"
-        end
         import("package.tools.xmake").install(package, configs)
     end)
 

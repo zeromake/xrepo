@@ -3,7 +3,7 @@ add_rules("mode.debug", "mode.release")
 
 local zlibPath = os.scriptdir()
 
-target("z")
+target("zlib")
     set_kind("$(kind)")
     for _, f in ipairs({
         "adler32.c",

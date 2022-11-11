@@ -7,13 +7,13 @@ package("jpeg")
     add_versions("9e", "4077d6a6a75aeb01884f708919d25934c93305e49f7e3f36db9129320e6f4f3d")
 
     add_includedirs("include")
-    on_install("windows", "macosx", "linux", function (package)
+    on_install("windows", "mingw", "macosx", "linux", function (package)
         io.writefile("xmake.lua", [[
             includes("check_cincludes.lua")
             add_rules("mode.debug", "mode.release")
             target("jpeg")
                 set_kind("$(kind)")
-                if is_plat("windows") then
+                if is_plat("windows", "mingw") then
                     add_configfiles("jconfig.vc", {filename = "jconfig.h"})
                 else
                     add_configfiles("jconfig.txt", {filename = "jconfig.h"})
@@ -78,9 +78,6 @@ package("jpeg")
                 end
         ]])
         local configs = {}
-        if package:config("shared") then
-            configs.kind = "shared"
-        end
         import("package.tools.xmake").install(package, configs)
     end)
 

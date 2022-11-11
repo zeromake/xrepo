@@ -7,7 +7,7 @@ package("webp")
     add_versions("1.2.4", "dfe7bff3390cd4958da11e760b65318f0a48c32913e4d5bc5e8d55abaaa2d32e")
 
     add_includedirs("include")
-    on_install("windows", "macosx", "linux", function (package)
+    on_install("windows", "mingw", "macosx", "linux", function (package)
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
 
@@ -27,9 +27,6 @@ target("webp")
         add_files(path.join(f, "*.c"))
     end]])
         local configs = {}
-        if package:config("shared") then
-            configs.kind = "shared"
-        end
         import("package.tools.xmake").install(package, configs)
     end)
 
