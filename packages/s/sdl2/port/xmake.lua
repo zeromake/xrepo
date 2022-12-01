@@ -42,7 +42,7 @@ local sdlSrc = {
 }
 
 
-if is_plat("macos") then
+if is_plat("macosx") then
     table.join2(sdlSrc, {
         "src/power/macosx/*.c",
         "src/video/cocoa/*.m",

@@ -49,7 +49,7 @@ package("sdl2")
             package:add("frameworks", "CoreHaptics", "GameController")
         end
     end)
-    on_install("windows", "macosx", function (package)
+    on_install("windows", "mingw", "macosx", "linux", function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
         import("package.tools.xmake").install(package, configs)

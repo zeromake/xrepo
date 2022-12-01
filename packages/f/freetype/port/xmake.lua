@@ -59,19 +59,19 @@ elseif is_plat("macosx") then
 end
 
 local options = {
+    "zlib",
     "bzip2",
     "brotli",
-    "woff2",
     "png",
     "harfbuzz"
 }
 
 for _, op in ipairs(options) do
-    option("use-"..op)
+    option(op)
         set_default(false)
         set_showmenu(true)
     option_end()
-    if has_config("use-"..op) then 
+    if has_config(op) then 
         add_requires(op)
     end
 end
@@ -92,13 +92,14 @@ target("freetype")
     add_defines(
         "FT2_BUILD_LIBRARY"
     )
-    add_packages("zlib")
     for _, op in ipairs(options) do
-        if has_config("use-"..op) then
+        if has_config(op) then
             add_packages(op)
-            add_defines(
-                "FT_CONFIG_OPTION_USE_"..string.upper(op)
-            )
+            if op ~= "zlib" then
+                add_defines(
+                    "FT_CONFIG_OPTION_USE_"..string.upper(op)
+                )
+            end
         end
     end
     if is_kind("shared") then

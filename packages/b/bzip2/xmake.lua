@@ -9,22 +9,21 @@ package("bzip2")
     add_includedirs("include")
     on_install("windows", "mingw", "macosx", "linux", function (package)
         io.writefile("xmake.lua", [[
-            add_rules("mode.debug", "mode.release")
-            target("bzip2")
-                set_kind("$(kind)")
-                add_headerfiles("bzlib.h")
-                for _, f in ipairs({
-                    "blocksort.c",
-                    "huffman.c",
-                    "crctable.c",
-                    "randtable.c",
-                    "compress.c",
-                    "decompress.c",
-                    "bzlib.c",
-                }) do
-                    add_files(f)
-                end
-        ]])
+add_rules("mode.debug", "mode.release")
+target("bzip2")
+    set_kind("$(kind)")
+    add_headerfiles("bzlib.h")
+    for _, f in ipairs({
+        "blocksort.c",
+        "huffman.c",
+        "crctable.c",
+        "randtable.c",
+        "compress.c",
+        "decompress.c",
+        "bzlib.c",
+    }) do
+        add_files(f)
+    end]])
         local configs = {}
         import("package.tools.xmake").install(package, configs)
     end)

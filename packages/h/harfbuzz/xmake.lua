@@ -18,12 +18,14 @@ package("harfbuzz")
     on_install("windows", "mingw", "macosx", "linux", function (package)
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
-option("use-freetype")
+
+set_languages("c++14")
+option("freetype")
     set_default(false)
     set_showmenu(true)
 option_end()
 
-if has_config("use-freetype") then 
+if has_config("freetype") then 
     add_requires("freetype")
 end
 
@@ -37,7 +39,7 @@ target("harfbuzz")
     if is_plat("windows", "mingw") then
         add_defines("HAVE_DIRECTWRITE=1")
     end
-    if has_config("use-freetype") then 
+    if has_config("freetype") then 
         add_packages("freetype")
         add_defines("HAVE_FREETYPE")
     end
@@ -54,10 +56,12 @@ target("harfbuzz")
         if package:config("freetype") then
             v = "y"
         end
-        table.insert(configs, "--use-freetype="..v)
+        table.insert(configs, "--freetype="..v)
         import("package.tools.xmake").install(package, configs)
     end)
 
     on_test(function (package)
-        assert(package:has_cfuncs("hb_buffer_add_utf8", {includes = "hb.h"}))
+        if not package:config("freetype") then
+            assert(package:has_cfuncs("hb_buffer_add_utf8", {includes = "hb.h"}))
+        end
     end)
