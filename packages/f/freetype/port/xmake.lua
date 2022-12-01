@@ -99,6 +99,8 @@ target("freetype")
                 add_defines(
                     "FT_CONFIG_OPTION_USE_"..string.upper(op)
                 )
+            else
+                add_defines("FT_CONFIG_OPTION_USE_ZLIB", "FT_CONFIG_OPTION_SYSTEM_ZLIB")
             end
         end
     end
