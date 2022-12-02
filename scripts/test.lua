@@ -14,6 +14,8 @@ local options =
 ,   {'a', "arch",       "kv", nil, "Set the given architecture."                }
 ,   {'m', "mode",       "kv", nil, "Set the given mode."                        }
 ,   {'j', "jobs",       "kv", nil, "Set the build jobs."                        }
+,   {'f', "configs",    "kv", nil, "Set the configs."                           }
+,   {'d', "debugdir",   "kv", nil, "Set the debug source directory."            }
 ,   {nil, "linkjobs",   "kv", nil, "Set the link jobs."                         }
 ,   {nil, "cflags",     "kv", nil, "Set the cflags."                            }
 ,   {nil, "cxxflags",   "kv", nil, "Set the cxxflags."                          }
@@ -93,7 +95,12 @@ function _require_packages(argv, packages)
     if argv.diagnosis then
         table.insert(require_argv, "-D")
     end
-    if argv.shallow then
+    local is_debug = false
+    if argv.debugdir then
+        is_debug = true
+        table.insert(require_argv, "--debugdir=" .. argv.debugdir)
+    end
+    if argv.shallow or is_debug then
         table.insert(require_argv, "--shallow")
     end
     if argv.jobs then
@@ -102,15 +109,27 @@ function _require_packages(argv, packages)
     if argv.linkjobs then
         table.insert(require_argv, "--linkjobs=" .. argv.linkjobs)
     end
-    if argv.mode == "debug" and argv.kind == "shared" then
-        table.insert(require_argv, "--extra={debug=true,configs={shared=true}}")
-    elseif argv.mode == "debug" then
-        table.insert(require_argv, "--extra={debug=true}")
-    elseif argv.kind == "shared" then
-        table.insert(require_argv, "--extra={configs={shared=true}}")
+    local extra = {system=false}
+    if argv.mode == "debug" then
+        extra.debug = true
     end
+    -- Some packages set shared=true as default, so we need to force set
+    -- shared=false to test static build.
+    extra.configs = extra.configs or {}
+    extra.configs.shared = argv.kind == "shared"
+    local configs = argv.configs
+    if configs then
+        extra.configs = extra.configs or {}
+        local extra_configs, errors = ("{" .. configs .. "}"):deserialize()
+        if extra_configs then
+            table.join2(extra.configs, extra_configs)
+        else
+            raise(errors)
+        end
+    end
+    local extra_str = string.serialize(extra, {indent = false, strip = true})
+    table.insert(require_argv, "--extra=" .. extra_str)
     table.join2(require_argv, packages)
-    print(require_argv)
     os.vexecv("xmake", require_argv)
 end
 
@@ -124,7 +143,7 @@ function _package_is_supported(argv, packagename)
             if package and packagename:split("%s+")[1] == package.name then
                 local arch = argv.arch
                 if not arch and plat ~= os.subhost() then
-                    arch = platform.archs(plat)[1]
+                    arch = table.wrap(platform.archs(plat))[1]
                 end
                 if not arch then
                     arch = os.subarch()
@@ -141,11 +160,25 @@ end
 
 -- the main entry
 function main(...)
+
     -- parse arguments
     local argv = option.parse({...}, options, "Test all the given or changed packages.")
 
     -- get packages
     local packages = argv.packages or {}
+    if #packages == 0 then
+        local files = os.iorun("git diff --name-only HEAD^")
+        for _, file in ipairs(files:split('\n'), string.trim) do
+            if file:find("packages", 1, true) and path.filename(file) == "xmake.lua" then
+                assert(file == file:lower(), "%s must be lower case!", file)
+                local package = path.filename(path.directory(file))
+                table.insert(packages, package)
+            end
+        end
+    end
+    if #packages == 0 then
+        table.insert(packages, "tbox dev")
+    end
 
     -- remove unsupported packages
     for idx, package in irpairs(packages) do
@@ -174,4 +207,7 @@ function main(...)
 
     -- require packages
     _require_packages(argv, packages)
+    --[[for _, package in ipairs(packages) do
+        _require_packages(argv, package)
+    end]]
 end

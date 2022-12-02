@@ -2,6 +2,8 @@
 import("core.package.package")
 import("core.platform.platform")
 
+local all_platform = {"windows", "linux", "macosx", "iphoneos", "android", "mingw", "msys", "bsd", "wasm", "cross"}
+
 -- is supported platform and architecture?
 function is_supported(instance, plat, arch, opt)
 
@@ -62,7 +64,7 @@ function main(opt)
             instance._BASE = package.load_from_repository(basename, nil, basedir, basefile)
         end
         if instance then
-            for _, plat in ipairs({"windows", "linux", "macosx", "iphoneos", "android", "mingw", "msys", "bsd", "wasm", "cross"}) do
+            for _, plat in ipairs(all_platform) do
                 local archs = platform.archs(plat)
                 if archs then
                     local package_archs = {}
@@ -73,7 +75,12 @@ function main(opt)
                     end
                     if #package_archs > 0 then
                         packages[plat] = packages[plat] or {}
-                        table.insert(packages[plat], {name = instance:name(), instance = instance, archs = package_archs, generic = #package_archs == #archs})
+                        table.insert(packages[plat], {
+                            name = instance:name(),
+                            instance = instance,
+                            archs = package_archs,
+                            generic = #package_archs == #archs,
+                        })
                     end
                 end
             end
