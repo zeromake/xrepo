@@ -96,5 +96,5 @@ ${define FRIBIDI_SIZEOF_INT}
     end)
 
     on_test(function (package)
-        assert(package:has_cfuncs("fribidi_log2vis", {includes = {"fribidi.h"}}))
+        assert(package:has_cfuncs("fribidi_log2vis", {includes = {"fribidi/fribidi.h"}}))
     end)

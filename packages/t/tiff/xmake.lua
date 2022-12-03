@@ -1,6 +1,6 @@
 local options = {}
 
-package("ttif")
+package("tiff")
     set_homepage("https://libtiff.gitlab.io/libtiff")
     set_description("The LibTIFF software provides support for the Tag Image File Format (TIFF), a widely used format for storing image data.")
     set_license("MIT")

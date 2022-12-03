@@ -80,7 +80,7 @@ local sourceFiles = {
     "tif_zstd.c",
 }
 
-target("ttif")
+target("tiff")
     set_kind("$(kind)")
 
     add_headerfiles(

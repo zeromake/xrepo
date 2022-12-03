@@ -72,13 +72,13 @@ target("fribidi")
     set_kind("$(kind)")
     
     for _, f in ipairs(headers) do
-        add_headerfiles(path.join("lib", f))
+        add_headerfiles(path.join("lib", f), {prefixdir="fribidi"})
     end
     set_configdir("$(buildir)/config")
     add_includedirs(".", "lib", "$(buildir)/config")
     add_configfiles("config.h.in", "fribidi-config.h.in")
 
-    add_headerfiles("$(buildir)/config/fribidi-config.h")
+    add_headerfiles("$(buildir)/config/fribidi-config.h", {prefixdir="fribidi"})
 
     configvar_check_cincludes("HAVE_ASM_PAGE_H", "asm/page.h")
     configvar_check_cincludes("HAVE_DLFCN_H", "dlfcn.h")

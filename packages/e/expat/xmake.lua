@@ -32,7 +32,7 @@ package("expat")
         io.writefile("expat_config.h.in", [[
 ${define _HOST_BIGENDIAN}
 
-#if define _HOST_BIGENDIAN == 1
+#if _HOST_BIGENDIAN == 1
 #define BYTEORDER 4321
 #else
 #define BYTEORDER 1234
