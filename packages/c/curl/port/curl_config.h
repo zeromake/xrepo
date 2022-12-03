@@ -73,6 +73,7 @@
 
 #define SIZEOF_INT              4
 #define SIZEOF_SIZE_T           4
+#define SIZEOF_CURL_OFF_T 8
 
 #define HAVE_RECV 1
 #define RECV_TYPE_ARG1 int
