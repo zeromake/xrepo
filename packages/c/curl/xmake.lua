@@ -40,7 +40,7 @@ package("curl")
         if package:is_plat("windows", "mingw") then
             os.cp("lib/config-win32.h", "lib/curl_config.h")
         elseif package:is_plat("macosx") then
-            os.cp("lib/config-mac.h", "lib/curl_config.h")
+            os.cp(path.join(os.scriptdir(), "port", "curl_config.h"), "lib/curl_config.h")
         else
             io.writefile("curl_config.h.in", [[
 #ifndef HEADER_CURL_CONFIG_H
