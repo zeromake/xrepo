@@ -149,7 +149,7 @@ target("wolfssl")
         end
     elseif is_plat("macosx") then
         local files = {}
-        if isarm64 then
+        if is_arch("arm*") then
             table.join2(files, {
                 "wolfcrypt/src/port/arm/armv8-aes.c",
                 "wolfcrypt/src/port/arm/armv8-sha256.c",
