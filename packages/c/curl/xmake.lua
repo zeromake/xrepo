@@ -9,6 +9,7 @@ package("curl")
     end})
 
     add_versions("7.86.0", "f5ca69db03eea17fa8705bdfb1a9f58d76a46c9010518109bb38f313137e0a28")
+    add_versions("7.85.0", "21a7e83628ee96164ac2b36ff6bf99d467c7b0b621c1f7e317d8f0d96011539c")
 
     for _, op in ipairs(options) do
         add_configs(op, {description = "Support "..op, default = false, type = "boolean"})
@@ -16,6 +17,8 @@ package("curl")
 
     add_deps("wolfssl", "zlib")
     add_includedirs("include")
+
+    add_defines("BUILDING_LIBCURL")
 
     on_load(function (package)
         for _, op in ipairs(options) do
@@ -25,8 +28,6 @@ package("curl")
         end
         if package:config("shared") ~= true then
             package:add("defines", "CURL_STATICLIB")
-        else
-            package:add("defines", "BUILDING_LIBCURL")
         end
     end)
 
@@ -36,9 +37,17 @@ package("curl")
 
     on_install("windows", "mingw", "macosx", "linux", function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
-        io.writefile("curl_config.h.in", [[
+        if package:is_plat("windows", "mingw") then
+            os.cp("lib/config-win32.h", "lib/curl_config.h")
+        elseif package:is_plat("macosx") then
+            os.cp("lib/config-mac.h", "lib/curl_config.h")
+        else
+            io.writefile("curl_config.h.in", [[
 #ifndef HEADER_CURL_CONFIG_H
 #define HEADER_CURL_CONFIG_H
+
+${define OS}
+${define CURL_DISABLE_LDAP}
 
 ${define HAVE_ARPA_INET_H}
 ${define HAVE_ARPA_TFTP_H}
@@ -110,23 +119,29 @@ ${define HAVE_UTIME}
 ${define HAVE_UTIMES}
 ${define HAVE_SOCKET}
 ${define HAVE_SIGACTION}
-${define HAVE_SIGACTION}
 ${define HAVE_RAND_EGD}
+${define HAVE_IOCTLSOCKET}
+${define HAVE_IOCTLSOCKET_FIONBIO}
 
 ${define HAVE_STRUCT_TIMEVAL}
 ${define HAVE_FCNTL_O_NONBLOCK}
+${define HAVE_LONGLONG}
 
 ${define SIZEOF_INT}
 ${define SIZEOF_SIZE_T}
+${define SIZEOF_CURL_OFF_T}
 
 #define HAVE_RECV 1
+#define HAVE_SEND 1
+
+#ifndef _WIN32
+
 #define RECV_TYPE_ARG1 int
 #define RECV_TYPE_ARG2 void *
 #define RECV_TYPE_ARG3 size_t
 #define RECV_TYPE_ARG4 int
 #define RECV_TYPE_RETV ssize_t
 
-#define HAVE_SEND 1
 #define SEND_TYPE_ARG1 int
 #define SEND_QUAL_ARG2 const
 #define SEND_TYPE_ARG2 void *
@@ -134,8 +149,25 @@ ${define SIZEOF_SIZE_T}
 #define SEND_TYPE_ARG4 int
 #define SEND_TYPE_RETV ssize_t
 
+#else
+
+#ifndef _SSIZE_T_DEFINED
+#  if defined(__POCC__) || defined(__MINGW32__)
+#  elif defined(_WIN64)
+#    define _SSIZE_T_DEFINED
+#    define ssize_t __int64
+#  else
+#    define _SSIZE_T_DEFINED
+#    define ssize_t int
+#  endif
+#endif
+
+#endif
+
 #endif /* HEADER_CURL_CONFIG_H */
         ]])
+        end
+
         local configs = {}
         for _, op in ipairs(options) do
             local v = "n"
