@@ -113,7 +113,7 @@ target("curl")
     configvar_check_cfuncs("HAVE_SIGACTION", "sigaction", {includes={"signal.h"}})
     configvar_check_cfuncs("HAVE_RAND_EGD", "RAND_egd", {includes={"openssl/rand.h"}})
 
-    configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "timeval", {includes={"sys/time.h"}})
+    configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes={"sys/time.h"}})
     configvar_check_ctypes("HAVE_FCNTL_O_NONBLOCK", "O_NONBLOCK", {includes={"fcntl.h"}})
 
     configvar_check_sizeof("SIZEOF_INT", "int")
