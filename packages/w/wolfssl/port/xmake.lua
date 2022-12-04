@@ -143,17 +143,29 @@ target("wolfssl")
             "wolfcrypt/src/port/arm/armv8-sha512-asm_c.c",
         })
     elseif is_arch("x86_64") then
-        table.join2(
-            files,
-            {
-                "wolfcrypt/src/aes_asm.asm",
-                "wolfcrypt/src/sp_x86_64_asm.asm",
-            }
-        )
+        if is_plat("windows", "mingw") then
+            table.join2(
+                files,
+                {
+                    "wolfcrypt/src/aes_asm.asm",
+                    "wolfcrypt/src/sp_x86_64_asm.asm",
+                }
+            )
+        else
+            table.join2(
+                files,
+                {
+                    "wolfcrypt/src/aes_asm.S",
+                    "wolfcrypt/src/sp_x86_64_asm.S",
+                }
+            )
+        end
     end
+
     for _, f in ipairs(files) do
         add_files(f)
     end
+
     if is_plat("windows") then
         add_links("advapi32")
         add_files("wolfssl.rc")
