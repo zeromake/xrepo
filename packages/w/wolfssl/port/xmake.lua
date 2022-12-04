@@ -130,55 +130,31 @@ target("wolfssl")
         add_files(f)
     end
 
+    local files = {}
+    if is_arch("arm.*") then
+        table.join2(files, {
+            "wolfcrypt/src/port/arm/armv8-aes.c",
+            "wolfcrypt/src/port/arm/armv8-sha256.c",
+            "wolfcrypt/src/port/arm/armv8-poly1305.c",
+            "wolfcrypt/src/port/arm/armv8-chacha.c",
+            "wolfcrypt/src/port/arm/armv8-curve25519.S",
+            "wolfcrypt/src/sp_arm64.c",
+            "wolfcrypt/src/port/arm/armv8-sha512.c",
+            "wolfcrypt/src/port/arm/armv8-sha512-asm_c.c",
+        })
+    elseif is_arch("x86_64") then
+        table.join2(
+            files,
+            {
+                "wolfcrypt/src/aes_asm.asm",
+                "wolfcrypt/src/sp_x86_64_asm.asm",
+            }
+        )
+    end
+    for _, f in ipairs(files) do
+        add_files(f)
+    end
     if is_plat("windows") then
         add_links("advapi32")
-        local list = {
-            "wolfssl.rc",
-        }
-        if is_arch("x86_64") then
-            table.join2(
-                list,
-                {
-                    "wolfcrypt/src/aes_asm.asm",
-                    "wolfcrypt/src/sp_x86_64_asm.asm",
-                }
-            )
-        end
-        for _, f in ipairs(list) do
-            add_files(f)
-        end
-    elseif is_plat("macosx") then
-        local files = {}
-        if is_arch("arm*") then
-            table.join2(files, {
-                "wolfcrypt/src/port/arm/armv8-aes.c",
-                "wolfcrypt/src/port/arm/armv8-sha256.c",
-                "wolfcrypt/src/port/arm/armv8-poly1305.c",
-                "wolfcrypt/src/port/arm/armv8-chacha.c",
-                "wolfcrypt/src/port/arm/armv8-curve25519.S",
-                "wolfcrypt/src/sp_arm64.c",
-                "wolfcrypt/src/port/arm/armv8-sha512.c",
-                "wolfcrypt/src/port/arm/armv8-sha512-asm_c.c",
-            })
-        else
-            table.join2(
-                files,
-                {
-                    "wolfcrypt/src/aes_asm.S",
-                    "wolfcrypt/src/sp_x86_64_asm.S",
-                }
-            )
-        end
-        for _, f in ipairs(files) do
-            add_files(f)
-        end
-    else
-        if is_arch("x86_64") then
-            for _, f in ipairs({
-                "wolfcrypt/src/aes_asm.S",
-                "wolfcrypt/src/sp_x86_64_asm.S",
-            }) do
-                add_files(f)
-            end
-        end
+        add_files("wolfssl.rc")
     end
