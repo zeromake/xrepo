@@ -36,7 +36,7 @@ package("wolfssl")
         end
     end)
 
-    on_install("windows", "mingw", "macosx", "linux", function (package)
+    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         os.cp("wolfssl/options.h.in", "wolfssl/options.h")
         local configs = {}

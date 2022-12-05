@@ -69,7 +69,7 @@ target("sdl2_mixer")
         add_defines("MUSIC_MID_FLUIDSYNTH=1")
     elseif has_config("timidity") then
         add_defines("MUSIC_MID_TIMIDITY=1")
-    else
+    elseif is_plat("windows", "mingw", "macosx") then
         add_defines("MUSIC_MID_NATIVE=1")
     end
 

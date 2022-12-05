@@ -56,6 +56,11 @@ elseif is_plat("macosx") then
         "src/base/ftdebug.c",
         "builds/unix/ftsystem.c",
     })
+elseif is_plat("android") then
+    table.join2(freetypeFiles, {
+        "src/base/ftdebug.c",
+        "builds/unix/ftsystem.c",
+    })
 end
 
 local options = {

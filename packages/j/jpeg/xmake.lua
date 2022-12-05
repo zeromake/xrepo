@@ -7,7 +7,7 @@ package("jpeg")
     add_versions("9e", "4077d6a6a75aeb01884f708919d25934c93305e49f7e3f36db9129320e6f4f3d")
 
     add_includedirs("include")
-    on_install("windows", "mingw", "macosx", "linux", function (package)
+    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
         io.writefile("xmake.lua", [[
             includes("check_cincludes.lua")
             add_rules("mode.debug", "mode.release")

@@ -27,7 +27,7 @@ package("expat")
         end
     end)
 
-    on_install("windows", "mingw", "macosx", "linux", function (package)
+    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         io.writefile("expat_config.h.in", [[
 ${define _HOST_BIGENDIAN}

@@ -43,17 +43,25 @@ package("sdl2")
         )
     end
     add_includedirs("include")
+    if is_plat("android") then
+        add_deps("ndk-cpufeatures")
+        add_syslinks("GLESv1_CM", "GLESv2", "OpenSLES", "log", "android")
+    end
 
     on_load(function (package)
         if package:is_plat("macosx") and package:version():ge("2.0.14") then
             package:add("frameworks", "CoreHaptics", "GameController")
         end
     end)
-    on_install("windows", "mingw", "macosx", "linux", function (package)
+
+    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
         import("package.tools.xmake").install(package, configs)
     end)
+
     on_test(function (package)
-        assert(package:has_cfuncs("SDL_Init", {includes = "SDL.h", configs = {defines = "SDL_MAIN_HANDLED"}}))
+        if not package:is_plat("android") then
+            assert(package:has_cfuncs("SDL_Init", {includes = "SDL.h", configs = {defines = "SDL_MAIN_HANDLED"}}))
+        end
     end)

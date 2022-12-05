@@ -35,7 +35,7 @@ package("curl")
         add_syslinks("ws2_32", "wldap32", "crypt32", "bcrypt")
     end
 
-    on_install("windows", "mingw", "macosx", "linux", function (package)
+    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         if package:is_plat("windows", "mingw") then
             os.cp("lib/config-win32.h", "lib/curl_config.h")

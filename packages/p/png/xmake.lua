@@ -11,7 +11,7 @@ package("png")
         add_syslinks("m")
     end
 
-    on_install("windows", "mingw", "macosx", "linux", function (package) 
+    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package) 
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
 add_requires("zlib")

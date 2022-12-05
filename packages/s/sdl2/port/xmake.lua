@@ -78,8 +78,27 @@ elseif is_plat("windows", "mingw") then
         "src/power/windows/*.c",
         "src/sensor/windows/*.c",
         "src/locale/windows/*.c",
-        "src/power/windows/*.c",
     })
+elseif is_plat("android") then
+    table.join2(sdlSrc, {
+        "src/video/android/*.c",
+        "src/misc/android/*.c",
+        "src/audio/aaudio/*.c",
+        "src/audio/openslES/*.c",
+        "src/audio/android/*.c",
+        "src/filesystem/android/*.c",
+        "src/thread/pthread/*.c",
+        "src/core/android/*.c",
+        "src/timer/unix/*.c",
+        "src/loadso/dlopen/*.c",
+        "src/haptic/android/*.c",
+        "src/hidapi/android/*.cpp",
+        "src/joystick/android/*.c",
+        "src/power/android/*.c",
+        "src/sensor/android/*.c",
+        "src/locale/android/*.c",
+    })
+    add_requires("ndk-cpufeatures")
 end
 
 target("sdl2")
@@ -127,5 +146,9 @@ target("sdl2")
             "imm32",
             "oleaut32"
         )
+    elseif is_plat("android") then
+        add_packages("ndk-cpufeatures")
+        add_defines("GL_GLEXT_PROTOTYPES")
+        add_syslinks("GLESv1_CM", "GLESv2", "OpenSLES", "log", "android")
     end
     add_headerfiles(path.join("include", "*.h"))

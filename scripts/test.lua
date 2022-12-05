@@ -22,6 +22,7 @@ local options =
 ,   {nil, "ldflags",    "kv", nil, "Set the ldflags."                           }
 ,   {nil, "ndk",        "kv", nil, "Set the Android NDK directory."             }
 ,   {nil, "ndk_sdkver", "kv", nil, "Set the Android NDK platform sdk version."  }
+,   {nil, "android_sdk", "kv", nil, "Set the Android SDK directory."            }
 ,   {nil, "sdk",        "kv", nil, "Set the SDK directory of cross toolchain."  }
 ,   {nil, "vs",         "kv", nil, "Set the VS Compiler version."               }
 ,   {nil, "vs_sdkver",  "kv", nil, "Set the Windows SDK version."               }
@@ -54,11 +55,14 @@ function _require_packages(argv, packages)
     if argv.ndk then
         table.insert(config_argv, "--ndk=" .. argv.ndk)
     end
-    if argv.sdk then
-        table.insert(config_argv, "--sdk=" .. argv.sdk)
-    end
     if argv.ndk_sdkver then
         table.insert(config_argv, "--ndk_sdkver=" .. argv.ndk_sdkver)
+    end
+    if argv.android_sdk then
+        table.insert(config_argv, "--android_sdk=" .. argv.android_sdk)
+    end
+    if argv.sdk then
+        table.insert(config_argv, "--sdk=" .. argv.sdk)
     end
     if argv.vs then
         table.insert(config_argv, "--vs=" .. argv.vs)

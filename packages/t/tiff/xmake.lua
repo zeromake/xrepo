@@ -22,7 +22,7 @@ package("tiff")
         end
     end)
     add_deps("zlib", "jpeg")
-    on_install("windows", "mingw", "macosx", "linux", function (package)
+    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         io.writefile("tiffconf.h.in", [[
 #ifndef _TIFFCONF_
