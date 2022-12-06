@@ -12,7 +12,7 @@ package("fribidi")
         add_configs(op, {description = "Support "..op, default = false, type = "boolean"})
     end
 
-    add_includedirs("include")
+    add_includedirs("include", "include/fribidi")
 
     on_load(function (package)
         for _, op in ipairs(options) do
