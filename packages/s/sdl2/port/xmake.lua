@@ -5,6 +5,7 @@ local sdlSrc = {
     "src/*.c",
     "src/atomic/*.c",
     "src/audio/*.c",
+    "src/audio/dummy/*.c",
     "src/cpuinfo/*.c",
     "src/dynapi/*.c",
     "src/events/*.c",
@@ -16,15 +17,7 @@ local sdlSrc = {
     "src/misc/*.c",
     "src/power/*.c",
     "src/render/*.c",
-    "src/render/direct3d/*.c",
-    "src/render/direct3d11/*.c",
-    "src/render/direct3d12/*.c",
-    "src/render/opengl/*.c",
-    "src/render/opengles/*.c",
-    "src/render/opengles2/*.c",
-    "src/render/ps2/*.c",
-    "src/render/software/*.c",
-    "src/render/vitagxm/*.c",
+    "src/render/*/*.c",
     "src/sensor/*.c",
     "src/stdlib/*.c",
     "src/thread/*.c",
@@ -32,11 +25,8 @@ local sdlSrc = {
     "src/video/*.c",
     "src/video/yuv2rgb/*.c",
     "src/locale/*.c",
-    "src/video/dummy/*.c",
     "src/audio/disk/*.c",
-    "src/audio/dummy/*.c",
     "src/video/x11/*.c",
-    "src/sensor/dummy/*.c",
     "src/joystick/hidapi/*.c",
     "src/joystick/virtual/*.c",
 }
@@ -59,6 +49,8 @@ if is_plat("macosx") then
         "src/loadso/dlopen/*.c",
         "src/haptic/darwin/*.c",
         "src/joystick/darwin/*.c",
+        "src/sensor/dummy/*.c",
+        "src/video/dummy/*.c",
     })
 elseif is_plat("windows", "mingw") then
     table.join2(sdlSrc, {
@@ -78,6 +70,8 @@ elseif is_plat("windows", "mingw") then
         "src/power/windows/*.c",
         "src/sensor/windows/*.c",
         "src/locale/windows/*.c",
+        "src/sensor/dummy/*.c",
+        "src/video/dummy/*.c",
     })
 elseif is_plat("android") then
     table.join2(sdlSrc, {
@@ -148,7 +142,7 @@ target("sdl2")
         )
     elseif is_plat("android") then
         add_packages("ndk-cpufeatures")
-        add_defines("GL_GLEXT_PROTOTYPES")
+        add_defines("GL_GLEXT_PROTOTYPES", "ANDROID")
         add_syslinks("GLESv1_CM", "GLESv2", "OpenSLES", "log", "android")
     end
     add_headerfiles(path.join("include", "*.h"))

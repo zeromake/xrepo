@@ -4,6 +4,7 @@ package("sdl2")
     set_license("zlib")
     set_urls("https://github.com/libsdl-org/SDL/releases/download/release-$(version)/SDL2-$(version).tar.gz")
 
+    add_versions("2.26.1", "02537cc7ebd74071631038b237ec4bfbb3f4830ba019e569434da33f42373e04")
     add_versions("2.24.1", "bc121588b1105065598ce38078026a414c28ea95e66ed2adab4c44d80b309e1b")
 
     if is_plat("macosx") then
