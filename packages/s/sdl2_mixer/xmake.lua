@@ -29,6 +29,10 @@ package("sdl2_mixer")
     add_deps("sdl2")
     add_includedirs("include")
 
+    if is_plat("macosx") then
+        add_frameworks("AudioToolbox")
+    end
+
     on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
