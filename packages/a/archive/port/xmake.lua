@@ -12,7 +12,7 @@ local options = {
 
     -- decrypt lib
     -- "b2",
-    "cng",
+    -- "cng",
 
     -- compression lib
     "lz4",
@@ -180,12 +180,28 @@ function configvar_check_csymbol_exists(define_name, var_name, opt)
     configvar_check_csnippets(define_name, 'void* a = (void*)'..var_name..';', opt)
 end
 
+function configvar_check_csymbol_exists(define_name, var_name, opt) 
+    configvar_check_csnippets(define_name, 'void* a = (void*)'..var_name..';', opt)
+end
+
 function configvar_check_sizeof(define_name, type_name)
-    configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..')); return 0;', {output = true, number = true})
+    configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..'));return 0;', {output = true, number = true, includes={"stdint.h"}})
+    configvar_check_csnippets("HAVE_"..define_name, type_name..' a;', {includes={"stdint.h"}})
+end
+
+function configvar_check_has_member(define_name, type_name, member, opt)
+    local opts = table.join({}, opt)
+    configvar_check_csnippets(define_name, format("%s a;void b = a.%s", type_name, member)..'', opts)
 end
 
 target("archive")
     set_kind("$(kind)")
+
+    set_configdir("$(buildir)/config")
+    add_includedirs("$(buildir)/config")
+    add_configfiles("config.h.in")
+
+    add_includedirs(".")
     
     configvar_check_cincludes("HAVE_SYS_TYPES_H", "sys/types.h")
     configvar_check_cincludes("HAVE_ACL_LIBACL_H", "acl/libacl.h")
@@ -251,6 +267,9 @@ target("archive")
     configvar_check_cincludes("HAVE_WCHAR_H", "wchar.h")
     configvar_check_cincludes("HAVE_WCTYPE_H", "wctype.h")
     configvar_check_cincludes("HAVE_WINDOWS_H", "windows.h")
+    configvar_check_cincludes("HAVE_WINCRYPT_H", "wincrypt.h")
+    configvar_check_cincludes("HAVE_WINIOCTL_H", "winioctl.h")
+    configvar_check_cincludes("HAVE_DIRENT_H", "dirent.h")
 
     local stdintHeaders = {"stdint.h"}
 
@@ -270,10 +289,150 @@ target("archive")
     configvar_check_csymbol_exists("HAVE_DECL_SIZE_MAX", "SIZE_MAX", {includes=stdintHeaders})
     configvar_check_csymbol_exists("HAVE_DECL_SSIZE_MAX", "SSIZE_MAX", {includes={"limits.h"}})
 
+    configvar_check_csymbol_exists("HAVE_WORKING_EXT2_IOC_GETFLAGS", "EXT2_IOC_GETFLAGS", {includes={"sys/ioctl.h", "ext2fs/ext2_fs.h"}})
+    configvar_check_csymbol_exists("HAVE_WORKING_FS_IOC_GETFLAGS", "FS_IOC_GETFLAGS", {includes={"sys/ioctl.h", "linux/fs.h"}})
 
+    configvar_check_cfuncs("HAVE_ARC4RANDOM_BUF", "arc4random_buf", {includes={"stdlib.h"}})
+    configvar_check_cfuncs("HAVE_CHFLAGS", "chflags", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_CHOWN", "chown", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_CHROOT", "chroot", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_CTIME_R", "ctime_r", {includes={"time.h"}})
+    configvar_check_cfuncs("HAVE_FCHDIR", "fchdir", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_FCHFLAGS", "fchflags", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_FCHMOD", "fchmod", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_FCHOWN", "fchown", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_FCNTL", "fcntl", {includes={"fcntl.h"}})
+    configvar_check_cfuncs("HAVE_FDOPENDIR", "fdopendir", {includes={"dirent.h"}})
+    configvar_check_cfuncs("HAVE_FORK", "fork", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_FSTAT", "fstat", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_FSTATAT", "fstatat", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_FSTATFS", "fstatfs", {includes={"sys/statfs.h"}})
+    configvar_check_cfuncs("HAVE_FSTATVFS", "fstatvfs", {includes={"sys/statvfs.h"}})
+    configvar_check_cfuncs("HAVE_FTRUNCATE", "ftruncate", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_FUTIMENS", "futimens", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_FUTIMES", "futimes", {includes={"sys/time.h"}})
+    configvar_check_cfuncs("HAVE_FUTIMESAT", "futimesat", {includes={"fcntl.h", "sys/time.h"}})
+    configvar_check_cfuncs("HAVE_GETEUID", "geteuid", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_GETGRGID_R", "getgrgid_r", {includes={"grp.h"}})
+    configvar_check_cfuncs("HAVE_GETGRNAM_R", "getgrnam_r", {includes={"grp.h"}})
+    configvar_check_cfuncs("HAVE_GETPWNAM_R", "getpwnam_r", {includes={"pwd.h"}})
+    configvar_check_cfuncs("HAVE_GETPWUID_R", "getpwuid_r", {includes={"pwd.h"}})
+    configvar_check_cfuncs("HAVE_GETPID", "getpid", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_GETVFSBYNAME", "getvfsbyname", {includes={"sys/mount.h"}})
+    configvar_check_cfuncs("HAVE_GMTIME_R", "gmtime_r", {includes={"time.h"}})
+    configvar_check_cfuncs("HAVE_LCHFLAGS", "lchflags", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_LCHMOD", "lchmod", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_LCHOWN", "lchown", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_LINK", "link", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_LINKAT", "linkat", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_LOCALTIME_R", "localtime_r", {includes={"time.h"}})
+    configvar_check_cfuncs("HAVE_LSTAT", "lstat", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_LUTIMES", "lutimes", {includes={"sys/time.h"}})
+    configvar_check_cfuncs("HAVE_MBRTOWC", "mbrtowc", {includes={"wchar.h"}})
+    configvar_check_cfuncs("HAVE_MEMMOVE", "memmove", {includes={"string.h"}})
+    configvar_check_cfuncs("HAVE_MKDIR", "mkdir", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_MKFIFO", "mkfifo", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_MKNOD", "mknod", {includes={"sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_MKSTEMP", "mkstemp", {includes={"stdlib.h"}})
+    configvar_check_cfuncs("HAVE_NL_LANGINFO", "nl_langinfo", {includes={"langinfo.h"}})
+    configvar_check_cfuncs("HAVE_OPENAT", "openat", {includes={"fcntl.h"}})
+    configvar_check_cfuncs("HAVE_PIPE", "pipe", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_POLL", "poll", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_POSIX_SPAWNP", "posix_spawnp", {includes={"spawn.h"}})
+    configvar_check_cfuncs("HAVE_READLINK", "readlink", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_READPASSPHRASE", "readpassphrase", {includes={"readpassphrase.h"}})
+    configvar_check_cfuncs("HAVE_SELECT", "select", {includes={"sys/select.h"}})
+    configvar_check_cfuncs("HAVE_SETENV", "setenv", {includes={"stdlib.h"}})
+    configvar_check_cfuncs("HAVE_SETLOCALE", "setlocale", {includes={"locale.h"}})
+    configvar_check_cfuncs("HAVE_SIGACTION", "sigaction", {includes={"signal.h"}})
+    configvar_check_cfuncs("HAVE_STATFS", "statfs", {includes={"sys/statfs.h"}})
+    configvar_check_cfuncs("HAVE_STATVFS", "statvfs", {includes={"sys/statvfs.h"}})
+    configvar_check_cfuncs("HAVE_STRCHR", "strchr", {includes={"string.h"}})
+    configvar_check_cfuncs("HAVE_STRDUP", "strdup", {includes={"string.h"}})
+    configvar_check_cfuncs("HAVE_STRERROR", "strerror", {includes={"string.h"}})
+    configvar_check_cfuncs("HAVE_STRNCPY_S", "strncpy_s", {includes={"string.h"}})
+    configvar_check_cfuncs("HAVE_STRNLEN", "strnlen", {includes={"string.h"}})
+    configvar_check_cfuncs("HAVE_STRRCHR", "strrchr", {includes={"string.h"}})
+    configvar_check_cfuncs("HAVE_SYMLINK", "symlink", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_TIMEGM", "timegm", {includes={"time.h"}})
+    configvar_check_cfuncs("HAVE_TZSET", "tzset", {includes={"time.h"}})
+    configvar_check_cfuncs("HAVE_UNLINKAT", "unlinkat", {includes={"fcntl.h", "sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_UNSETENV", "unsetenv", {includes={"stdlib.h"}})
+    configvar_check_cfuncs("HAVE_UTIME", "utime", {includes={"utime.h"}})
+    configvar_check_cfuncs("HAVE_UTIMES", "utimes", {includes={"sys/time.h"}})
+    configvar_check_cfuncs("HAVE_UTIMENSAT", "utimensat", {includes={"fcntl.h", "sys/stat.h"}})
+    configvar_check_cfuncs("HAVE_VFORK", "vfork", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_WCRTOMB", "wcrtomb", {includes={"wchar.h"}})
+    configvar_check_cfuncs("HAVE_WCSCMP", "wcscmp", {includes={"wchar.h"}})
+    configvar_check_cfuncs("HAVE_WCSCPY", "wcscpy", {includes={"wchar.h"}})
+    configvar_check_cfuncs("HAVE_WCSLEN", "wcslen", {includes={"wchar.h"}})
+    configvar_check_cfuncs("HAVE_WCTOMB", "wctomb", {includes={"wchar.h"}})
+    configvar_check_cfuncs("HAVE__CTIME64_S", "_ctime64_s", {includes={"time.h"}})
+    configvar_check_cfuncs("HAVE__FSEEKI64", "_fseeki64", {includes={"stdio.h"}})
+    configvar_check_cfuncs("HAVE__GET_TIMEZONE", "_get_timezone", {includes={"time.h"}})
+    configvar_check_cfuncs("HAVE__GMTIME64_S", "_gmtime64_s", {includes={"time.h"}})
+    configvar_check_cfuncs("HAVE__LOCALTIME64_S", "_localtime64_s", {includes={"time.h"}})
+    configvar_check_cfuncs("HAVE__MKGMTIME64", "_mkgmtime64", {includes={"time.h"}})
 
+    configvar_check_cfuncs("HAVE_CYGWIN_CONV_PATH", "cygwin_conv_path", {includes={"sys/cygwin.h"}})
+    configvar_check_cfuncs("HAVE_FSEEKO", "fseeko" , {includes={"stdio.h"}})
+    configvar_check_cfuncs("HAVE_STRERROR_R", "strerror_r", {includes={"string.h"}})
+    configvar_check_cfuncs("HAVE_DECL_STRERROR_R", "strerror_r", {includes={"string.h"}})
+    configvar_check_cfuncs("HAVE_STRFTIME", "strftime", {includes={"time.h"}})
+    configvar_check_cfuncs("HAVE_VPRINTF", "vprintf", {includes={"stdio.h"}})
+    configvar_check_cfuncs("HAVE_WMEMCMP", "wmemcmp", {includes={"wchar.h"}})
+    configvar_check_cfuncs("HAVE_WMEMCPY", "wmemcpy", {includes={"wchar.h"}})
+    configvar_check_cfuncs("HAVE_WMEMMOVE", "wmemmove", {includes={"wchar.h"}})
+    configvar_check_cfuncs("HAVE_DIRFD", "dirfd", {includes={"dirent.h"}})
+    configvar_check_cfuncs("HAVE_READLINKAT", "readlinkat", {includes={"unistd.h"}})
+
+    configvar_check_has_member("HAVE_STRUCT_TM_TM_GMTOFF", "struct tm", "tm_gmtoff", {includes={"time.h"}})
+    configvar_check_has_member("HAVE_STRUCT_TM___TM_GMTOFF", "struct tm", "__tm_gmtoff", {includes={"time.h"}})
+    configvar_check_has_member("HAVE_STRUCT_STATFS_F_NAMEMAX", "struct statfs", "f_namemax", {includes={"sys/param.h","sys/mount.h"}})
+    configvar_check_has_member("HAVE_STRUCT_STATFS_F_IOSIZE", "struct statfs", "f_iosize", {includes={"sys/param.h","sys/mount.h"}})
+    configvar_check_has_member("HAVE_STRUCT_STAT_ST_BIRTHTIME", "struct stat", "st_birthtime", {includes={"sys/types.h","sys/stat.h"}})
+    configvar_check_has_member("HAVE_STRUCT_STAT_ST_BIRTHTIMESPEC_TV_NSEC", "struct stat", "st_birthtimespec.tv_nsec", {includes={"sys/types.h","sys/stat.h"}})
+    configvar_check_has_member("HAVE_STRUCT_STAT_ST_MTIMESPEC_TV_NSEC", "struct stat", "st_mtimespec.tv_nsec", {includes={"sys/types.h","sys/stat.h"}})
+    configvar_check_has_member("HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC", "struct stat", "st_mtim.tv_nsec", {includes={"sys/types.h","sys/stat.h"}})
+    configvar_check_has_member("HAVE_STRUCT_STAT_ST_MTIME_N", "struct stat", "st_mtime_n", {includes={"sys/types.h","sys/stat.h"}})
+    configvar_check_has_member("HAVE_STRUCT_STAT_ST_UMTIME", "struct stat", "st_umtime", {includes={"sys/types.h","sys/stat.h"}})
+    configvar_check_has_member("HAVE_STRUCT_STAT_ST_MTIME_USEC", "struct stat", "st_mtime_usec", {includes={"sys/types.h","sys/stat.h"}})
+    configvar_check_has_member("HAVE_STRUCT_STAT_ST_BLKSIZE", "struct stat", "st_blksize", {includes={"sys/types.h","sys/stat.h"}})
+    configvar_check_has_member("HAVE_STRUCT_STAT_ST_FLAGS", "struct stat", "st_flags", {includes={"sys/types.h","sys/stat.h"}})
+    configvar_check_has_member("TIME_WITH_SYS_TIME", "struct tm", "tm_sec", {includes={"sys/types.h","sys/time.h","time.h"}})
+    configvar_check_has_member("HAVE_STRUCT_STATVFS_F_IOSIZE", "struct statvfs", "f_iosize", {includes={"sys/types.h","sys/statvfs.h"}})
+
+    configvar_check_sizeof("SIZEOF_SHORT", "short")
+    configvar_check_sizeof("SIZEOF_INT", "int")
+    configvar_check_sizeof("SIZEOF_LONG", "long")
+    configvar_check_sizeof("SIZEOF_LONG_LONG", "long long")
+    configvar_check_sizeof("SIZEOF_UNSIGNED_SHORT", "unsigned short")
+    configvar_check_sizeof("SIZEOF_UNSIGNED", "unsigned")
+    configvar_check_sizeof("SIZEOF_UNSIGNED_LONG", "unsigned long")
+    configvar_check_sizeof("SIZEOF_UNSIGNED_LONG_LONG", "unsigned long long")
+
+    configvar_check_sizeof("__INT64", "__int64")
+    configvar_check_sizeof("UNSIGNED___INT64", "unsigned __int64")
+    configvar_check_sizeof("INT16_T", "int16_t")
+    configvar_check_sizeof("INT32_T", "int32_t")
+    configvar_check_sizeof("INT64_T", "int64_t")
+    configvar_check_sizeof("INTMAX_T", "intmax_t")
+    configvar_check_sizeof("UINT8_T", "uint8_t")
+    configvar_check_sizeof("UINT16_T", "uint16_t")
+    configvar_check_sizeof("UINT32_T", "uint32_t")
+    configvar_check_sizeof("UINT64_T", "uint64_t")
+    configvar_check_sizeof("UINTMAX_T", "uintmax_t")
+
+    set_configvar("HAVE_LZMA_STREAM_ENCODER_MT", 1)
+    -- set_configvar("_FILE_OFFSET_BITS", 1)
+    set_configvar("VERSION", "3.6.1")
 
     add_defines("HAVE_CONFIG_H=1")
+
+    configvar_check_cincludes("HAVE_BCRYPT_H", "Bcrypt.h")
+    if is_plat("windows", "mingw") then
+        add_syslinks("Bcrypt")
+    end
 
     for _, op in ipairs(options) do
         if has_config(op) then
@@ -281,9 +440,6 @@ target("archive")
             if op == "zlib" then
                 set_configvar("HAVE_LIBZ", 1)
                 set_configvar("HAVE_ZLIB_H", 1)
-            elseif op == "bzip2" then
-                set_configvar("HAVE_LIBBZ2", 1)
-                set_configvar("HAVE_BZLIB_H", 1)
             elseif op == "bzip2" then
                 set_configvar("HAVE_LIBBZ2", 1)
                 set_configvar("HAVE_BZLIB_H", 1)
@@ -314,6 +470,15 @@ target("archive")
                 configvar_check_cincludes("HAVE_NETTLE_SHA_H", "nettle/sha.h")
             elseif op == "openssl" then
                 set_configvar("HAVE_LIBCRYPTO", 1)
+            elseif op == "iconv" then
+                set_configvar("HAVE_ICONV_H", 1)
+            elseif op == "xml2" then
+                set_configvar("HAVE_LIBXML2", 1)
+                configvar_check_cincludes("HAVE_LIBXML_XMLREADER_H", "libxml/xmlreader.h")
+                configvar_check_cincludes("HAVE_LIBXML_XMLWRITER_H", "libxml/xmlwriter.h")
+            elseif op == "expat" then
+                set_configvar("HAVE_LIBEXPAT", 1)
+                configvar_check_cincludes("HAVE_EXPAT_H", "expat.h")
             end
         end
     end

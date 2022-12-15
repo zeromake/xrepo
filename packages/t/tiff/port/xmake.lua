@@ -122,9 +122,16 @@ target("tiff")
     set_configvar("CHECK_JPEG_YCBCR_SUBSAMPLING", 1)
     set_configvar("CXX_SUPPORT", 1)
 
-    configvar_check_bigendian("HOST_BIGENDIAN")
-
-    configvar_check_sizeof("SIZEOF_SIZE_T", "size_t")
+    if is_plat("android") then
+        if is_arch("armeabi", "armeabi-v7a") then
+            set_configvar("SIZEOF_SIZE_T", 4)
+        else
+            set_configvar("SIZEOF_SIZE_T", 8)
+        end
+    else
+        configvar_check_bigendian("HOST_BIGENDIAN")
+        configvar_check_sizeof("SIZEOF_SIZE_T", "size_t")
+    end
 
     set_configvar("HAVE_IEEEFP", 1)
     set_configvar("CCITT_SUPPORT", 1)

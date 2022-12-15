@@ -33,7 +33,7 @@ function configvar_check_sizeof(define_name, type_name)
 end
 
 function configvar_check_var(define_name, var_name, opt)
-    configvar_check_csnippets(define_name, 'void* a = (void*)'..var_name..';', opt)
+    configvar_check_csnippets(define_name, var_name..';', opt)
 end
 
 target("curl")
