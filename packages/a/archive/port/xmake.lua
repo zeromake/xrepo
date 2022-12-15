@@ -180,18 +180,17 @@ function configvar_check_csymbol_exists(define_name, var_name, opt)
     configvar_check_csnippets(define_name, 'void* a = (void*)'..var_name..';', opt)
 end
 
-function configvar_check_csymbol_exists(define_name, var_name, opt) 
-    configvar_check_csnippets(define_name, 'void* a = (void*)'..var_name..';', opt)
-end
-
 function configvar_check_sizeof(define_name, type_name)
     configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..'));return 0;', {output = true, number = true, includes={"stdint.h"}})
     configvar_check_csnippets("HAVE_"..define_name, type_name..' a;', {includes={"stdint.h"}})
 end
 
 function configvar_check_has_member(define_name, type_name, member, opt)
-    local opts = table.join({}, opt)
-    configvar_check_csnippets(define_name, format("%s a;void b = a.%s", type_name, member)..'', opts)
+    configvar_check_csnippets(define_name, format([[
+void has_member() {
+    %s a;
+    a.%s;
+}]], type_name, member), opt)
 end
 
 target("archive")

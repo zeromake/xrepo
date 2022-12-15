@@ -80,7 +80,7 @@ local sourceFiles = {
     "tif_zstd.c",
 }
 
-function configvar_check_var(define_name, var_name, opt)
+function configvar_check_csymbol_exists(define_name, var_name, opt)
     configvar_check_csnippets(define_name, 'void* a = (void*)'..var_name..';', opt)
 end
 
@@ -98,8 +98,8 @@ target("tiff")
     add_configfiles("tiffconf.h.in", "tif_config.h.in")
     add_headerfiles("$(buildir)/config/tiffconf.h")
 
-    configvar_check_var("HAVE_DECL_OPTARG", "optarg", {includes={"unistd.h"}})
-    configvar_check_var("HAVE_FSEEKO", "fseeko", {includes={"stdio.h"}})
+    configvar_check_csymbol_exists("HAVE_DECL_OPTARG", "optarg", {includes={"unistd.h"}})
+    configvar_check_csymbol_exists("HAVE_FSEEKO", "fseeko", {includes={"stdio.h"}})
 
     configvar_check_cfuncs("HAVE_GETOPT", "getopt", {includes={"unistd.h"}})
     configvar_check_cfuncs("HAVE_JBG_NEWLEN", "jbg_newlen", {includes={"jbig.h"}})

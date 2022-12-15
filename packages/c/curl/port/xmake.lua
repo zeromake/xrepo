@@ -32,8 +32,8 @@ function configvar_check_sizeof(define_name, type_name)
     configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..')); return 0;', {output = true, number = true})
 end
 
-function configvar_check_var(define_name, var_name, opt)
-    configvar_check_csnippets(define_name, var_name..';', opt)
+function configvar_check_csymbol_exists(define_name, var_name, opt)
+    configvar_check_csnippets(define_name, 'void* a =(void*)'..var_name..';', opt)
 end
 
 target("curl")
@@ -116,8 +116,8 @@ target("curl")
         configvar_check_cfuncs("HAVE_RAND_EGD", "RAND_egd", {includes={"openssl/rand.h"}})
         configvar_check_cfuncs("HAVE_IOCTLSOCKET", "ioctlsocket", {includes={"windows.h", "winsock.h"}})
 
-        configvar_check_var("HAVE_IOCTLSOCKET_FIONBIO", "FIONBIO", {includes={"windows.h", "winsock.h"}})
-        configvar_check_var("HAVE_FCNTL_O_NONBLOCK", "O_NONBLOCK", {includes={"fcntl.h"}})
+        configvar_check_csymbol_exists("HAVE_IOCTLSOCKET_FIONBIO", "FIONBIO", {includes={"windows.h", "winsock.h"}})
+        configvar_check_csymbol_exists("HAVE_FCNTL_O_NONBLOCK", "O_NONBLOCK", {includes={"fcntl.h"}})
         configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes={"windows.h", "winsock.h"}})
         configvar_check_ctypes("HAVE_LONGLONG", "long long", {includes={"fcntl.h"}})
 
