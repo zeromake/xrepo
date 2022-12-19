@@ -62,14 +62,14 @@ target("sdl2_image")
         add_defines("LOAD_WEBP=1")
     end
 
-    if is_plat("macosx") then
+    if is_plat("macosx", "iphoneos") then
         set_values("objc.build.arc", false)
         add_mflags("-fno-objc-arc")
     end
     local files = {
         "*.c",
     }
-    if is_plat("macosx") then
+    if is_plat("macosx", "iphoneos") then
         table.insert(files, "*.m")
     end
     for _, f in ipairs(files) do

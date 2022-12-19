@@ -30,6 +30,8 @@ package("sdl2_image")
 
     if is_plat("macosx") then
         add_frameworks("CoreFoundation", "CoreGraphics", "ImageIO", "CoreServices")
+    elseif is_plat("iphoneos") then
+        add_frameworks("ImageIO", "CoreServices")
     end
 
     on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
