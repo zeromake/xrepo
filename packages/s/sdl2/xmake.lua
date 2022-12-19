@@ -23,6 +23,19 @@ package("sdl2")
             "Foundation"
         )
         add_syslinks("iconv")
+    elseif is_plat("iphoneos") then
+        add_frameworks(
+            "AVFAudio",
+            "AudioToolbox",
+            "UIKit",
+            "Metal",
+            "CoreGraphics",
+            "QuartzCore",
+            "OpenGLES",
+            "CoreHaptics",
+            "GameController",
+            "CoreMotion"
+        )
     elseif is_plat("linux", "bsd") then
         if is_plat("bsd") then
             add_syslinks("usbhid")

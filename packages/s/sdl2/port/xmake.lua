@@ -52,6 +52,23 @@ if is_plat("macosx") then
         "src/sensor/dummy/*.c",
         "src/video/dummy/*.c",
     })
+elseif is_plat("iphoneos") then
+    table.join2(sdlSrc, {
+        "src/power/uikit/*.m",
+        "src/video/uikit/*.m",
+        "src/render/metal/*.m",
+        "src/misc/ios/*.m",
+        "src/audio/coreaudio/*.m",
+        "src/joystick/iphoneos/*.m",
+        "src/joystick/steam/*.c",
+        "src/timer/unix/*.c",
+        "src/thread/pthread/*.c",
+        "src/sensor/coremotion/*.m",
+        "src/haptic/dummy/*.c",
+        "src/video/dummy/*.c",
+        "src/loadso/dlopen/*.c",
+        "src/file/cocoa/*.m"
+    })
 elseif is_plat("windows", "mingw") then
     table.join2(sdlSrc, {
         "src/video/windows/*.c",
@@ -121,6 +138,19 @@ target("sdl2")
             "Foundation"
         )
         add_syslinks("iconv")
+    elseif is_plat("iphoneos") then
+        add_frameworks(
+            "AVFAudio",
+            "AudioToolbox",
+            "UIKit",
+            "Metal",
+            "CoreGraphics",
+            "QuartzCore",
+            "OpenGLES",
+            "CoreHaptics",
+            "GameController",
+            "CoreMotion"
+        )
     elseif is_plat("linux", "bsd") then
         if is_plat("bsd") then
             add_syslinks("usbhid")

@@ -23,6 +23,7 @@ local options =
 ,   {nil, "ndk",        "kv", nil, "Set the Android NDK directory."             }
 ,   {nil, "ndk_sdkver", "kv", nil, "Set the Android NDK platform sdk version."  }
 ,   {nil, "android_sdk", "kv", nil, "Set the Android SDK directory."            }
+,   {nil, "target_minver", "kv", nil, "Set the ios minver."}
 ,   {nil, "sdk",        "kv", nil, "Set the SDK directory of cross toolchain."  }
 ,   {nil, "vs",         "kv", nil, "Set the VS Compiler version."               }
 ,   {nil, "vs_sdkver",  "kv", nil, "Set the Windows SDK version."               }
@@ -90,6 +91,9 @@ function _require_packages(argv, packages)
     end
     if argv.ldflags then
         table.insert(config_argv, "--ldflags=" .. argv.ldflags)
+    end
+    if argv.target_minver then
+        table.insert(config_argv, "--target_minver="..argv.target_minver)
     end
     os.vexecv("xmake", config_argv)
     local require_argv = {"require", "-f", "-y", "--build"}
