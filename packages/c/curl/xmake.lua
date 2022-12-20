@@ -174,7 +174,7 @@ ${define SIZEOF_CURL_OFF_T}
             if package:config(op) ~= false then
                 v = "y"
             end
-            table.insert(configs, op.."="..v)
+            table.insert(configs, "--"..op.."="..v)
         end
         import("package.tools.xmake").install(package, configs)
     end)
