@@ -3,7 +3,7 @@ package("ghc_filesystem")
     set_homepage("https://github.com/gulrak/filesystem")
     set_description("An implementation of C++17 std::filesystem for C++11 /C++14/C++17/C++20 on Windows, macOS, Linux and FreeBSD.")
     set_license("MIT")
-    set_urls("https://github.com/gulrak/filesystem/archive/refs/tags/v1.5.12.tar.gz")
+    set_urls("https://github.com/gulrak/filesystem/archive/refs/tags/v$(version).tar.gz")
     
     add_versions("1.5.12", "7d62c5746c724d28da216d9e11827ba4e573df15ef40720292827a4dfd33f2e9")
 

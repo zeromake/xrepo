@@ -20,6 +20,9 @@ package("fribidi")
                 package:add("deps", op)
             end
         end
+        if package:config("shared") ~= true then
+            package:add("defines", "FRIBIDI_LIB_STATIC")
+        end
     end)
 
     add_defines(

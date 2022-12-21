@@ -73,9 +73,7 @@ target("expat")
             add_packages(op)
         end
     end
-    if is_kind("shared") then
-        --add_defines("XMLIMPORT=")
-    else
+    if not is_kind("shared") then
         add_defines("XML_STATIC")
     end
     for _, f in ipairs(sourceFiles) do

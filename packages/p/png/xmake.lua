@@ -11,6 +11,12 @@ package("png")
         add_syslinks("m")
     end
 
+    on_load(function (package)
+        if package:is_plat("windows") and package:config("shared") then
+            package:add("defines", "PNG_BUILD_DLL")
+        end
+    end)
+
     on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package) 
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
@@ -43,7 +49,7 @@ target("png")
     if is_kind("shared") and is_plat("windows") then
         add_defines("PNG_BUILD_DLL")
     end]])
-        
+
         if package:is_plat("android") and package:is_arch("armeabi-v7a") then
             io.replace("arm/filter_neon.S", ".func", ".hidden", {plain = true})
             io.replace("arm/filter_neon.S", ".endfunc", "", {plain = true})
