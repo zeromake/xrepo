@@ -122,14 +122,8 @@ ${define HAVE_UMASK}
 ${define HAVE_UTIME}
 ${define HAVE_VSNPRINTF}
 
-#if defined AC_APPLE_UNIVERSAL_BUILD
-# if defined __BIG_ENDIAN__
-#  define WORDS_BIGENDIAN 1
-# endif
-#else
-# ifndef WORDS_BIGENDIAN
-/* #  undef WORDS_BIGENDIAN */
-# endif
+#if defined __BIG_ENDIAN__
+#define WORDS_BIGENDIAN 1
 #endif
 
 /* Enable large inode numbers on Mac OS X 10.5.  */

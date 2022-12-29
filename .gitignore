@@ -6,3 +6,4 @@ build
 .xmake
 .vscode
 .DS_Store
+downloads/

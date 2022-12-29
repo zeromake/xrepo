@@ -179,6 +179,6 @@ ${define SIZEOF_CURL_OFF_T}
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("curl_version()", {includes = {"curl/curl.h"}}))
-    end)
+    -- on_test(function (package)
+    --     assert(package:has_cfuncs("curl_version()", {includes = {"curl/curl.h"}}))
+    -- end)
