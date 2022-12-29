@@ -11,7 +11,8 @@ local options = {
     -- compression lib
     "lz4",
     "lzo",
-    "lzma",
+    "xz",
+    "fxz",
     "zstd",
     "zlib",
     "bzip2",

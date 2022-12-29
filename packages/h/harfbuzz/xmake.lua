@@ -26,7 +26,7 @@ option("freetype")
 option_end()
 
 if has_config("freetype") then 
-    add_requires("freetype")
+    add_requires("freetype", {system=false})
 end
 
 if is_plat("windows") then

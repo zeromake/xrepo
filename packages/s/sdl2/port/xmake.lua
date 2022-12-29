@@ -109,7 +109,7 @@ elseif is_plat("android") then
         "src/sensor/android/*.c",
         "src/locale/android/*.c",
     })
-    add_requires("ndk-cpufeatures")
+    add_requires("ndk-cpufeatures", {system=false})
 end
 
 target("sdl2")

@@ -12,11 +12,12 @@ for _, op in ipairs(options) do
         set_showmenu(true)
     option_end()
     if has_config(op) then 
-        add_requires(op)
+        add_requires(op, {system=false})
     end
 end
 
-add_requires("zlib", "jpeg")
+add_requires("zlib", {system=false})
+add_requires("jpeg", {system=false})
 
 if is_plat("windows") then
     add_cxflags("/utf-8")

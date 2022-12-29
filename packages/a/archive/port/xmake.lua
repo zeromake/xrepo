@@ -17,7 +17,8 @@ local options = {
     -- compression lib
     "lz4",
     "lzo",
-    "lzma",
+    "xz",
+    "fxz",
     "zstd",
     "zlib",
     "bzip2",
@@ -37,7 +38,7 @@ for _, op in ipairs(options) do
         set_showmenu(true)
     option_end()
     if has_config(op) then 
-        add_requires(op)
+        add_requires(op, {system=false})
     end
 end
 
@@ -164,8 +165,14 @@ local sourceFiles = {
     "archive_write_set_format_zip.c",
     "archive_write_set_options.c",
     "archive_write_set_passphrase.c",
+    "archive_blake2s_ref.c",
+	"archive_blake2sp_ref.c",
+    "archive_disk_acl_linux.c",
+	"archive_disk_acl_sunos.c",
+	"archive_disk_acl_darwin.c",
+	"archive_disk_acl_freebsd.c",
     "filter_fork_posix.c",
-    "xxhash.c",
+    "xxhash.c"
 }
 
 local windowsFiles = {
@@ -442,7 +449,7 @@ target("archive")
             elseif op == "bzip2" then
                 set_configvar("HAVE_LIBBZ2", 1)
                 set_configvar("HAVE_BZLIB_H", 1)
-            elseif op == "lzma" then
+            elseif op == "xz" or op == "fxz" then
                 set_configvar("HAVE_LIBLZMA", 1)
                 set_configvar("HAVE_LZMA_H", 1)
             elseif op == "lzo" then

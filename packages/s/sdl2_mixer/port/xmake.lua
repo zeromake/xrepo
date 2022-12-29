@@ -16,11 +16,11 @@ for _, op in ipairs(options) do
         set_showmenu(true)
     option_end()
     if has_config(op) then 
-        add_requires(op)
+        add_requires(op, {system=false})
     end
 end
 
-add_requires("sdl2")
+add_requires("sdl2", {system=false})
 
 local sdlMixerFiles = {
     "src/*.c",

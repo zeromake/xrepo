@@ -7,9 +7,10 @@ option("harfbuzz")
     set_showmenu(true)
 option_end()
 
-add_requires("freetype", "sdl2")
+add_requires("freetype", {system=false})
+add_requires("sdl2", {system=false})
 if has_config("harfbuzz") then 
-    add_requires("harfbuzz")
+    add_requires("harfbuzz", {system=false})
 end
 
 target("sdl2_ttf")

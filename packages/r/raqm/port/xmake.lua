@@ -1,6 +1,8 @@
 add_rules("mode.debug", "mode.release")
 
-add_requires("freetype", "harfbuzz", "fribidi")
+add_requires("freetype", {system=false})
+add_requires("harfbuzz", {system=false})
+add_requires("fribidi", {system=false})
 
 if is_plat("windows") then
     add_cxflags("/utf-8")
