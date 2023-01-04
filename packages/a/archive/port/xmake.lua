@@ -489,6 +489,7 @@ target("archive")
         end
     end
 
+    add_headerfiles("libarchive/archive.h","libarchive/archive_entry.h")
     for _, f in ipairs(sourceFiles) do
         add_files(path.join("libarchive", f))
     end

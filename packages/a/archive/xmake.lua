@@ -27,8 +27,8 @@ local options = {
 }
 
 package("archive")
-    set_homepage("Todo")
-    set_description("Todo")
+    set_homepage("https://github.com/libarchive/libarchive")
+    set_description("Multi-format archive and compression library")
     set_license("MIT")
     set_urls("https://github.com/libarchive/libarchive/releases/download/v$(version)/libarchive-$(version).tar.xz")
     
