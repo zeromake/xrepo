@@ -14,6 +14,7 @@ target("yoga")
     set_kind("$(kind)")
     add_includedirs(".")
     add_headerfiles("yoga/*.h", {prefixdir = "yoga"})
+    add_headerfiles("yoga/event/*.h", {prefixdir = "yoga/event"})
     for _, f in ipairs(sourceFiles) do
         add_files(f)
     end
