@@ -1,0 +1,15 @@
+package("tweeny")
+    set_kind("library", {headeronly = true})
+    set_homepage("https://github.com/mobius3/tweeny")
+    set_description("A modern C++ tweening library")
+    set_license("MIT")
+    set_urls("https://github.com/mobius3/tweeny/releases/download/v$(version)/tweeny-$(version).h")
+    
+    add_versions("3.2.0", "bdb8ad985a1d7ee30a3f441d67030f55de47d1961b71a0e2c3062df3c1d80fa3")
+    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+        os.cp("../tweeny-"..package:version()..".h", path.join(package:installdir("include"), "tweeny.h"))
+    end)
+
+    -- on_test(function (package)
+    --     assert(package:has_cfuncs("xxx", {includes = {"xx.h"}}))
+    -- end)
