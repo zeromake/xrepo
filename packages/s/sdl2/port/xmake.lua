@@ -1,5 +1,10 @@
 add_rules("mode.debug", "mode.release")
 
+option("winrt")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
 local sdlPath = os.scriptdir()
 local sdlSrc = {
     "src/*.c",
@@ -72,13 +77,10 @@ elseif is_plat("iphoneos") then
 elseif is_plat("windows", "mingw") then
     table.join2(sdlSrc, {
         "src/video/windows/*.c",
-        "src/misc/windows/*.c",
         "src/audio/wasapi/*.c",
         "src/audio/winmm/*.c",
         "src/audio/directsound/*.c",
         "src/filesystem/windows/*.c",
-        "src/thread/generic/SDL_syscond.c",
-        "src/thread/windows/*.c",
         "src/core/windows/*.c",
         "src/timer/windows/*.c",
         "src/loadso/windows/*.c",
@@ -86,10 +88,32 @@ elseif is_plat("windows", "mingw") then
         "src/joystick/windows/*.c",
         "src/power/windows/*.c",
         "src/sensor/windows/*.c",
-        "src/locale/windows/*.c",
         "src/sensor/dummy/*.c",
         "src/video/dummy/*.c",
     })
+    if get_config("winrt") then
+        table.join2(sdlSrc, {
+            "src/audio/wasapi/*.cpp",
+            "src/core/winrt/*.cpp",
+            "src/filesystem/winrt/*.cpp",
+            "src/misc/winrt/*.cpp",
+            "src/power/winrt/*.cpp",
+            "src/render/direct3d11/*.cpp",
+            "src/thread/windows/SDL_syssem.c",
+            "src/thread/stdcpp/*.cpp",
+            "src/video/winrt/*.cpp",
+            "src/locale/winrt/SDL_syslocale.c",
+            "src/haptic/dummy/*.c",
+        })
+        add_requires("cppwinrt")
+    else
+        table.join2(sdlSrc, {
+            "src/thread/generic/SDL_syscond.c",
+            "src/thread/windows/*.c",
+            "src/locale/windows/*.c",
+            "src/misc/windows/*.c",
+        })
+    end
 elseif is_plat("android") then
     table.join2(sdlSrc, {
         "src/video/android/*.c",
@@ -157,19 +181,44 @@ target("sdl2")
         end
         add_syslinks("pthread", "dl")
     elseif is_plat("windows", "mingw") then
-        add_syslinks(
-            "gdi32",
-            "user32",
-            "winmm",
-            "shell32",
-            "setupapi",
-            "advapi32",
-            "version",
-            "ole32",
-            "cfgmgr32",
-            "imm32",
-            "oleaut32"
-        )
+        if is_kind("shared") then
+            add_defines("DLL_EXPORT")
+        end
+        if get_config("winrt") then
+            add_packages("cppwinrt")
+            add_defines(
+                "SDL_BUILDING_WINRT=1",
+                "WINAPI_FAMILY=WINAPI_FAMILY_APP",
+                "UNICODE",
+                "_UNICODE"
+            )
+            add_syslinks(
+                "msvcrt",
+                "vccorlib",
+                "dxgi",
+                "d3d11",
+                "synchronization",
+                "xinput",
+                "mmdevapi"
+            )
+            -- support cx
+            set_runtimes("MD")
+            add_cxxflags("/ZW")
+        else
+            add_syslinks(
+                "gdi32",
+                "user32",
+                "winmm",
+                "shell32",
+                "setupapi",
+                "advapi32",
+                "version",
+                "ole32",
+                "cfgmgr32",
+                "imm32",
+                "oleaut32"
+            )
+        end
     elseif is_plat("android") then
         add_packages("ndk-cpufeatures")
         add_defines("GL_GLEXT_PROTOTYPES", "ANDROID")

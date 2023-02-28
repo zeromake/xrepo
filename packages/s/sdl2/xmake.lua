@@ -7,6 +7,8 @@ package("sdl2")
     add_versions("2.26.1", "02537cc7ebd74071631038b237ec4bfbb3f4830ba019e569434da33f42373e04")
     add_versions("2.24.1", "bc121588b1105065598ce38078026a414c28ea95e66ed2adab4c44d80b309e1b")
 
+    add_configs("winrt", {description = "Support winrt", default = false, type = "boolean"})
+
     if is_plat("macosx") then
         add_frameworks(
             "OpenGL",
@@ -41,20 +43,6 @@ package("sdl2")
             add_syslinks("usbhid")
         end
         add_syslinks("pthread", "dl")
-    elseif is_plat("windows", "mingw") then
-        add_syslinks(
-            "gdi32",
-            "user32",
-            "winmm",
-            "shell32",
-            "setupapi",
-            "advapi32",
-            "version",
-            "ole32",
-            "cfgmgr32",
-            "imm32",
-            "oleaut32"
-        )
     end
     add_includedirs("include")
     if is_plat("android") then
@@ -66,11 +54,40 @@ package("sdl2")
         if package:is_plat("macosx") and package:version():ge("2.0.14") then
             package:add("frameworks", "CoreHaptics", "GameController")
         end
+        if package:config("winrt") then
+            package:add("deps", "cppwinrt")
+            package:add(
+                "syslinks",
+                "msvcrt",
+                "vccorlib",
+                "dxgi",
+                "d3d11",
+                "synchronization",
+                "xinput",
+                "mmdevapi"
+            )
+        else
+            package:add(
+                "syslinks",
+                "gdi32",
+                "user32",
+                "winmm",
+                "shell32",
+                "setupapi",
+                "advapi32",
+                "version",
+                "ole32",
+                "cfgmgr32",
+                "imm32",
+                "oleaut32"
+            )
+        end
     end)
 
     on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
+        configs["winrt"] = package:config("winrt") and "y" or "n"
         import("package.tools.xmake").install(package, configs)
     end)
 
