@@ -59,7 +59,6 @@ package("sdl2")
             package:add(
                 "syslinks",
                 "msvcrt",
-                "vccorlib",
                 "dxgi",
                 "d3d11",
                 "synchronization",
@@ -90,6 +89,18 @@ package("sdl2")
         configs["winrt"] = package:config("winrt") and "y" or "n"
         import("package.tools.xmake").install(package, configs)
     end)
+
+    -- use msbuild
+    -- on_install(function (package)
+    --     local content = io.readfile("VisualC-WinRT\\SDL-UWP.vcxproj"):gsub("v142", "v143")
+    --     io.writefile("VisualC-WinRT\\SDL-UWP.vcxproj", content)
+    --     local configs = {"VisualC-WinRT\\SDL-UWP.vcxproj", "/p:Configuration=Release", "/p:Platform=x64"}
+    --     import("package.tools.msbuild").build(package, configs)
+    --     os.cp("include/*.h", package:installdir("include").."/")
+    --     os.cp("VisualC-WinRT/x64/Release/SDL-UWP/*.dll", package:installdir("bin"))
+    --     os.cp("VisualC-WinRT/x64/Release/SDL-UWP/*.lib", package:installdir("lib"))
+    --     os.cp("VisualC-WinRT/x64/Release/SDL-UWP/*.pdb", package:installdir("lib"))
+    -- end)
 
     on_test(function (package)
         if not package:is_plat("android") then

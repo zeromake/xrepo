@@ -194,7 +194,6 @@ target("sdl2")
             )
             add_syslinks(
                 "msvcrt",
-                "vccorlib",
                 "dxgi",
                 "d3d11",
                 "synchronization",
