@@ -16,6 +16,11 @@ for _, op in ipairs(options) do
     end
 end
 
+option("winrt")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
 add_requires("zlib", {system=false})
 add_requires("wolfssl", {system=false})
 
@@ -139,8 +144,13 @@ target("curl")
 
     if is_plat("windows", "mingw") then
         -- set_configvar("HAVE_IOCTLSOCKET_FIONBIO", 1)
-        add_defines("WIN32", "USE_WIN32_LDAP")
-        add_syslinks("ws2_32", "wldap32", "crypt32", "bcrypt")
+        if get_config("winrt") then
+            add_defines("CURL_DISABLE_LDAP=1")
+        else
+            add_defines("USE_WIN32_LDAP=1")
+            add_syslinks("wldap32")
+        end
+        add_defines("WIN32")
     elseif is_plat("macosx") then
         add_defines("HAVE_LONGLONG=1")
     end

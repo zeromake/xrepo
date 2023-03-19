@@ -15,6 +15,8 @@ package("curl")
         add_configs(op, {description = "Support "..op, default = false, type = "boolean"})
     end
 
+    add_configs("winrt", {description = "Support winrt", default = false, type = "boolean"})
+
     add_deps("wolfssl", "zlib")
     add_includedirs("include")
 
@@ -29,11 +31,10 @@ package("curl")
         if package:config("shared") ~= true then
             package:add("defines", "CURL_STATICLIB")
         end
+        if not package:config("winrt") and is_plat("windows", "mingw") then
+            package:add("syslinks", "wldap32")
+        end
     end)
-
-    if is_plat("windows", "mingw") then
-        add_syslinks("ws2_32", "wldap32", "crypt32", "bcrypt")
-    end
 
     on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
@@ -176,6 +177,7 @@ ${define SIZEOF_CURL_OFF_T}
             end
             table.insert(configs, "--"..op.."="..v)
         end
+        configs["winrt"] = package:config("winrt") and "y" or "n"
         import("package.tools.xmake").install(package, configs)
     end)
 
