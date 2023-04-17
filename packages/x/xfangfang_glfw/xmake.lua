@@ -2,9 +2,9 @@ package("xfangfang_glfw")
     set_homepage("https://github.com/xfangfang/glfw")
     set_description("glfw")
     set_license("MIT")
-    set_urls("https://github.com/xfangfang/glfw/archive/refs/heads/wiliwili.zip")
+    set_urls("https://github.com/xfangfang/glfw/archive/288235ec228582bf2bc9cf7765261e4d12426cfb.zip")
     
-    add_versions("latest", "f150732d1d157fc225559e34f8f42367a8033f3765714e4967f32a57c500ff3e")
+    add_versions("latest", "1d8f08f59f90afbf2d56a3a00fd0e1757e1f9179ddf9bc6bdb0713a8b7e8c00c")
     add_deps("cmake")
     add_deps("opengl", {optional = true})
     if is_plat("macosx") then
