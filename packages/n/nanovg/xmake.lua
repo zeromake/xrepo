@@ -7,10 +7,10 @@ package("nanovg")
     if os.exists(p) and os.isdir(p) then
         set_sourcedir(p)
     else
-        set_urls("https://github.com/zeromake/nanovg/archive/b6e6f34fa1bd22e4a92885b37f60be264397521d.zip")
-        add_versions("latest", "1095da85be813b7a0713ed0a2fa807012fb05af0121978a4f51b4ac68bb213a1")
+        set_urls("https://github.com/zeromake/nanovg/archive/aa6917c02688ceb72d30fc31f34f0bdfc9b4a559.zip")
+        add_versions("latest", "d05da01345d86cf5b1f3990be87ea7b4279827acbad3ebb50b75308f8c258dc6")
     end
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         local configs = {}
         import("package.tools.xmake").install(package, configs)
     end)
