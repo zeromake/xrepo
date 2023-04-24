@@ -23,6 +23,7 @@ package("sdl2_ttf")
 
     add_deps("freetype", "sdl2")
     add_includedirs("include")
+    add_includedirs("include/SDL2")
 
     on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")

@@ -43,7 +43,7 @@ target("sdl2_image")
         "SDL_IMAGE_SAVE_JPG=1"
     )
     add_packages("sdl2")
-    add_headerfiles("SDL_image.h")
+    add_headerfiles("SDL_image.h", {prefixdir="SDL2"})
     for _, op in ipairs(options) do
         if has_config(op) then
             add_packages(op)

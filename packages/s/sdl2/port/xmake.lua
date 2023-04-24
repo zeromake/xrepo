@@ -223,4 +223,4 @@ target("sdl2")
         add_defines("GL_GLEXT_PROTOTYPES", "ANDROID")
         add_syslinks("GLESv1_CM", "GLESv2", "OpenSLES", "log", "android")
     end
-    add_headerfiles(path.join("include", "*.h"))
+    add_headerfiles(path.join("include", "*.h"), {prefixdir="SDL2"})

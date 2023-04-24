@@ -34,7 +34,7 @@ target("sdl2_mixer")
         "src",
         "src/codecs"
     )
-    add_headerfiles("include/*.h")
+    add_headerfiles("include/*.h", {prefixdir="SDL2"})
     add_packages("sdl2")
     for _, op in ipairs(options) do
         if has_config(op) then

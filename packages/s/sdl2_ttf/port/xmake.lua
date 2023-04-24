@@ -16,7 +16,7 @@ end
 target("sdl2_ttf")
     set_kind("$(kind)")
     add_packages("freetype", "sdl2")
-    add_headerfiles("*.h")
+    add_headerfiles("*.h", {prefixdir="SDL2"})
     if has_config("harfbuzz") then
         add_packages("harfbuzz")
         add_defines(

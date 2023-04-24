@@ -45,6 +45,7 @@ package("sdl2")
         add_syslinks("pthread", "dl")
     end
     add_includedirs("include")
+    add_includedirs("include/SDL2")
     if is_plat("android") then
         add_deps("ndk-cpufeatures")
         add_syslinks("GLESv1_CM", "GLESv2", "OpenSLES", "log", "android")
@@ -104,6 +105,6 @@ package("sdl2")
 
     on_test(function (package)
         if not package:is_plat("android") then
-            assert(package:has_cfuncs("SDL_Init", {includes = "SDL.h", configs = {defines = "SDL_MAIN_HANDLED"}}))
+            assert(package:has_cfuncs("SDL_Init", {includes = "SDL2/SDL.h", configs = {defines = "SDL_MAIN_HANDLED"}}))
         end
     end)

@@ -27,6 +27,7 @@ package("sdl2_image")
 
     add_deps("sdl2")
     add_includedirs("include")
+    add_includedirs("include/SDL2")
 
     if is_plat("macosx") then
         add_frameworks("CoreFoundation", "CoreGraphics", "ImageIO", "CoreServices")

@@ -28,6 +28,7 @@ package("sdl2_mixer")
 
     add_deps("sdl2")
     add_includedirs("include")
+    add_includedirs("include/SDL2")
 
     if is_plat("macosx") then
         add_frameworks("AudioToolbox")
