@@ -31,7 +31,7 @@ package("archive")
     set_description("Multi-format archive and compression library")
     set_license("MIT")
     set_urls("https://github.com/libarchive/libarchive/releases/download/v$(version)/libarchive-$(version).tar.xz")
-    
+
     add_versions("3.6.1", "5a411aceb978f43e626f0c2d1812ddd8807b645ed892453acabd532376c148e6")
 
     for _, op in ipairs(options) do

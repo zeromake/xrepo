@@ -76,7 +76,7 @@ ${define MDI_SUPPORT}
 
 #endif /* _TIFFCONF_ */
 ]])
-        
+
         io.writefile("tif_config.h.in", [[
 #include "tiffconf.h"
 

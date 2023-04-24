@@ -5,7 +5,7 @@ package("unibreak")
     set_description("The Unicode breaking library")
     set_license("zlib")
     set_urls("https://github.com/adah1972/libunibreak/releases/download/libunibreak_5_0/libunibreak-$(version).tar.gz")
-    
+
     add_versions("5.0", "58f2fe4f9d9fc8277eb324075ba603479fa847a99a4b134ccb305ca42adf7158")
 
     for _, op in ipairs(options) do

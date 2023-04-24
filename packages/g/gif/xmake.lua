@@ -5,7 +5,7 @@ package("gif")
     set_description("GIFLIB is a package of portable tools and library routines for working with GIF images.")
     set_license("MIT")
     set_urls("https://download.sourceforge.net/giflib/giflib-$(version).tar.gz")
-    
+
     add_versions("5.2.1", "31da5562f44c5f15d63340a09a4fd62b48c45620cd302f77a6d9acf0077879bd")
 
     for _, op in ipairs(options) do

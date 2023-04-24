@@ -3,7 +3,7 @@ package("cppwinrt")
     set_description("C++/WinRT is an entirely standard C++ language projection for Windows Runtime (WinRT) APIs")
     set_license("MIT")
     set_urls("https://globalcdn.nuget.org/packages/microsoft.windows.cppwinrt.2.0.230225.1.nupkg")
-    
+
     add_versions("latest", "83d2584bb63ea7180de73147a7e63e24371fa832fa79c00e500695a709d51749")
     on_install("windows", "mingw", function (package)
         import("lib.detect.find_tool")

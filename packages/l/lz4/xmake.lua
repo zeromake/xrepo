@@ -4,7 +4,7 @@ package("lz4")
     set_description("Extremely Fast Compression algorithm")
     set_license("BSD")
     set_urls("https://github.com/lz4/lz4/archive/refs/tags/v$(version).tar.gz")
-    
+
     add_versions("1.9.4", "0b0e3aa07c8c063ddf40b082bdf7e37a1562bda40a0ff5272957f3e987e0e54b")
 
     on_load(function (package)

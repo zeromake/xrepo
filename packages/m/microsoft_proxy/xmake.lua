@@ -4,7 +4,7 @@ package("microsoft_proxy")
     set_description("Proxy: Easy Polymorphism in C++")
     set_license("MIT")
     set_urls("https://github.com/microsoft/proxy/releases/download/$(version)/proxy-$(version).zip")
-    
+
     add_versions("1.1.1", "a153c95b2ffe69f2f01c393d80da8364f7e3e3a35572691808133edb60f5834f")
     on_install(function (package)
         os.cp("*.h", package:installdir("include"))

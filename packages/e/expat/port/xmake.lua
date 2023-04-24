@@ -37,7 +37,7 @@ end
 
 target("expat")
     set_kind("$(kind)")
-    
+
     set_configdir("$(buildir)/config")
     add_includedirs("$(buildir)/config")
     add_configfiles("expat_config.h.in")

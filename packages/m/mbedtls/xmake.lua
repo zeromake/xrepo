@@ -5,7 +5,7 @@ package("mbedtls")
     set_description("An open source, portable, easy to use, readable and flexible TLS library, and reference implementation of the PSA Cryptography API.")
     set_license("Apache-2.0")
     set_urls("https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/v$(version).tar.gz")
-    
+
     add_versions("3.2.1", "d0e77a020f69ad558efc660d3106481b75bd3056d6301c31564e04a0faae88cc")
 
     for _, op in ipairs(options) do

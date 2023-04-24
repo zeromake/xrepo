@@ -5,7 +5,7 @@ package("raqm")
     set_description("Todo")
     set_license("MIT")
     set_urls("https://github.com/HOST-Oman/libraqm/releases/download/v$(version)/raqm-$(version).tar.xz")
-    
+
     add_versions("0.9.0", "9ed6fdf41da6391fc9bf7038662cbe412c330aa6eb22b19704af2258e448107c")
 
     add_includedirs("include")

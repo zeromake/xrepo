@@ -70,7 +70,7 @@ end
 
 target("fribidi")
     set_kind("$(kind)")
-    
+
     for _, f in ipairs(headers) do
         add_headerfiles(path.join("lib", f), {prefixdir="fribidi"})
     end
@@ -122,4 +122,3 @@ target("fribidi")
     for _, f in ipairs(sourceFiles) do
         add_files(path.join("lib", f))
     end
-    

@@ -208,7 +208,7 @@ target("archive")
     add_configfiles("config.h.in")
 
     add_includedirs(".")
-    
+
     configvar_check_cincludes("HAVE_SYS_TYPES_H", "sys/types.h")
     configvar_check_cincludes("HAVE_ACL_LIBACL_H", "acl/libacl.h")
     configvar_check_cincludes("HAVE_ATTR_XATTR_H", "attr/xattr.h")

@@ -55,7 +55,7 @@ local function generateVm(package)
             "src/lj_opt_fold.c"
         }
     }
-    
+
     if package:is_plat("windows") then
         table.insert(arr, {
             "-m",

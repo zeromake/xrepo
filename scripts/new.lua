@@ -21,7 +21,7 @@ package("%s")
     set_description("Todo")
     set_license("MIT")
     set_urls("Todo")
-    
+
     add_versions("0.0.0", "sha256")
 ]], opt.package)
     if opt.options then
@@ -96,7 +96,7 @@ local sourceFiles = {}
 
 target("%s")
     set_kind("$(kind)")
-    
+
     check_cincludes("HAVE_UNISTD_H", "unistd.h")
 
     add_headerfiles("todo.h")

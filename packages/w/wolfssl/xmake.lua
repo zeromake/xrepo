@@ -5,7 +5,7 @@ package("wolfssl")
     set_description("The wolfSSL library is a small, fast, portable implementation of TLS/SSL for embedded devices to the cloud. wolfSSL supports up to TLS 1.3!")
     set_license("GPLv2")
     set_urls("https://github.com/wolfSSL/wolfssl/archive/refs/tags/v$(version)-stable.tar.gz")
-    
+
     add_versions("5.5.0", "c34b74b5f689fac7becb05583b044e84d3b10d39f38709f0095dd5d423ded67f")
 
     for _, op in ipairs(options) do

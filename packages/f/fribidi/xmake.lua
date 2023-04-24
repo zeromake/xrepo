@@ -5,7 +5,7 @@ package("fribidi")
     set_description("Todo")
     set_license("MIT")
     set_urls("https://github.com/fribidi/fribidi/releases/download/v$(version)/fribidi-$(version).tar.xz")
-    
+
     add_versions("1.0.12", "0cd233f97fc8c67bb3ac27ce8440def5d3ffacf516765b91c2cc654498293495")
 
     for _, op in ipairs(options) do
