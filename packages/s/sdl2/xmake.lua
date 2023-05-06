@@ -48,39 +48,41 @@ package("sdl2")
     add_includedirs("include/SDL2")
     if is_plat("android") then
         add_deps("ndk-cpufeatures")
-        add_syslinks("GLESv1_CM", "GLESv2", "OpenSLES", "log", "android")
+        add_syslinks("GLESv1_CM", "GLESv2", "GLESv3", "OpenSLES", "log", "android")
     end
 
     on_load(function (package)
         if package:is_plat("macosx") and package:version():ge("2.0.14") then
             package:add("frameworks", "CoreHaptics", "GameController")
         end
-        if package:config("winrt") then
-            package:add("deps", "cppwinrt")
-            package:add(
-                "syslinks",
-                "msvcrt",
-                "dxgi",
-                "d3d11",
-                "synchronization",
-                "xinput",
-                "mmdevapi"
-            )
-        else
-            package:add(
-                "syslinks",
-                "gdi32",
-                "user32",
-                "winmm",
-                "shell32",
-                "setupapi",
-                "advapi32",
-                "version",
-                "ole32",
-                "cfgmgr32",
-                "imm32",
-                "oleaut32"
-            )
+        if package:is_plat("windows", "mingw") then
+            if package:config("winrt") then
+                package:add("deps", "cppwinrt")
+                package:add(
+                    "syslinks",
+                    "msvcrt",
+                    "dxgi",
+                    "d3d11",
+                    "synchronization",
+                    "xinput",
+                    "mmdevapi"
+                )
+            else
+                package:add(
+                    "syslinks",
+                    "gdi32",
+                    "user32",
+                    "winmm",
+                    "shell32",
+                    "setupapi",
+                    "advapi32",
+                    "version",
+                    "ole32",
+                    "cfgmgr32",
+                    "imm32",
+                    "oleaut32"
+                )
+            end
         end
     end)
 
