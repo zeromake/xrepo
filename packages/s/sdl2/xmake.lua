@@ -7,6 +7,7 @@ package("sdl2")
         "https://github.com/libsdl-org/SDL.git"
     )
 
+    add_versions("2.26.5", "ad8fea3da1be64c83c45b1d363a6b4ba8fd60f5bde3b23ec73855709ec5eabf7")
     add_versions("2.26.1", "02537cc7ebd74071631038b237ec4bfbb3f4830ba019e569434da33f42373e04")
 
     add_configs("winrt", {description = "Support winrt", default = false, type = "boolean"})
