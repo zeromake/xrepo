@@ -42,6 +42,7 @@ package("sdl2")
             "CoreMotion"
         )
     elseif is_plat("linux", "bsd") then
+        add_deps("cmake")
         if is_plat("bsd") then
             add_syslinks("usbhid")
         end
@@ -90,10 +91,17 @@ package("sdl2")
     end)
 
     on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
-        os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
-        configs["winrt"] = package:config("winrt") and "y" or "n"
-        import("package.tools.xmake").install(package, configs)
+        local packagedeps = {}
+        if package:is_plat("linux") then
+            table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
+            table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
+            import("package.tools.cmake").install(package, configs, {packagedeps = packagedeps})
+        else
+            os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
+            configs["winrt"] = package:config("winrt") and "y" or "n"
+            import("package.tools.xmake").install(package, configs)
+        end
     end)
 
     -- use msbuild
