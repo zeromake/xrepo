@@ -231,12 +231,12 @@ target("sdl2")
             add_syslinks("X11", "Xext")
             add_defines(
                 "SDL_VIDEO_DRIVER_X11",
-                "SDL_VIDEO_DRIVER_X11_SUPPORTS_GENERIC_EVENTS",
+                "SDL_VIDEO_DRIVER_X11_SUPPORTS_GENERIC_EVENTS"
             )
         elseif get_config("wayland") then
             add_defines(
                 "SDL_VIDEO_DRIVER_WAYLAND",
-                "SDL_VIDEO_DRIVER_WAYLAND_SUPPORTS_GENERIC_EVENTS",
+                "SDL_VIDEO_DRIVER_WAYLAND_SUPPORTS_GENERIC_EVENTS"
             )
         end
         add_syslinks("pthread", "dl")
