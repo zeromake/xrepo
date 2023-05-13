@@ -5,6 +5,17 @@ option("winrt")
     set_showmenu(true)
 option_end()
 
+option("x11")
+    set_default(true)
+    set_showmenu(true)
+option_end()
+
+option("wayland")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
+
 local sdlPath = os.scriptdir()
 local sdlSrc = {
     "src/*.c",
@@ -134,6 +145,29 @@ elseif is_plat("android") then
         "src/locale/android/*.c",
     })
     add_requires("ndk-cpufeatures", {system=false})
+elseif is_plat("linux") then
+    table.join2(sdlSrc, {
+        "src/core/unix/*.c",
+        "src/core/linux/*.c",
+        "src/audio/alsa/*.c",
+        "src/audio/pulseaudio/*.c",
+        "src/filesystem/unix/*.c",
+        "src/haptic/linux/*.c",
+        "src/hidapi/linux/*.c",
+        "src/joystick/linux/*.c",
+        "src/loadso/dlopen/*.c",
+        "src/locale/unix/*.c",
+        "src/misc/unix/*.c",
+        "src/power/linux/*.c",
+        "src/thread/pthread/*.c",
+        "src/video/x11/*.c",
+        "src/video/wayland/*.c",
+        "src/video/dummy/*.c",
+        "src/timer/unix/*.c",
+        "src/joystick/steam/*.c",
+        "src/joystick/dummy/*.c",
+        "src/sensor/dummy/*.c",
+    })
 end
 
 target("sdl2")
@@ -178,6 +212,32 @@ target("sdl2")
     elseif is_plat("linux", "bsd") then
         if is_plat("bsd") then
             add_syslinks("usbhid")
+        end
+        add_defines(
+            "SDL_FILESYSTEM_UNIX",
+            "SDL_LOADSO_DLOPEN",
+            "SDL_TIMER_UNIX",
+            "SDL_HAPTIC_LINUX",
+            "HAVE_LINUX_INPUT_H",
+            "SDL_JOYSTICK_LINUX",
+            "SDL_INPUT_LINUXEV",
+            "HAVE_POLL",
+            "HAVE_DBUS_DBUS_H",
+            "SDL_USE_LIBDBUS"
+        )
+        add_cflags("-Wimplicit-function-declaration")
+        add_cflags("-Wbuiltin-declaration-mismatch")
+        if get_config("x11") then
+            add_syslinks("X11", "Xext")
+            add_defines(
+                "SDL_VIDEO_DRIVER_X11",
+                "SDL_VIDEO_DRIVER_X11_SUPPORTS_GENERIC_EVENTS",
+            )
+        elseif get_config("wayland") then
+            add_defines(
+                "SDL_VIDEO_DRIVER_WAYLAND",
+                "SDL_VIDEO_DRIVER_WAYLAND_SUPPORTS_GENERIC_EVENTS",
+            )
         end
         add_syslinks("pthread", "dl")
     elseif is_plat("windows", "mingw") then

@@ -45,7 +45,7 @@ package("sdl2")
         if is_plat("bsd") then
             add_syslinks("usbhid")
         end
-        add_syslinks("pthread", "dl")
+        add_syslinks("pthread", "dl", "X11", "Xext")
     end
     add_includedirs("include")
     add_includedirs("include/SDL2")
