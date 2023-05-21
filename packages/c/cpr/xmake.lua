@@ -9,18 +9,20 @@ package("cpr")
     add_versions("1.10.0", "d669c028bd63a1c8827c32b348ecc85e46747bb33be3b00ce59b77717b91aee8")
     add_configs("ssl", {description = "Enable SSL.", default = false, type = "boolean"})
 
+    local curlName = "curl"
     add_deps("cmake")
     if is_plat("mingw") then
         add_syslinks("pthread")
+        curlName = "libcurl"
     end
     add_links("cpr")
 
     on_load(function (package)
         if package:config("ssl") then
-            package:add("deps", "curl")
+            package:add("deps", curlName)
             package:add("deps", "libssh2")
         else
-            package:add("deps", "curl")
+            package:add("deps", curlName)
         end
     end)
 
@@ -35,11 +37,11 @@ package("cpr")
         if package:config("shared") and package:is_plat("macosx") then
             shflags = {"-framework", "CoreFoundation", "-framework", "Security", "-framework", "SystemConfiguration"}
         end
-        local packagedeps = {"curl"}
+        local packagedeps = {curlName}
         if package:config("ssl") then
             table.insert(packagedeps, "libssh2")
         end
-        if package:is_plat("windows") then
+        if package:is_plat("windows", "mingw") then
             -- fix find_package issue on windows
             io.replace("CMakeLists.txt", "find_package%(CURL COMPONENTS .-%)", "find_package(CURL)")
         end
