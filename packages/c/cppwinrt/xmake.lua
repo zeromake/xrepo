@@ -9,17 +9,21 @@ package("cppwinrt")
         import("lib.detect.find_tool")
         import("detect.sdks.find_vstudio")
         local p7z = find_tool("7z")
-        os.execv(p7z.program, {"x", "../microsoft.windows.cppwinrt.2.0.230225.1.nupkg"})
-        local vs = find_vstudio()["2022"]["vcvarsall"]["x86"]
-        local winmds = {
-            path.join(vs["VSInstallDir"], "VC", "Tools", "MSVC", vs["VCToolsVersion"], "lib/x86/store/references/platform.winmd")
-        }
-        local sdkWinmdDir = path.join(path.join(vs["WindowsSdkDir"], "References", vs["WindowsSDKVersion"]), "*", "*", "*.winmd")
-        for _, winmd in ipairs(os.filedirs(path.join(sdkWinmdDir))) do
-            table.insert(winmds, winmd)
+        os.execv(p7z.program, {"x", package:originfile()})
+        local vs
+        for _, vsinfo in pairs(find_vstudio()) do
+            if vsinfo.vcvarsall then
+                vs = vsinfo.vcvarsall[os.arch()]
+                break
+            end
         end
-        os.execv("./bin/cppwinrt", {"-in", "local", "-out", "include"})
-        os.execv("./bin/cppwinrt", table.join2({"-in"}, winmds, {"-out", "include"}))
-        os.cp("include/*", package:installdir("include").."/")
-        os.cp("bin/*.exe", package:installdir("bin").."/")
+
+        local winmds = {"-in"}
+        for _, p in ipairs(vs["WindowsLibPath"]:split(";")) do
+            for _, winmd in ipairs(os.filedirs(path.join(p, "*.winmd"))) do
+                table.insert(winmds, winmd)
+            end
+        end
+        os.execv("bin/cppwinrt", {"-in", "local", "-out", package:installdir("include")})
+        os.execv("bin/cppwinrt", table.join(winmds, {"-out", package:installdir("include")}))
     end)
