@@ -16,8 +16,20 @@ package("vulkan")
         local p7z = find_tool("7z")
         os.execv(p7z.program, {"x", "../vulkan-r.zip"})
         os.execv(p7z.program, {"x", package:originfile()})
-        os.cp("Include/vulkan", package:installdir("include").."/")
-        os.cp("Lib/vulkan-1.lib", package:installdir("lib").."/")
+        
+        for _, d in ipairs({
+            "vulkan",
+            "vk_video",
+            "shaderc",
+        }) do
+            os.cp(path.join("Include", d), package:installdir("include").."/")
+        end
+        for _, f in ipairs({
+            "vulkan-1.lib",
+            "shaderc.lib",
+        }) do
+            os.cp(path.join("Lib", f), package:installdir("lib").."/")
+        end
         os.cp("VulkanRT-1.3.250.1-Components/x64/vulkan-1.dll", package:installdir("bin").."/")
         if package:is_plat("mingw") then
             os.cp("VulkanRT-1.3.250.1-Components/x64/vulkan-1.dll", "./")
