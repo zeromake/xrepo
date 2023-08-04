@@ -12,7 +12,10 @@ package("sokol")
     set_license("zlib")
 
     set_urls(
-        "https://github.com/floooh/sokol/$(version)"
+        "https://github.com/floooh/sokol/$(version)",
+        {
+            version = getVersion
+        }
     )
     add_versions("2023.08.04", "d5cdd99a259b6030ab4b7cba47e553399bd3c01fd6ad97901ac1dfe37e033a5b")
 
