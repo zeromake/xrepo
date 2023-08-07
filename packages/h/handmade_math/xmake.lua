@@ -1,0 +1,15 @@
+package("handmade_math")
+    set_kind("library", {headeronly = true})
+    set_homepage("https://github.com/HandmadeMath/HandmadeMath")
+    set_description("A simple math library for games and computer graphics. Compatible with both C and C++.")
+    set_license("MIT")
+    set_urls("https://github.com/HandmadeMath/HandmadeMath/archive/refs/tags/v$(version).tar.gz")
+
+    add_versions("2.0.0", "3ec811fe2b082d33154e5a69944b47c63111483379f976093a17e773fe01437e")
+    on_install(function (package)
+        os.cp("*.h", package:installdir("include"))
+    end)
+
+    -- on_test(function (package)
+    --     assert(package:has_cfuncs("xxx", {includes = {"xx.h"}}))
+    -- end)
