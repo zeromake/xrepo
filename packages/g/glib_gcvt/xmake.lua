@@ -1,0 +1,15 @@
+package("glib_gcvt")
+    set_homepage("https://github.com/zeromake/glib")
+    set_description("fork glib vasnprintf impl fcvt ecvt")
+    set_license("LGPLv2")
+    set_urls("https://github.com/zeromake/glib/archive/refs/tags/v$(version).tar.gz")
+
+    add_versions("0.1.1", "e170e10989ea58dc34ad296aeea2a779e7a1c9b08f80f44d2890bbb1ddee3f09")
+    on_install(function (package)
+        local configs = {}
+        import("package.tools.xmake").install(package, configs)
+    end)
+    on_test(function (package)
+        assert(package:has_cfuncs("_gfcvt_s", {includes = {"glib/gcvt.h"}}))
+        assert(package:has_cfuncs("_gecvt_s", {includes = {"glib/gcvt.h"}}))
+    end)
