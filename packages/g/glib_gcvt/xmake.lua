@@ -4,7 +4,7 @@ package("glib_gcvt")
     set_license("LGPLv2")
     set_urls("https://github.com/zeromake/glib/archive/refs/tags/v$(version).tar.gz")
 
-    add_versions("0.1.1", "e170e10989ea58dc34ad296aeea2a779e7a1c9b08f80f44d2890bbb1ddee3f09")
+    add_versions("0.1.2", "2fbc916d82e8306d2c07ad661fb3c5bf97ff83c95ab101b837a9ebd937d180e5")
     on_install(function (package)
         local configs = {}
         import("package.tools.xmake").install(package, configs)
