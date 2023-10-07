@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2023.08.05"] = "archive/47d92ff86298fc96b3b84d93d0ee8c8533d3a2d2.tar.gz",
+        ["2023.10.07"] = "archive/d98c8b92c25070f13d0491f5fade1d9d2ca885ad.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -17,6 +18,7 @@ package("sokol")
             version = getVersion
         }
     )
+    add_versions("2023.10.07", "8feafbe69626fa33d071ebeef158431fab4831c77e60fff91a6f659ba34d0353")
     add_versions("2023.08.05", "bfad73555e07e1f7a0b257f612ac62cb1f858169c39e1df1fd134431cdb07c64")
 
     on_install(function (package)

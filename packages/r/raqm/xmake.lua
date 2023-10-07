@@ -6,6 +6,7 @@ package("raqm")
     set_license("MIT")
     set_urls("https://github.com/HOST-Oman/libraqm/releases/download/v$(version)/raqm-$(version).tar.xz")
 
+    add_versions("0.10.1", "4d76a358358d67c5945684f2f10b3b08fb80e924371bf3ebf8b15cd2e321d05d")
     add_versions("0.9.0", "9ed6fdf41da6391fc9bf7038662cbe412c330aa6eb22b19704af2258e448107c")
 
     add_includedirs("include")

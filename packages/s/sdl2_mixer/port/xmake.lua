@@ -22,6 +22,10 @@ end
 
 add_requires("sdl2", {system=false})
 
+if is_plat("windows") then
+    add_cxflags("/utf-8")
+end
+
 local sdlMixerFiles = {
     "src/*.c",
     "src/codecs/*.c",

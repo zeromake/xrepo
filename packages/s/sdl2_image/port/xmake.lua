@@ -21,6 +21,10 @@ end
 
 add_requires("sdl2", {system=false})
 
+if is_plat("windows") then
+    add_cxflags("/utf-8")
+end
+
 target("sdl2_image")
     set_kind("$(kind)")
     check_cincludes("HAVE_STDINT_H", "stdint.h")

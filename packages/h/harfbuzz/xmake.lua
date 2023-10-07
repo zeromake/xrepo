@@ -5,6 +5,7 @@ package("harfbuzz")
     set_license("MIT")
     set_urls("https://github.com/harfbuzz/harfbuzz/releases/download/$(version)/harfbuzz-$(version).tar.xz")
     add_versions("5.3.1", "4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d")
+    add_versions("8.1.1", "0305ad702e11906a5fc0c1ba11c270b7f64a8f5390d676aacfd71db129d6565f")
     add_configs("freetype", {description = "Support freetype", default = false, type = "boolean"})
 
     add_includedirs("include")

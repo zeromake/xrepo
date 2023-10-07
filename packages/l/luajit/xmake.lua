@@ -159,12 +159,24 @@ target("buildvm")
     add_files("src/host/buildvm*.c")
 ]]
 
+local function getVersion(version)
+    local versions ={
+        ["2023.09.25"] = "archive/becf5cc65d966a8926466dd43407c48bfea0fa13.tar.gz",
+    }
+    return versions[tostring(version)]
+end
+
 package("luajit")
     set_homepage("https://luajit.org")
     set_description("LuaJIT is a Just-In-Time Compiler (JIT) for the Lua programming language. Lua is a powerful, dynamic and light-weight programming language. It may be embedded or used as a general-purpose, stand-alone language.")
     set_license("MIT")
-    set_urls("https://github.com/LuaJIT/LuaJIT/archive/d0e88930ddde28ff662503f9f20facf34f7265aa.zip")
-    add_versions("202301040544", "73ea842b8668d1c23cda13d657dc9066064b5ebe77885ad425250500f9fd15fe")
+    set_urls(
+        "https://github.com/LuaJIT/LuaJIT/$(version)",
+        {
+            version = getVersion
+        }
+    )
+    add_versions("2023.09.25", "6d7e8fc691d45fe837d05e2a03f3a41b0886a237544d30f74f1355ce2c8d9157")
     on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
         local lua_target = nil
         local lua_os = nil
@@ -205,6 +217,17 @@ package("luajit")
             package:installdir("bin").."/minilua",
             args
         )
+        if os.exists("src/host/genversion.lua") and os.exists(".relver") then
+            os.cp(".relver", "src/luajit_relver.txt")
+            os.cd("src")
+            os.vrunv(
+                package:installdir("bin").."/minilua",
+                {
+                    "host/genversion.lua"
+                }
+            )
+            os.cd("-")
+        end
         local _buildvmScript = string.format(buildvmScript, commonDefines, lua_arch32)
         io.writefile("xmake.lua", _buildvmScript)
         print(_buildvmScript)

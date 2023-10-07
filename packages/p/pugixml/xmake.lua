@@ -19,6 +19,7 @@ package("pugixml")
     add_configs('no_stl', {description = "Disable STL", default = false, type = "boolean"})
     add_configs('no_exceptions', {description = "Disable Exceptions", default = false, type = "boolean"})
 
+    add_versions("1.14", "2f10e276870c64b1db6809050a75e11a897a8d7456c4be5c6b2e35a11168a015")
     add_versions("1.13", "40c0b3914ec131485640fa57e55bf1136446026b41db91c1bef678186a12abbe")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")

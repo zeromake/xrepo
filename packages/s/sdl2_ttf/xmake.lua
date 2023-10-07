@@ -8,6 +8,7 @@ package("sdl2_ttf")
     set_license("zlib")
     set_urls("https://github.com/libsdl-org/SDL_ttf/releases/download/release-$(version)/SDL2_ttf-$(version).tar.gz")
 
+    add_versions("2.20.2", "9dc71ed93487521b107a2c4a9ca6bf43fb62f6bddd5c26b055e6b91418a22053")
     add_versions("2.20.1", "78cdad51f3cc3ada6932b1bb6e914b33798ab970a1e817763f22ddbfd97d0c57")
     for _, op in ipairs(options) do
         add_configs(op, {description = "Support "..op, default = false, type = "boolean"})

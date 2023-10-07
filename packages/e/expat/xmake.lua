@@ -8,6 +8,7 @@ package("expat")
         return version:gsub("%.", "_") .. "/expat-" .. version
     end})
 
+    add_versions("2.5.0", "6f0e6e01f7b30025fa05c85fdad1e5d0ec7fd35d9f61b22f34998de11969ff67")
     add_versions("2.4.8", "a247a7f6bbb21cf2ca81ea4cbb916bfb9717ca523631675f99b3d4a5678dcd16")
 
     for _, op in ipairs(options) do

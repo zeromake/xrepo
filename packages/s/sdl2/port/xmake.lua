@@ -15,6 +15,9 @@ option("wayland")
     set_showmenu(true)
 option_end()
 
+if is_plat("windows") then
+    add_cxflags("/utf-8")
+end
 
 local sdlPath = os.scriptdir()
 local sdlSrc = {

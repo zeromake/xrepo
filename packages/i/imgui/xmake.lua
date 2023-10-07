@@ -4,6 +4,7 @@ package("imgui")
     set_license("MIT")
     set_urls("https://github.com/ocornut/imgui/archive/refs/tags/v$(version).tar.gz")
 
+    add_versions("1.89.9", "1acc27a778b71d859878121a3f7b287cd81c29d720893d2b2bf74455bf9d52d6")
     add_versions("1.89.8", "6680ccc32430009a8204291b1268b2367d964bd6d1b08a4e0358a017eb8e8c9e")
 
     add_configs("backend", {description = "Select backend", default = "", type = "string"})

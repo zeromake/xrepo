@@ -11,6 +11,7 @@ package("sdl2_image")
     set_license("zlib")
     set_urls("https://github.com/libsdl-org/SDL_image/releases/download/release-$(version)/SDL2_image-$(version).tar.gz")
 
+    add_versions("2.6.3", "931c9be5bf1d7c8fae9b7dc157828b7eee874e23c7f24b44ba7eff6b4836312c")
     add_versions("2.6.2", "48355fb4d8d00bac639cd1c4f4a7661c4afef2c212af60b340e06b7059814777")
 
     for _, op in ipairs(options) do

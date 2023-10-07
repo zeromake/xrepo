@@ -13,6 +13,7 @@ package("sdl2_mixer")
     set_license("zlib")
     set_urls("https://github.com/libsdl-org/SDL_mixer/releases/download/release-$(version)/SDL2_mixer-$(version).tar.gz")
 
+    add_versions("2.6.3", "7a6ba86a478648ce617e3a5e9277181bc67f7ce9876605eea6affd4a0d6eea8f")
     add_versions("2.6.2", "8cdea810366decba3c33d32b8071bccd1c309b2499a54946d92b48e6922aa371")
     for _, op in ipairs(options) do
         add_configs(op, {description = "Support "..op, default = false, type = "boolean"})
