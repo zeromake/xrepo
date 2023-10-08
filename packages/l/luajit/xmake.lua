@@ -151,7 +151,7 @@ target("buildvm")
 %s
     set_plat(os.host())
     set_arch(os.arch())
-    if %d == 1 then
+    if %d == 1 and os.host() ~= "macosx" then
         set_arch("x86")
     end
     add_includedirs("dynasm")
@@ -209,7 +209,7 @@ package("luajit")
             commonDefines = commonDefines.."    add_defines(\"TARGET_OS_IPHONE=1\")\n"
             commonDefines = commonDefines.."    add_defines(\"LUAJIT_NO_UNWIND\")\n"
         end
-        io.writefile("xmake.lua", string.format(miniluaScript, commonDefines))
+        io.writefile("xmake.lua", string.format(miniluaScript, commonDefines, lua_arch32))
         local configs = {}
         import("package.tools.xmake").install(package, configs)
         local args = generateBuildvm(package)

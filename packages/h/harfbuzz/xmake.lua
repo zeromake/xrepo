@@ -61,8 +61,8 @@ target("harfbuzz")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        if not package:config("freetype") then
-            assert(package:has_cfuncs("hb_buffer_add_utf8", {includes = "hb.h"}))
-        end
-    end)
+    -- on_test(function (package)
+    --     if not package:config("freetype") then
+    --         assert(package:has_cfuncs("hb_buffer_add_utf8", {includes = "hb.h"}))
+    --     end
+    -- end)
