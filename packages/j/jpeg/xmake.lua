@@ -1,13 +1,36 @@
+local function getVersion(version)
+    local versions ={
+        ["2022.05.07"] = "archive/1cd244dca8451b0f5f18f04c8eaa4bfe3f866c49.tar.gz",
+    }
+    return versions[tostring(version)]
+end
+
 package("jpeg")
     set_homepage("https://www.ijg.org")
     set_description("A widely used C library for reading and writing JPEG image files.")
 
     set_license("bsd")
-    set_urls("http://www.ijg.org/files/jpegsrc.v$(version).tar.gz")
-    add_versions("9e", "4077d6a6a75aeb01884f708919d25934c93305e49f7e3f36db9129320e6f4f3d")
+    set_urls("https://github.com/libsdl-org/jpeg/$(version)")
+    add_versions("2022.05.07", "149dc39fc0e37bab3996430c581bdb525e3664e380ffcd57b05addafa8e2800d")
 
     add_includedirs("include")
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
+        io.writefile("jconfig.txt", [[
+#define HAVE_PROTOTYPES 1
+#define HAVE_UNSIGNED_CHAR 1
+#define HAVE_UNSIGNED_SHORT 1
+#define HAVE_STDDEF_H 1
+#define HAVE_STDLIB_H 1
+#define HAVE_LOCALE_H 1
+#ifdef JPEG_INTERNALS
+#define INLINE __inline__
+#endif
+#ifdef JPEG_CJPEG_DJPEG
+#define BMP_SUPPORTED
+#define GIF_SUPPORTED
+#define PPM_SUPPORTED
+#define TARGA_SUPPORTED
+#endif]])      
         io.writefile("xmake.lua", [[
             includes("check_cincludes.lua")
             add_rules("mode.debug", "mode.release")
