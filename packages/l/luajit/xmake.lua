@@ -230,7 +230,7 @@ package("luajit")
         io.writefile("xmake.lua", _buildvmScript)
         print(_buildvmScript)
         local buildvmConfig = {
-            "plat": os.host()
+            plat=os.host()
         }
         if lua_arch32 == 1 then
             buildvmConfig["arch"] = os.host() == "windows" and "x86" or "i386"
