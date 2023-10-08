@@ -148,12 +148,8 @@ target("minilua")
 local buildvmScript = [[
 target("buildvm")
     set_kind("binary")
-%s
-    set_plat(os.host())
-    set_arch(os.arch())
-    if %d == 1 and os.host() ~= "macosx" then
-        set_arch("x86")
-    end
+
+    %s
     add_includedirs("dynasm")
     add_includedirs("src")
     add_files("src/host/buildvm*.c")
@@ -230,10 +226,16 @@ package("luajit")
             )
             os.cd("-")
         end
-        local _buildvmScript = string.format(buildvmScript, commonDefines, lua_arch32)
+        local _buildvmScript = string.format(buildvmScript, commonDefines)
         io.writefile("xmake.lua", _buildvmScript)
         print(_buildvmScript)
-        import("package.tools.xmake").install(package)
+        local buildvmConfig = {
+            "plat": os.host()
+        }
+        if lua_arch32 == 1 then
+            buildvmConfig["arch"] = os.host() == "windows" and "x86" or "i386"
+        end
+        import("package.tools.xmake").install(package, buildvmConfig)
         local arr = generateVm(package)
         for _, args in ipairs(arr) do
             os.vrunv(package:installdir("bin").."/buildvm", args)
