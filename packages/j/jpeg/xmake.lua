@@ -10,7 +10,9 @@ package("jpeg")
     set_description("A widely used C library for reading and writing JPEG image files.")
 
     set_license("bsd")
-    set_urls("https://github.com/libsdl-org/jpeg/$(version)")
+    set_urls("https://github.com/libsdl-org/jpeg/$(version)", {
+        version = getVersion
+    })
     add_versions("2022.05.07", "149dc39fc0e37bab3996430c581bdb525e3664e380ffcd57b05addafa8e2800d")
 
     add_includedirs("include")
