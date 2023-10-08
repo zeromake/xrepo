@@ -35,7 +35,10 @@ target("luajit")
         add_defines("LUAJIT_OS=LUAJIT_OS_OSX")
         add_defines("LUAJIT_UNWIND_EXTERNAL", "_LARGEFILE_SOURCE", "_FILE_OFFSET_BITS=64")
         add_undefines("_FORTIFY_SOURCE")
+        add_defines("TARGET_OS_IPHONE=0")
     elseif is_plat("iphoneos") then
         add_defines("LUAJIT_OS=LUAJIT_OS_OSX")
         add_defines("TARGET_OS_IPHONE=1")
+    else
+        add_defines("TARGET_OS_IPHONE=0")
     end

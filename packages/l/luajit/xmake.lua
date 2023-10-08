@@ -208,6 +208,8 @@ package("luajit")
         if package:is_plat("iphoneos") then
             commonDefines = commonDefines.."    add_defines(\"TARGET_OS_IPHONE=1\")\n"
             commonDefines = commonDefines.."    add_defines(\"LUAJIT_NO_UNWIND\")\n"
+        else
+            commonDefines = commonDefines.."    add_defines(\"TARGET_OS_IPHONE=0\")\n"
         end
         io.writefile("xmake.lua", string.format(miniluaScript, commonDefines, lua_arch32))
         local configs = {}
