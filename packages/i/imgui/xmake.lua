@@ -20,6 +20,9 @@ package("imgui")
     add_configs("backend", {description = "Select backend", default = "", type = "string"})
     add_configs("freetype", {description = "Use freetype", default = false, type = "boolean"})
 
+    add_includedirs("include")
+    add_includedirs("include/imgui")
+
     on_load(function (package)
         if package:config("freetype") then
             package:add("deps", "freetype")
