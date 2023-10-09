@@ -33,6 +33,8 @@ end
 
 local packages = {
     sdl2="sdl2",
+    sdl2renderer="sdl2",
+    sdl="sdl2",
     sdlrenderer="sdl2",
     glfw="glfw",
     glut="freeglut"
@@ -41,9 +43,9 @@ local packages = {
 local backend = get_config("backend")
 if backend and backend ~= "" then
     local backends = string.split(backend, ";")
-    for _, backend in ipairs(backends) do
-        if packages[backend] ~= nil then
-            add_requires(backend)
+    for _, item in ipairs(backends) do
+        if packages[item] ~= nil then
+            add_requires(item)
         end
     end
 end
@@ -55,15 +57,15 @@ target("imgui")
     local backend = get_config("backend")
     if backend and backend ~= "" then
         local backends = string.split(backend, ";")
-        for _, backend in ipairs(backends) do
-            if packages[backend] ~= nil then
-                add_packages(backend)
+        for _, item in ipairs(backends) do
+            if packages[item] ~= nil then
+                add_packages(item)
             end
-            add_headerfiles("backends/imgui_impl_"..backend..".h", {prefixdir = "imgui/backends"})
-            if backend == "metal" or backend == "osx" then
-                add_files("backends/imgui_impl_"..backend..".mm")
+            add_headerfiles("backends/imgui_impl_"..item..".h", {prefixdir = "imgui/backends"})
+            if item == "metal" or item == "osx" then
+                add_files("backends/imgui_impl_"..item..".mm")
             else
-                add_files("backends/imgui_impl_"..backend..".cpp")
+                add_files("backends/imgui_impl_"..item..".cpp")
             end
         end
     end
