@@ -35,6 +35,33 @@ package("imgui")
         table.insert(configs, "--backend="..package:config("backend"))
         table.insert(configs, "--freetype="..(package:config("freetype") and "y" or "n"))
         import("package.tools.xmake").install(package, configs)
+        local binary_to_compressed_c = package:installdir("bin").."/binary_to_compressed_c"
+        if os.host() == "windows" or os.host() == "mingw" then
+            binary_to_compressed_c = binary_to_compressed_c..".exe"
+        end
+        if os.exists(binary_to_compressed_c) then
+            local fontDir = package:installdir("include/imgui/misc/fonts")
+            if not os.exists(fontDir) then
+                os.mkdir(fontDir)
+            end
+            for _, fontName in ipairs({
+                "Cousine-Regular",
+                "DroidSans",
+                "Karla-Regular",
+                "ProggyClean",
+                "ProggyTiny",
+                "Roboto-Medium",
+            }) do
+                local fontPath = "misc/fonts/"..fontName..".ttf"
+                if os.exists(fontPath) then
+                    fontName = fontName:gsub("-", "")
+                    local outdata, errdata = os.iorunv(binary_to_compressed_c, {fontPath, fontName})
+                    local f = io.open(path.join(fontDir, fontName..".h"), "wb")
+                    f:write(outdata)
+                    f:close()
+                end
+            end
+        end
     end)
 
     -- on_test(function (package)

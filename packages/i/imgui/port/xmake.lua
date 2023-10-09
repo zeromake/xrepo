@@ -77,3 +77,8 @@ target("imgui")
     end
     add_headerfiles("imgui.h", {prefixdir = "imgui"})
     add_headerfiles("imconfig.h", {prefixdir = "imgui"})
+
+target("binary_to_compressed_c")
+    set_plat(os.host())
+    set_arch(os.arch())
+    add_files("misc/fonts/binary_to_compressed_c.cpp")
