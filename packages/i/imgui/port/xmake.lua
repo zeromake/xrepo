@@ -59,7 +59,7 @@ target("imgui")
             if packages[backend] ~= nil then
                 add_packages(backend)
             end
-            add_headerfiles("backends/imgui_impl_"..backend..".h", {prefixdir = "backends"})
+            add_headerfiles("backends/imgui_impl_"..backend..".h", {prefixdir = "imgui/backends"})
             if backend == "metal" or backend == "osx" then
                 add_files("backends/imgui_impl_"..backend..".mm")
             else
@@ -71,5 +71,7 @@ target("imgui")
         add_defines("IMGUI_ENABLE_FREETYPE")
         add_packages("freetype")
         add_files("misc/freetype/*.cpp")
+        add_headerfiles("misc/freetype/imgui_freetype.h", {prefixdir = "imgui/misc/freetype"})
     end
-    add_headerfiles("imgui.h", "imconfig.h")
+    add_headerfiles("imgui.h", {prefixdir = "imgui"})
+    add_headerfiles("imconfig.h", {prefixdir = "imgui"})
