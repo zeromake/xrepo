@@ -58,6 +58,17 @@ target("imgui")
     add_files("*.cpp|imgui_demo.cpp")
     add_includedirs(".")
     local backend = get_config("backend")
+    on_config(function (target)
+        local pkgs = target:pkgs()
+        for n, v in pairs(pkgs) do
+            if n == "freetype" then
+                local includedir = path.join(v:get("sysincludedirs"), "freetype2")
+                if os.exists(path.join(includedir, "ft2build.h")) then
+                    target:add("includedirs", includedir)
+                end
+            end
+        end
+    end)
     if backend and backend ~= "" then
         local backends = string.split(backend, ";")
         for _, item in ipairs(backends) do
