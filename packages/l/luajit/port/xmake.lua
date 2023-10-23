@@ -18,7 +18,12 @@ target("luajit")
         "src/luajit.h"
     )
     add_files("src/lj_*.c", "src/lib_*.c")
-    add_vectorexts("all")
+    if is_arch("arm.*") then
+        add_vectorexts("neon")
+    else
+        add_vectorexts("avx", "avx2")
+        add_vectorexts("sse", "sse2", "sse3", "ssse3", "sse4.2")
+    end
     if is_plat("windows", "mingw") then
         add_defines("LUAJIT_OS=LUAJIT_OS_WINDOWS")
         add_defines(
