@@ -24,14 +24,15 @@ option("logging")
 
 target("dav1d")
     set_kind("$(kind)")
-    add_includedirs("include")
+    add_includedirs(".", "include", "include/dav1d", "src")
 
     set_configdir("$(buildir)/config")
     add_includedirs("$(buildir)/config")
     add_configfiles("config.h.in")
 
-    set_configvar("CONFIG_8BPC", (get_config("bitdepths") == "8" and 1 or ''))
-    set_configvar("CONFIG_16BPC", get_config("bitdepths") == "16" and 1 or '')
+    if get_config("bitdepths") then
+        set_configvar(string.format("CONFIG_%sBPC", get_config("bitdepths")), 1)
+    end
     if get_config('logging') then
         set_configvar("CONFIG_LOG", 1)
     end
@@ -39,20 +40,12 @@ target("dav1d")
         set_configvar("_GNU_SOURCE", 1)
     end
 
-    set_configvar("_WIN32_WINNT", nil)
-    set_configvar("UNICODE", nil)
-    set_configvar("_UNICODE", nil)
-    set_configvar("__USE_MINGW_ANSI_STDIO", nil)
-    set_configvar("_CRT_DECLARE_NONSTDC_NAMES", nil)
-    set_configvar("__USE_MINGW_ANSI_STDIO", nil)
-    set_configvar("HAVE_FSEEKO", nil)
     if is_plat("windows", "mingw") then
-        set_configvar("_WIN32_WINNT", "0x0601")
-        set_configvar("UNICODE", 1)
-        set_configvar("_UNICODE", 1)
-        set_configvar("__USE_MINGW_ANSI_STDIO", 1)
-        set_configvar("_CRT_DECLARE_NONSTDC_NAMES", 1)
-        set_configvar("__USE_MINGW_ANSI_STDIO", 1)
+        add_defines("_WIN32_WINNT=0x0601")
+        add_defines("UNICODE=1")
+        add_defines("_UNICODE=1")
+        add_defines("__USE_MINGW_ANSI_STDIO=1")
+        add_defines("_CRT_DECLARE_NONSTDC_NAMES=1")
         configvar_check_cfuncs("HAVE_FSEEKO", "fseeko", {includes = {"stdio.h"}})
         add_files("src/win32/*.c")
     else
@@ -160,6 +153,19 @@ target("dav1d")
     elseif is_arch("x86", "x64", "x86_64") then
         set_toolset("as", "nasm")
         add_files("src/x86/cpu.c")
+        add_configfiles("config.asm.in")
+        set_configvar("ASM_FORCE_VEX_ENCODING", 0)
+        set_configvar("ASM_PIC", 1)
+        set_configvar("ASM_PREFIX", 1)
+        if is_arch("x86") then
+            set_configvar("ASM_ARCH_X86_32", 1)
+            set_configvar("ASM_ARCH_X86_64", 0)
+            set_configvar("ASM_STACK_ALIGNMENT", 4)
+        else
+            set_configvar("ASM_ARCH_X86_32", 0)
+            set_configvar("ASM_ARCH_X86_64", 1)
+            set_configvar("ASM_STACK_ALIGNMENT", 16)
+        end
 
         add_files(
             'src/x86/cpuid.asm',
@@ -219,5 +225,6 @@ target("dav1d")
         end
     end
 
-    
+    add_headerfiles("include/dav1d/*.h", {prefixdir = "dav1d"})
+    add_headerfiles("version.h", {prefixdir = "dav1d"})
     
