@@ -44,6 +44,11 @@ ${define HAVE_DLSYM}
 ${define HAVE_UNISTD_H}
 ${define HAVE_IO_H}
 ${define HAVE_PTHREAD_NP_H}
+
+${define ARCH_AARCH64}
+${define ARCH_ARM}
+${define HAVE_AS_FUNC}
+${define PIC}
 ]])
         io.writefile("version.h", [[
 #ifndef DAV1D_VERSION_H

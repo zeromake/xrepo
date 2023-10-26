@@ -94,6 +94,10 @@ target("dav1d")
     )
 
     if is_arch("arm64.*") then
+        set_configvar("PIC", 3)
+        add_asflags("-fPIC")
+        add_cxflags("-fPIC")
+        set_configvar("ARCH_AARCH64", 1)
         add_files("src/arm/cpu.c")
         add_files(
             'src/arm/64/itx.S',
@@ -122,6 +126,10 @@ target("dav1d")
             )
         end
     elseif is_arch("arm.*") and not is_arch("arm64.*") then
+        set_configvar("ARCH_ARM", 1)
+        set_configvar("PIC", 3)
+        add_asflags("-fPIC")
+        add_cxflags("-fPIC")
         add_files("src/arm/cpu.c")
         add_files(
             'src/arm/32/itx.S',
