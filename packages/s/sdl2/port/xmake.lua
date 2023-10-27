@@ -19,7 +19,7 @@ if is_plat("windows") then
     add_cxflags("/utf-8")
 end
 
-local sdlPath = os.scriptdir()
+local sdlMainSrc = {}
 local sdlSrc = {
     "src/*.c",
     "src/atomic/*.c",
@@ -52,6 +52,9 @@ local sdlSrc = {
 
 
 if is_plat("macosx") then
+    table.join2(sdlMainSrc, {
+        'src/main/dummy/*.c'
+    })
     table.join2(sdlSrc, {
         "src/power/macosx/*.c",
         "src/video/cocoa/*.m",
@@ -72,6 +75,9 @@ if is_plat("macosx") then
         "src/video/dummy/*.c",
     })
 elseif is_plat("iphoneos") then
+    table.join2(sdlMainSrc, {
+        'src/main/uikit/*.c'
+    })
     table.join2(sdlSrc, {
         "src/power/uikit/*.m",
         "src/video/uikit/*.m",
@@ -106,6 +112,9 @@ elseif is_plat("windows", "mingw") then
         "src/video/dummy/*.c",
     })
     if get_config("winrt") then
+        table.join2(sdlMainSrc, {
+            'src/main/winrt/*.cpp'
+        })
         table.join2(sdlSrc, {
             "src/audio/wasapi/*.cpp",
             "src/core/winrt/*.cpp",
@@ -121,6 +130,9 @@ elseif is_plat("windows", "mingw") then
         })
         add_requires("cppwinrt")
     else
+        table.join2(sdlMainSrc, {
+            'src/main/windows/*.c'
+        })
         table.join2(sdlSrc, {
             "src/thread/generic/SDL_syscond.c",
             "src/thread/windows/*.c",
@@ -129,6 +141,9 @@ elseif is_plat("windows", "mingw") then
         })
     end
 elseif is_plat("android") then
+    table.join2(sdlMainSrc, {
+        'src/main/android/*.c'
+    })
     table.join2(sdlSrc, {
         "src/video/android/*.c",
         "src/misc/android/*.c",
@@ -149,6 +164,9 @@ elseif is_plat("android") then
     })
     add_requires("ndk-cpufeatures", {system=false})
 elseif is_plat("linux") then
+    table.join2(sdlMainSrc, {
+        'src/main/dummy/*.c'
+    })
     table.join2(sdlSrc, {
         "src/core/unix/*.c",
         "src/core/linux/*.c",
@@ -179,9 +197,9 @@ target("sdl2")
     if is_plat("windows", "mingw") then
         add_defines("SDL_THREAD_WINDOWS=1")
     end
-    add_includedirs(path.join(sdlPath, "include"), path.join(sdlPath, "src/video/khronos"))
+    add_includedirs("include", "src/video/khronos")
     for _, f in ipairs(sdlSrc) do
-        add_files(path.join(sdlPath, f))
+        add_files(f)
     end
     if is_plat("macosx") then
         add_frameworks(
@@ -287,3 +305,10 @@ target("sdl2")
         add_syslinks("GLESv1_CM", "GLESv2", "OpenSLES", "log", "android")
     end
     add_headerfiles(path.join("include", "*.h"), {prefixdir="SDL2"})
+
+target("sdl2_main")
+    set_kind("$(kind)")
+    add_includedirs("include")
+    for _, f in ipairs(sdlMainSrc) do
+        add_files(f)
+    end
