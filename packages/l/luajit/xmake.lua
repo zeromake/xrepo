@@ -148,8 +148,7 @@ target("minilua")
 local buildvmScript = [[
 target("buildvm")
     set_kind("binary")
-
-    %s
+%s
     add_includedirs("dynasm")
     add_includedirs("src")
     add_files("src/host/buildvm*.c")
