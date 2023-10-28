@@ -56,7 +56,7 @@ local function generateVm(package)
         }
     }
 
-    if package:is_plat("windows") then
+    if package:is_plat("windows", "mingw") then
         table.insert(arr, {
             "-m",
             "peobj",
