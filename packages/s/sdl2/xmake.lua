@@ -49,6 +49,7 @@ package("sdl2")
     end
     add_includedirs("include")
     add_includedirs("include/SDL2")
+    add_links("sdl2")
     if is_plat("android") then
         add_deps("ndk-cpufeatures")
         add_syslinks("OpenSLES", "log", "android")
