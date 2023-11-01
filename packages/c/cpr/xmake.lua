@@ -3,10 +3,11 @@ package("cpr")
     set_description("C++ Requests is a simple wrapper around libcurl inspired by the excellent Python Requests project.")
     set_license("MIT")
 
-    set_urls("https://github.com/libcpr/cpr/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/libcpr/cpr.git")
-    add_versions("1.8.3", "0784d4c2dbb93a0d3009820b7858976424c56578ce23dcd89d06a1d0bf5fd8e2")
+    set_urls("https://github.com/libcpr/cpr/archive/refs/tags/$(version).tar.gz")
+
+    add_versions("1.10.5", "c8590568996cea918d7cf7ec6845d954b9b95ab2c4980b365f582a665dea08d8")
     add_versions("1.10.0", "d669c028bd63a1c8827c32b348ecc85e46747bb33be3b00ce59b77717b91aee8")
+    add_versions("1.8.3", "0784d4c2dbb93a0d3009820b7858976424c56578ce23dcd89d06a1d0bf5fd8e2")
     add_configs("ssl", {description = "Enable SSL.", default = false, type = "boolean"})
 
     local curlName = "curl"

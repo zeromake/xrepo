@@ -108,7 +108,8 @@ target("wolfssl")
         "CYASSL_USER_SETTINGS",
         "WOLFSSL_NO_MD4",
         "OPENSSL_EXTRA",
-        "WOLFSSL_SHA512"
+        "WOLFSSL_SHA512",
+        "WOLFSSL_SYS_CA_CERTS"
     )
 
     for _, op in ipairs(options) do
@@ -124,6 +125,8 @@ target("wolfssl")
     elseif is_host("macosx") then
         add_includedirs("IDE/XCODE")
         add_headerfiles("IDE/XCODE/*.h")
+        add_defines("HAVE_SECURITY_SECTRUSTSETTINGS_H")
+        add_frameworks("Security")
     end
 
     for _, f in ipairs(sourceFiles) do

@@ -8,6 +8,7 @@ package("curl")
         return version:gsub("%.", "_") .. "/curl-" .. version
     end})
 
+    add_versions("8.4.0", "e5250581a9c032b1b6ed3cf2f9c114c811fc41881069e9892d115cc73f9e88c6")
     add_versions("7.86.0", "f5ca69db03eea17fa8705bdfb1a9f58d76a46c9010518109bb38f313137e0a28")
     add_versions("7.85.0", "21a7e83628ee96164ac2b36ff6bf99d467c7b0b621c1f7e317d8f0d96011539c")
 
@@ -36,7 +37,7 @@ package("curl")
         end
     end)
 
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         if package:is_plat("windows", "mingw") then
             os.cp("lib/config-win32.h", "lib/curl_config.h")
@@ -181,6 +182,6 @@ ${define SIZEOF_CURL_OFF_T}
         import("package.tools.xmake").install(package, configs)
     end)
 
-    -- on_test(function (package)
-    --     assert(package:has_cfuncs("curl_version()", {includes = {"curl/curl.h"}}))
-    -- end)
+    on_test(function (package)
+        assert(package:has_cfuncs("curl_version()", {includes = {"curl/curl.h"}}))
+    end)

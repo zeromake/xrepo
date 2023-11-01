@@ -32,6 +32,9 @@
 
 #define OS "mac"
 
+#include <stdbool.h>
+#define HAVE_BOOL_T             1
+
 /* Define if you want the built-in manual */
 #define USE_MANUAL              1
 

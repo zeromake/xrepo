@@ -4,18 +4,6 @@ includes("check_cfuncs.lua")
 includes("check_ctypes.lua")
 add_rules("mode.debug", "mode.release")
 
-local options = {}
-
-for _, op in ipairs(options) do
-    option(op)
-        set_default(false)
-        set_showmenu(true)
-    option_end()
-    if has_config(op) then 
-        add_requires(op, {system=false})
-    end
-end
-
 option("winrt")
     set_default(false)
     set_showmenu(true)
@@ -31,7 +19,8 @@ end
 local sourceFiles = {
     "lib/*.c",
     "lib/vtls/*.c",
-    "lib/vauth/*.c"
+    "lib/vauth/*.c",
+    "lib/vquic/*.c"
 }
 
 function configvar_check_sizeof(define_name, type_name)
