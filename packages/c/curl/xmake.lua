@@ -40,10 +40,7 @@ package("curl")
 
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
-        if package:is_plat("windows", "mingw") then
-            os.cp("lib/config-win32.h", "lib/curl_config.h")
-        else
-            io.writefile("curl_config.h.in", [[
+        io.writefile("curl_config.h.in", [[
 #ifndef HEADER_CURL_CONFIG_H
 #define HEADER_CURL_CONFIG_H
 
@@ -113,6 +110,8 @@ ${define HAVE_WINSOCK2_H}
 ${define HAVE_WS2TCPIP_H}
 ${define HAVE_PROCESS_H}
 ${define TIME_WITH_SYS_TIME}
+${define HAVE_ZLIB_H}
+${define HAVE_LIBZ}
 
 ${define HAVE_BOOL_T}
 
@@ -135,8 +134,19 @@ ${define SIZEOF_INT}
 ${define SIZEOF_SIZE_T}
 ${define SIZEOF_CURL_OFF_T}
 
-#define HAVE_RECV 1
-#define HAVE_SEND 1
+${define HAVE_RECV}
+${define HAVE_SEND}
+
+// wolfssl
+${define USE_WOLFSSL}
+${define OPENSSL_EXTRA}
+
+// apple
+${define USE_SECTRANSP}
+
+// windows
+${define USE_SCHANNEL}
+${define USE_WINDOWS_SSPI}
 
 #ifndef _WIN32
 
@@ -169,8 +179,7 @@ ${define SIZEOF_CURL_OFF_T}
 #endif
 
 #endif /* HEADER_CURL_CONFIG_H */
-        ]])
-        end
+]])
         local configs = {}
         configs["wolfssl"] = package:config("wolfssl") and "y" or "n"
         configs["winrt"] = package:config("winrt") and "y" or "n"
