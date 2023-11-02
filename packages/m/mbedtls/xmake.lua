@@ -22,7 +22,7 @@ package("mbedtls")
         end
     end)
 
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         import("lib.detect.find_program")
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
 

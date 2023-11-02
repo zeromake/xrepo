@@ -8,7 +8,7 @@ package("brotli")
     add_versions("1.0.9", "f9e8d81d0405ba66d181529af42a3354f838c939095ff99930da6aa9cdf6fe46")
 
     add_includedirs("include")
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         os.rm("BUILD")
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")

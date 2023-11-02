@@ -49,7 +49,7 @@ package("archive")
         end
     end)
 
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         os.cp("contrib/android/include/android_lf.h", "android_lf.h")
         io.writefile("config.h.in", [[

@@ -31,7 +31,7 @@ package("fribidi")
         "HAVE_CONFIG_H"
     )
 
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         io.writefile("config.h.in", [[
 ${define HAVE_ASM_PAGE_H}
