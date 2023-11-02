@@ -41,8 +41,6 @@ package("curl")
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         if package:is_plat("windows", "mingw") then
             os.cp("lib/config-win32.h", "lib/curl_config.h")
-        elseif package:is_plat("macosx") then
-            os.cp(path.join(os.scriptdir(), "port", "curl_config.h"), "lib/curl_config.h")
         else
             io.writefile("curl_config.h.in", [[
 #ifndef HEADER_CURL_CONFIG_H
@@ -50,6 +48,7 @@ package("curl")
 
 ${define OS}
 ${define CURL_DISABLE_LDAP}
+${define USE_WIN32_LDAP}
 
 ${define HAVE_ARPA_INET_H}
 ${define HAVE_ARPA_TFTP_H}
@@ -113,6 +112,8 @@ ${define HAVE_WINSOCK2_H}
 ${define HAVE_WS2TCPIP_H}
 ${define HAVE_PROCESS_H}
 ${define TIME_WITH_SYS_TIME}
+
+${define HAVE_BOOL_T}
 
 ${define HAVE_SELECT}
 ${define HAVE_ALARM}

@@ -23,8 +23,11 @@ local sourceFiles = {
     "lib/vquic/*.c"
 }
 
-function configvar_check_sizeof(define_name, type_name)
-    configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..')); return 0;', {output = true, number = true})
+function configvar_check_sizeof(define_name, type_name, opt)
+    opt = opt or {}
+    opt.output = true
+    opt.number = true
+    configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..')); return 0;', opt)
 end
 
 function configvar_check_csymbol_exists(define_name, var_name, opt)
@@ -33,8 +36,9 @@ end
 
 target("curl")
     set_kind("$(kind)")
+    add_includedirs("lib", "include")
 
-    if not is_plat("windows", "mingw", "macosx") then
+    if not is_plat("windows", "mingw") then
         set_configdir("$(buildir)/config")
         add_includedirs("$(buildir)/config")
         add_configfiles("curl_config.h.in")
@@ -113,37 +117,66 @@ target("curl")
 
         configvar_check_csymbol_exists("HAVE_IOCTLSOCKET_FIONBIO", "FIONBIO", {includes={"windows.h", "winsock.h"}})
         configvar_check_csymbol_exists("HAVE_FCNTL_O_NONBLOCK", "O_NONBLOCK", {includes={"fcntl.h"}})
-        configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes={"windows.h", "winsock.h"}})
+        if is_plat("windows", "mingw") then
+            configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes={"windows.h", "winsock.h"}})
+        else
+            configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes={"time.h"}})
+        end
         configvar_check_ctypes("HAVE_LONGLONG", "long long", {includes={"fcntl.h"}})
+        configvar_check_ctypes("HAVE_BOOL_T", "bool")
+        configvar_check_ctypes("HAVE_BOOL_T", "bool", {includes={"stdbool.h"}})
 
         configvar_check_sizeof("SIZEOF_INT", "int")
         configvar_check_sizeof("SIZEOF_SIZE_T", "size_t")
-        configvar_check_sizeof("SIZEOF_CURL_OFF_T", 8)
-
-        set_configvar("USE_MANUAL", 1)
-        set_configvar("CURL_DISABLE_LDAP", 1)
-        set_configvar("HAVE_SOCKET", 1)
-        set_configvar("HAVE_SELECT", 1)
-        set_configvar("OS", "xmake")
-    end
-
-    add_headerfiles("include/curl/*.h", {prefixdir = "curl"})
-
-    add_includedirs("lib", "include")
-
-    if is_plat("windows", "mingw") then
-        -- set_configvar("HAVE_IOCTLSOCKET_FIONBIO", 1)
-        if get_config("winrt") then
-            add_defines("CURL_DISABLE_LDAP=1")
+        local cflags = {}
+        if is_plat("windows") then
+            table.insert(cflags, "/I "..path.absolute(os.scriptdir()))
         else
-            add_defines("USE_WIN32_LDAP=1")
-            add_syslinks("wldap32")
+            table.insert(cflags, "-I "..path.absolute(os.scriptdir()))
         end
-        add_defines("WIN32")
-    elseif is_plat("macosx") then
-        add_defines("HAVE_LONGLONG=1")
+        configvar_check_sizeof("SIZEOF_CURL_OFF_T", 'curl_off_t', {
+            includes={"include/curl/system.h"},
+            cflags=cflags
+        })
+        configvar_check_sizeof("SIZEOF_CURL_SOCKET_T", 'curl_socket_t', {
+            includes={"include/curl/curl.h"},
+            cflags=cflags
+        })
+        -- set_configvar("USE_MANUAL", 1)
+        if is_plat("windows", "mingw") then
+            if get_config("winrt") then
+                set_configvar("CURL_DISABLE_LDAP", 1)
+            else
+                set_configvar("USE_WIN32_LDAP", 1)
+                add_syslinks("wldap32")
+            end
+            configvar_check_cfuncs("HAVE_SOCKET", "socket", {includes={"winsock2.h"}})
+            configvar_check_cfuncs("HAVE_SELECT", "select", {includes={"winsock2.h"}})
+            configvar_check_cfuncs("HAVE_RECV", "recv", {includes={"winsock2.h"}})
+            configvar_check_cfuncs("HAVE_SEND", "send", {includes={"winsock2.h"}})
+        else
+            set_configvar("CURL_DISABLE_LDAP", 1)
+            configvar_check_cfuncs("HAVE_SOCKET", "socket", {includes={"sys/socket.h"}})
+            configvar_check_cfuncs("HAVE_SELECT", "select", {includes={"sys/select.h"}})
+            configvar_check_cfuncs("HAVE_RECV", "recv", {includes={"sys/socket.h"}})
+            configvar_check_cfuncs("HAVE_SEND", "send", {includes={"sys/socket.h"}})
+        end
+        set_configvar("OS", "xmake")
+    else
+        if is_plat("windows", "mingw") then
+            -- set_configvar("HAVE_IOCTLSOCKET_FIONBIO", 1)
+            if get_config("winrt") then
+                add_defines("CURL_DISABLE_LDAP=1")
+            else
+                add_defines("USE_WIN32_LDAP=1")
+                add_syslinks("wldap32")
+            end
+            add_defines("WIN32")
+        elseif is_plat("macosx") then
+            add_defines("HAVE_LONGLONG=1")
+        end
     end
-
+    add_headerfiles("include/curl/*.h", {prefixdir = "curl"})
     if not is_kind("shared") then
         add_defines("CURL_STATICLIB")
     end
@@ -156,15 +189,12 @@ target("curl")
         "HAVE_LIBZ=1",
         "HAVE_ZLIB_H=1"
     )
-
     for _, op in ipairs(options) do
         if has_config(op) then
             add_packages(op)
         end
     end
-
     add_packages("wolfssl", "zlib")
-
     for _, f in ipairs(sourceFiles) do
         add_files(f)
     end
