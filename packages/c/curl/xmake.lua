@@ -40,13 +40,34 @@ package("curl")
 
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
+        if is_plat("windows", "mingw") then
+            os.cp("lib/config-win32.h", "lib/curl_config.h")
+        end
         io.writefile("curl_config.h.in", [[
 #ifndef HEADER_CURL_CONFIG_H
 #define HEADER_CURL_CONFIG_H
 
 ${define OS}
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#define _CRT_SECURE_NO_DEPRECATE 1
+#define _CRT_NONSTDC_NO_DEPRECATE 1
+#endif
+
+
+${define WINVER}
+${define _WIN32_WINNT}
+${define HAVE_FREEADDRINFO}
+${define HAVE_GETADDRINFO}
+${define USE_WIN32_CRYPTO}
+
+#if defined(HAVE_GETADDRINFO)
+#define HAVE_GETADDRINFO_THREADSAFE 1
+#endif
+
 ${define CURL_DISABLE_LDAP}
 ${define USE_WIN32_LDAP}
+${define STDC_HEADERS}
 
 ${define HAVE_ARPA_INET_H}
 ${define HAVE_ARPA_TFTP_H}
@@ -177,6 +198,39 @@ ${define USE_WINDOWS_SSPI}
 #endif
 
 #endif
+
+#if defined(_MSC_VER) && !defined(_WIN32_WCE)
+#  if (_MSC_VER >= 900) && (_INTEGRAL_MAX_BITS >= 64)
+#    define USE_WIN32_LARGE_FILES
+#  else
+#    define USE_WIN32_SMALL_FILES
+#  endif
+#endif
+
+#if defined(__MINGW32__) && !defined(USE_WIN32_LARGE_FILES)
+#  define USE_WIN32_LARGE_FILES
+#endif
+
+#if defined(__POCC__)
+#  undef USE_WIN32_LARGE_FILES
+#endif
+
+#if !defined(USE_WIN32_LARGE_FILES) && !defined(USE_WIN32_SMALL_FILES)
+#  define USE_WIN32_SMALL_FILES
+#endif
+
+/* Number of bits in a file offset, on hosts where this is settable. */
+#if defined(USE_WIN32_LARGE_FILES) && defined(__MINGW32__)
+#  ifndef _FILE_OFFSET_BITS
+#  define _FILE_OFFSET_BITS 64
+#  endif
+#endif
+
+#ifdef USE_WIN32_LARGE_FILES
+#define HAVE__FSEEKI64
+#endif
+
+#define PACKAGE "curl"
 
 #endif /* HEADER_CURL_CONFIG_H */
 ]])
