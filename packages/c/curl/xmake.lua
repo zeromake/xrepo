@@ -19,16 +19,22 @@ package("curl")
     add_defines("BUILDING_LIBCURL")
 
     on_load(function (package)
-        if package:config("wolfssl") then
-            package:add("deps", "wolfssl")
+        if is_plat("windows", "mingw") then
+            package:add("syslinks", "ws2_32")
+            if not package:config("winrt") then
+                package:add("syslinks", "wldap32")
+            end
         elseif package:is_plat("macosx", "iphoneos") then
             package:add("frameworks", "CoreFoundation", "Security")
         end
+
+        if package:config("wolfssl") then
+            package:add("deps", "wolfssl")
+        elseif package:is_plat("windows", "mingw") then
+            package:add("syslinks", "crypt32", "advapi32")
+        end
         if package:config("shared") ~= true then
             package:add("defines", "CURL_STATICLIB")
-        end
-        if not package:config("winrt") and is_plat("windows", "mingw") then
-            package:add("syslinks", "wldap32")
         end
     end)
 

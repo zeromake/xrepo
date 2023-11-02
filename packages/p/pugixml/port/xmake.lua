@@ -1,4 +1,4 @@
-includes("check_cxxtypes.lua")
+includes("@builtin/check")
 add_rules("mode.debug", "mode.release")
 
 if is_plat("windows") then

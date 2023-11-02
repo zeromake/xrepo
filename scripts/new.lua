@@ -68,7 +68,7 @@ end
 function package_target_script(opt)
     local out = io.open(opt.out, "w")
     out:write([[
-includes("check_cincludes.lua")
+includes("@builtin/check")
 add_rules("mode.debug", "mode.release")
 
 ]])

@@ -1,7 +1,4 @@
-includes("check_cincludes.lua")
-includes("check_csnippets.lua")
-includes("check_cfuncs.lua")
-includes("check_ctypes.lua")
+includes("@builtin/check")
 add_rules("mode.debug", "mode.release")
 
 option("winrt")
@@ -200,6 +197,10 @@ target("curl")
         "HAVE_LIBZ=1",
         "HAVE_ZLIB_H=1"
     )
+
+    if is_plat("windows", "mingw") then
+        add_syslinks("ws2_32")
+    end
     add_packages("zlib")
     if get_config("wolfssl") then
         add_packages("wolfssl")
@@ -211,7 +212,7 @@ target("curl")
     elseif is_plat("windows", "mingw") then
         add_defines("USE_SCHANNEL=1")
         add_defines("USE_WINDOWS_SSPI=1")
-        add_syslinks("crypt32")
+        add_syslinks("crypt32", "advapi32")
     end
     if get_config("httponly") then
         add_defines("HTTP_ONLY=1")

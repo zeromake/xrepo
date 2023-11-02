@@ -1,6 +1,4 @@
-includes("check_cincludes.lua")
-includes("check_csnippets.lua")
-includes("check_cfuncs.lua")
+includes("@builtin/check")
 add_rules("mode.debug", "mode.release")
 
 option("PCRE2_8")

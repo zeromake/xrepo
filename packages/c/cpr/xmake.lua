@@ -19,6 +19,7 @@ package("cpr")
     add_links("cpr")
 
     on_load(function (package)
+        package:add("deps", "zlib")
         if package:config("ssl") then
             package:add("deps", curlName)
             package:add("deps", "libssh2")
@@ -37,7 +38,7 @@ package("cpr")
         if package:config("shared") and package:is_plat("macosx") then
             shflags = {"-framework", "CoreFoundation", "-framework", "Security", "-framework", "SystemConfiguration"}
         end
-        local packagedeps = {curlName}
+        local packagedeps = {curlName, "zlib"}
         if package:config("ssl") then
             table.insert(packagedeps, "libssh2")
         end

@@ -1,4 +1,4 @@
-includes("check_cincludes.lua")
+includes("@builtin/check")
 add_rules("mode.debug", "mode.release")
 
 local freetypeFiles = {
