@@ -1,5 +1,3 @@
-local options = {}
-
 package("curl")
     set_homepage("https://curl.se")
     set_description("A library for transferring data with URL syntax, supporting DICT, FILE, FTP, FTPS, GOPHER, GOPHERS, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP, RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP. libcurl offers a myriad of powerful features")
@@ -12,22 +10,19 @@ package("curl")
     add_versions("7.86.0", "f5ca69db03eea17fa8705bdfb1a9f58d76a46c9010518109bb38f313137e0a28")
     add_versions("7.85.0", "21a7e83628ee96164ac2b36ff6bf99d467c7b0b621c1f7e317d8f0d96011539c")
 
-    for _, op in ipairs(options) do
-        add_configs(op, {description = "Support "..op, default = false, type = "boolean"})
-    end
-
     add_configs("winrt", {description = "Support winrt", default = false, type = "boolean"})
+    add_configs("wolfssl", {description = "use wolfssl", default = false, type = "boolean"})
 
-    add_deps("wolfssl", "zlib")
+    add_deps("zlib")
     add_includedirs("include")
 
     add_defines("BUILDING_LIBCURL")
 
     on_load(function (package)
-        for _, op in ipairs(options) do
-            if package:config(op) then
-                package:add("deps", op)
-            end
+        if package:config("wolfssl") then
+            package:add("deps", "wolfssl")
+        elseif package:is_plat("macosx", "iphoneos") then
+            package:add("frameworks", "CoreFoundation", "Security")
         end
         if package:config("shared") ~= true then
             package:add("defines", "CURL_STATICLIB")
@@ -170,15 +165,8 @@ ${define SIZEOF_CURL_OFF_T}
 #endif /* HEADER_CURL_CONFIG_H */
         ]])
         end
-
         local configs = {}
-        for _, op in ipairs(options) do
-            local v = "n"
-            if package:config(op) ~= false then
-                v = "y"
-            end
-            table.insert(configs, "--"..op.."="..v)
-        end
+        configs["wolfssl"] = package:config("wolfssl") and "y" or "n"
         configs["winrt"] = package:config("winrt") and "y" or "n"
         import("package.tools.xmake").install(package, configs)
     end)

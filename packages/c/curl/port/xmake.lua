@@ -9,8 +9,21 @@ option("winrt")
     set_showmenu(true)
 option_end()
 
+option("wolfssl")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
+option("httponly")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
 add_requires("zlib", {system=false})
-add_requires("wolfssl", {system=false})
+
+if get_config("wolfssl") then
+    add_requires("wolfssl", {system=false})
+end
 
 if is_plat("windows") then
     add_cxflags("/utf-8")
@@ -183,18 +196,26 @@ target("curl")
 
     add_defines(
         "BUILDING_LIBCURL",
-        "OPENSSL_EXTRA",
         "HAVE_CONFIG_H=1",
-        "USE_WOLFSSL=1",
         "HAVE_LIBZ=1",
         "HAVE_ZLIB_H=1"
     )
-    for _, op in ipairs(options) do
-        if has_config(op) then
-            add_packages(op)
-        end
+    add_packages("zlib")
+    if get_config("wolfssl") then
+        add_packages("wolfssl")
+        add_defines("USE_WOLFSSL=1")
+        add_defines("OPENSSL_EXTRA=1")
+    elseif is_plat("macosx", "iphoneos") then
+        add_defines("USE_SECTRANSP=1")
+        add_frameworks("CoreFoundation", "Security")
+    elseif is_plat("windows", "mingw") then
+        add_defines("USE_SCHANNEL=1")
+        add_defines("USE_WINDOWS_SSPI=1")
+        add_syslinks("crypt32")
     end
-    add_packages("wolfssl", "zlib")
+    if get_config("httponly") then
+        add_defines("HTTP_ONLY=1")
+    end
     for _, f in ipairs(sourceFiles) do
         add_files(f)
     end
