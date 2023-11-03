@@ -31,7 +31,7 @@ package("curl")
         if package:config("wolfssl") then
             package:add("deps", "wolfssl")
         elseif package:is_plat("windows", "mingw") then
-            package:add("syslinks", "crypt32", "advapi32")
+            package:add("syslinks", "crypt32", "bcrypt", "advapi32")
         end
         if package:config("shared") ~= true then
             package:add("defines", "CURL_STATICLIB")

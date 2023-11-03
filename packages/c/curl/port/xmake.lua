@@ -217,7 +217,7 @@ target("curl")
     elseif is_plat("windows", "mingw") then
         add_defines("USE_SCHANNEL=1")
         add_defines("USE_WINDOWS_SSPI=1")
-        add_syslinks("crypt32", "advapi32")
+        add_syslinks("crypt32", "bcrypt", "advapi32")
     end
     if get_config("httponly") then
         add_defines("HTTP_ONLY=1")
