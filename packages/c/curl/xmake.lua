@@ -40,9 +40,9 @@ package("curl")
 
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
-        if is_plat("windows", "mingw") then
-            os.cp("lib/config-win32.h", "lib/curl_config.h")
-        end
+        -- if is_plat("windows", "mingw") then
+        --     os.cp("lib/config-win32.h", "lib/curl_config.h")
+        -- end
         io.writefile("curl_config.h.in", [[
 #ifndef HEADER_CURL_CONFIG_H
 #define HEADER_CURL_CONFIG_H

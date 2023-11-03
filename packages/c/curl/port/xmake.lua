@@ -48,7 +48,7 @@ target("curl")
     set_kind("$(kind)")
     add_includedirs("lib", "include")
 
-    if not is_plat("windows", "mingw") then
+    -- if not is_plat("windows", "mingw") then
         set_configdir("$(buildir)/config")
         add_includedirs("$(buildir)/config")
         add_configfiles("curl_config.h.in")
@@ -182,14 +182,14 @@ target("curl")
             configvar_check_cfuncs("HAVE_SEND", "send", {includes={"sys/socket.h"}})
         end
         add_headerfiles("$(buildir)/config/curl_config.h", {prefixdir = "curl"})
-    else
-        if get_config("winrt") then
-            add_defines("CURL_DISABLE_LDAP")
-        else
-            add_defines("USE_WIN32_LDAP")
-            add_syslinks("wldap32")
-        end
-    end
+    -- else
+    --     if get_config("winrt") then
+    --         add_defines("CURL_DISABLE_LDAP")
+    --     else
+    --         add_defines("USE_WIN32_LDAP")
+    --         add_syslinks("wldap32")
+    --     end
+    -- end
 
     add_headerfiles("include/curl/*.h", {prefixdir = "curl"})
     if not is_kind("shared") then
