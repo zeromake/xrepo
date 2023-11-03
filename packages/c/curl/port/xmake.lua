@@ -1,4 +1,11 @@
-includes("@builtin/check")
+if xmake.version():ge("2.8.3") then
+    includes("@builtin/check")
+else
+    includes("check_cincludes.lua")
+    includes("check_csnippets.lua")
+    includes("check_cfuncs.lua")
+    includes("check_ctypes.lua")
+end
 add_rules("mode.debug", "mode.release")
 
 option("winrt")
@@ -35,6 +42,13 @@ local sourceFiles = {
 
 function configvar_check_csymbol_exists(define_name, var_name, opt)
     configvar_check_csnippets(define_name, 'void* a =(void*)'..var_name..';', opt)
+end
+
+local configvar_check_sizeof = configvar_check_sizeof or function(define_name, type_name, opt)
+    opt = opt or {}
+    opt.output = true
+    opt.number = true
+    configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..')); return 0;', opt)
 end
 
 target("curl")

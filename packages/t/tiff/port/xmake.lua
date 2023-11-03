@@ -1,4 +1,11 @@
-includes("@builtin/check")
+if xmake.version():ge("2.8.3") then
+    includes("@builtin/check")
+else
+    includes("check_cincludes.lua")
+    includes("check_csnippets.lua")
+    includes("check_cfuncs.lua")
+    includes("check_ctypes.lua")
+end
 add_rules("mode.debug", "mode.release")
 
 local options = {}
@@ -30,8 +37,11 @@ return 0;
 ]], {output = true, number = true})
 end
 
-function configvar_check_sizeof(define_name, type_name)
-    configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..')); return 0;', {output = true, number = true})
+local configvar_check_sizeof = configvar_check_sizeof or function(define_name, type_name, opt)
+    opt = opt or {}
+    opt.output = true
+    opt.number = true
+    configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..')); return 0;', opt)
 end
 
 local sourceFiles = {

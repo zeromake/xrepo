@@ -1,4 +1,8 @@
-includes("@builtin/check")
+if xmake.version():ge("2.8.3") then
+    includes("@builtin/check")
+else
+    includes("check_cincludes.lua")
+end
 add_rules("mode.debug", "mode.release")
 
 if is_plat("windows") then
