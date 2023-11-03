@@ -8,6 +8,12 @@ package("mbedtls")
 
     add_links("mbedtls")
 
+    on_load(function (package) 
+        if package:is_plat("windows", "mingw") then
+            package:add("syslinks", "bcrypt")
+        end
+    end)
+
     on_install(function (package)
         -- import("lib.detect.find_tool")
         -- local python = assert(find_tool("python3"), "python not found!")
