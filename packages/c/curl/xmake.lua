@@ -186,19 +186,6 @@ ${define USE_WINDOWS_SSPI}
 
 #else
 
-#ifndef _SSIZE_T_DEFINED
-#  if defined(__POCC__) || defined(__MINGW32__)
-#  elif defined(_WIN64)
-#    define _SSIZE_T_DEFINED
-#    define ssize_t __int64
-#  else
-#    define _SSIZE_T_DEFINED
-#    define ssize_t int
-#  endif
-#endif
-
-#endif
-
 #if defined(_MSC_VER) && !defined(_WIN32_WCE)
 #  if (_MSC_VER >= 900) && (_INTEGRAL_MAX_BITS >= 64)
 #    define USE_WIN32_LARGE_FILES
@@ -228,6 +215,19 @@ ${define USE_WINDOWS_SSPI}
 
 #ifdef USE_WIN32_LARGE_FILES
 #define HAVE__FSEEKI64
+#endif
+
+#ifndef _SSIZE_T_DEFINED
+#  if defined(__POCC__) || defined(__MINGW32__)
+#  elif defined(_WIN64)
+#    define _SSIZE_T_DEFINED
+#    define ssize_t __int64
+#  else
+#    define _SSIZE_T_DEFINED
+#    define ssize_t int
+#  endif
+#endif
+
 #endif
 
 #define PACKAGE "curl"

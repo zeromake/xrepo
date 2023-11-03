@@ -33,13 +33,6 @@ local sourceFiles = {
     "lib/vquic/*.c"
 }
 
-function configvar_check_sizeof(define_name, type_name, opt)
-    opt = opt or {}
-    opt.output = true
-    opt.number = true
-    configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..')); return 0;', opt)
-end
-
 function configvar_check_csymbol_exists(define_name, var_name, opt)
     configvar_check_csnippets(define_name, 'void* a =(void*)'..var_name..';', opt)
 end
@@ -144,19 +137,19 @@ target("curl")
         configvar_check_sizeof("SIZEOF_SIZE_T", "size_t")
         configvar_check_sizeof("SIZEOF_TIME_T", "time_t", {includes={"time.h"}})
 
-        local cflags = {}
+        local cxflags = {}
         if is_plat("windows") then
-            table.insert(cflags, "/I "..path.absolute(os.scriptdir()))
+            table.insert(cxflags, "/I "..path.absolute(os.scriptdir()))
         else
-            table.insert(cflags, "-I "..path.absolute(os.scriptdir()))
+            table.insert(cxflags, "-I "..path.absolute(os.scriptdir()))
         end
         configvar_check_sizeof("SIZEOF_CURL_OFF_T", 'curl_off_t', {
             includes={"include/curl/system.h"},
-            cflags=cflags
+            cxflags=cxflags
         })
         configvar_check_sizeof("SIZEOF_CURL_SOCKET_T", 'curl_socket_t', {
             includes={"include/curl/curl.h"},
-            cflags=cflags
+            cxflags=cxflags
         })
         -- set_configvar("USE_MANUAL", 1)
         set_configvar("STDC_HEADERS", 1)
