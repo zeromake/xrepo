@@ -68,7 +68,7 @@ end
 function package_target_script(opt)
     local out = io.open(opt.out, "w")
     out:write([[
-if xmake.version():ge("2.8.3") then
+if xmake.version():gt("2.8.3") then
     includes("@builtin/check")
 else
     includes("check_cincludes.lua")

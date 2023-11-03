@@ -1,4 +1,4 @@
-if xmake.version():ge("2.8.3") then
+if xmake.version():gt("2.8.3") then
     includes("@builtin/check")
 else
     includes("check_cxxtypes.lua")

@@ -34,7 +34,7 @@ package("jpeg")
 #define TARGA_SUPPORTED
 #endif]])      
         io.writefile("xmake.lua", [[
-if xmake.version():ge("2.8.3") then
+if xmake.version():gt("2.8.3") then
     includes("@builtin/check")
 else
     includes("check_cincludes.lua")
