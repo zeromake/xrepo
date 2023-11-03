@@ -19,31 +19,107 @@ package("curl")
     add_defines("BUILDING_LIBCURL")
 
     on_load(function (package)
-        if package:config("wolfssl") then
-            package:add("deps", "wolfssl")
+        if is_plat("windows", "mingw") then
+            package:add("syslinks", "ws2_32")
+            if not package:config("winrt") then
+                package:add("syslinks", "wldap32")
+            end
         elseif package:is_plat("macosx", "iphoneos") then
             package:add("frameworks", "CoreFoundation", "Security")
         end
+
+        if package:config("wolfssl") then
+            package:add("deps", "wolfssl")
+        elseif package:is_plat("windows", "mingw") then
+            package:add("syslinks", "crypt32", "bcrypt", "advapi32")
+        end
         if package:config("shared") ~= true then
             package:add("defines", "CURL_STATICLIB")
-        end
-        if not package:config("winrt") and is_plat("windows", "mingw") then
-            package:add("syslinks", "wldap32")
         end
     end)
 
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
-        if package:is_plat("windows", "mingw") then
-            os.cp("lib/config-win32.h", "lib/curl_config.h")
-        else
-            io.writefile("curl_config.h.in", [[
+        -- if is_plat("windows", "mingw") then
+        --     os.cp("lib/config-win32.h", "lib/curl_config.h")
+        -- end
+        io.writefile("curl_config.h.in", [[
 #ifndef HEADER_CURL_CONFIG_H
 #define HEADER_CURL_CONFIG_H
 
 ${define OS}
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#define _CRT_SECURE_NO_DEPRECATE 1
+#define _CRT_NONSTDC_NO_DEPRECATE 1
+#endif
+
+#ifdef _WIN32
+#if defined(_MSC_VER)
+#  define VS2008_MIN_TARGET 0x0500
+#  if defined(_USING_V110_SDK71_)
+#    define VS2012_MIN_TARGET 0x0501
+#  else
+#    define VS2012_MIN_TARGET 0x0600
+#  endif
+#  define VS2008_DEF_TARGET 0x0501
+#  if defined(_USING_V110_SDK71_)
+#    define VS2012_DEF_TARGET 0x0501
+#  else
+#    define VS2012_DEF_TARGET 0x0600
+#  endif
+#endif
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1500) && (_MSC_VER <= 1600)
+#  ifndef _WIN32_WINNT
+#    define _WIN32_WINNT VS2008_DEF_TARGET
+#  endif
+#  ifndef WINVER
+#    define WINVER VS2008_DEF_TARGET
+#  endif
+#  if (_WIN32_WINNT < VS2008_MIN_TARGET) || (WINVER < VS2008_MIN_TARGET)
+#    error VS2008 does not support Windows build targets prior to Windows 2000
+#  endif
+#endif
+#if defined(_MSC_VER) && (_MSC_VER >= 1700)
+#  ifndef _WIN32_WINNT
+#    define _WIN32_WINNT VS2012_DEF_TARGET
+#  endif
+#  ifndef WINVER
+#    define WINVER VS2012_DEF_TARGET
+#  endif
+#  if (_WIN32_WINNT < VS2012_MIN_TARGET) || (WINVER < VS2012_MIN_TARGET)
+#    if defined(_USING_V110_SDK71_)
+#      error VS2012 does not support Windows build targets prior to Windows XP
+#    else
+#      error VS2012 does not support Windows build targets prior to Windows \
+Vista
+#    endif
+#  endif
+#endif
+
+#if defined(__POCC__) && (__POCC__ >= 500)
+#  ifndef _WIN32_WINNT
+#    define _WIN32_WINNT 0x0500
+#  endif
+#  ifndef WINVER
+#    define WINVER 0x0500
+#  endif
+#endif
+
+#endif
+
+${define HAVE_FREEADDRINFO}
+${define HAVE_GETADDRINFO}
+${define USE_WIN32_CRYPTO}
+
+#if defined(HAVE_GETADDRINFO)
+#define HAVE_GETADDRINFO_THREADSAFE 1
+#endif
+
 ${define CURL_DISABLE_LDAP}
 ${define USE_WIN32_LDAP}
+${define STDC_HEADERS}
 
 ${define HAVE_ARPA_INET_H}
 ${define HAVE_ARPA_TFTP_H}
@@ -107,6 +183,8 @@ ${define HAVE_WINSOCK2_H}
 ${define HAVE_WS2TCPIP_H}
 ${define HAVE_PROCESS_H}
 ${define TIME_WITH_SYS_TIME}
+${define HAVE_ZLIB_H}
+${define HAVE_LIBZ}
 
 ${define HAVE_BOOL_T}
 
@@ -129,8 +207,19 @@ ${define SIZEOF_INT}
 ${define SIZEOF_SIZE_T}
 ${define SIZEOF_CURL_OFF_T}
 
-#define HAVE_RECV 1
-#define HAVE_SEND 1
+${define HAVE_RECV}
+${define HAVE_SEND}
+
+// wolfssl
+${define USE_WOLFSSL}
+${define OPENSSL_EXTRA}
+
+// apple
+${define USE_SECTRANSP}
+
+// windows
+${define USE_SCHANNEL}
+${define USE_WINDOWS_SSPI}
 
 #ifndef _WIN32
 
@@ -149,6 +238,37 @@ ${define SIZEOF_CURL_OFF_T}
 
 #else
 
+#if defined(_MSC_VER) && !defined(_WIN32_WCE)
+#  if (_MSC_VER >= 900) && (_INTEGRAL_MAX_BITS >= 64)
+#    define USE_WIN32_LARGE_FILES
+#  else
+#    define USE_WIN32_SMALL_FILES
+#  endif
+#endif
+
+#if defined(__MINGW32__) && !defined(USE_WIN32_LARGE_FILES)
+#  define USE_WIN32_LARGE_FILES
+#endif
+
+#if defined(__POCC__)
+#  undef USE_WIN32_LARGE_FILES
+#endif
+
+#if !defined(USE_WIN32_LARGE_FILES) && !defined(USE_WIN32_SMALL_FILES)
+#  define USE_WIN32_SMALL_FILES
+#endif
+
+/* Number of bits in a file offset, on hosts where this is settable. */
+#if defined(USE_WIN32_LARGE_FILES) && defined(__MINGW32__)
+#  ifndef _FILE_OFFSET_BITS
+#  define _FILE_OFFSET_BITS 64
+#  endif
+#endif
+
+#ifdef USE_WIN32_LARGE_FILES
+#define HAVE__FSEEKI64
+#endif
+
 #ifndef _SSIZE_T_DEFINED
 #  if defined(__POCC__) || defined(__MINGW32__)
 #  elif defined(_WIN64)
@@ -162,9 +282,10 @@ ${define SIZEOF_CURL_OFF_T}
 
 #endif
 
+#define PACKAGE "curl"
+
 #endif /* HEADER_CURL_CONFIG_H */
-        ]])
-        end
+]])
         local configs = {}
         configs["wolfssl"] = package:config("wolfssl") and "y" or "n"
         configs["winrt"] = package:config("winrt") and "y" or "n"

@@ -1,7 +1,11 @@
-includes("check_cincludes.lua")
-includes("check_csnippets.lua")
-includes("check_cfuncs.lua")
-includes("check_ctypes.lua")
+if xmake.version():ge("2.8.3") then
+    includes("@builtin/check")
+else
+    includes("check_cincludes.lua")
+    includes("check_csnippets.lua")
+    includes("check_cfuncs.lua")
+    includes("check_ctypes.lua")
+end
 add_rules("mode.debug", "mode.release")
 
 local options = {

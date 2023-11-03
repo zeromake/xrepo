@@ -20,9 +20,7 @@ package("wolfssl")
         "WOLFSSL_LIB",
         "WOLFSSL_USER_SETTINGS",
         "CYASSL_USER_SETTINGS",
-        "WOLFSSL_NO_MD4",
-        "OPENSSL_EXTRA",
-        "WOLFSSL_SHA512"
+        "WOLFSSL_NO_MD4"
     )
 
     if is_plat("windows", "mingw") then
