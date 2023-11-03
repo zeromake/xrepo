@@ -164,8 +164,6 @@ target("curl")
             configvar_check_cfuncs("HAVE_SELECT", "select", {includes={"winsock2.h"}})
             configvar_check_cfuncs("HAVE_RECV", "recv", {includes={"winsock2.h"}})
             configvar_check_cfuncs("HAVE_SEND", "send", {includes={"winsock2.h"}})
-            set_configvar("WINVER", 0x0500)
-            set_configvar("_WIN32_WINNT", 0x0500)
             set_configvar("USE_WIN32_CRYPTO", 1)
         else
             set_configvar("CURL_DISABLE_LDAP", 1)

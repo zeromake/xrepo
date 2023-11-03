@@ -54,9 +54,61 @@ ${define OS}
 #define _CRT_NONSTDC_NO_DEPRECATE 1
 #endif
 
+#ifdef _WIN32
+#if defined(_MSC_VER)
+#  define VS2008_MIN_TARGET 0x0500
+#  if defined(_USING_V110_SDK71_)
+#    define VS2012_MIN_TARGET 0x0501
+#  else
+#    define VS2012_MIN_TARGET 0x0600
+#  endif
+#  define VS2008_DEF_TARGET 0x0501
+#  if defined(_USING_V110_SDK71_)
+#    define VS2012_DEF_TARGET 0x0501
+#  else
+#    define VS2012_DEF_TARGET 0x0600
+#  endif
+#endif
 
-${define WINVER}
-${define _WIN32_WINNT}
+#if defined(_MSC_VER) && (_MSC_VER >= 1500) && (_MSC_VER <= 1600)
+#  ifndef _WIN32_WINNT
+#    define _WIN32_WINNT VS2008_DEF_TARGET
+#  endif
+#  ifndef WINVER
+#    define WINVER VS2008_DEF_TARGET
+#  endif
+#  if (_WIN32_WINNT < VS2008_MIN_TARGET) || (WINVER < VS2008_MIN_TARGET)
+#    error VS2008 does not support Windows build targets prior to Windows 2000
+#  endif
+#endif
+#if defined(_MSC_VER) && (_MSC_VER >= 1700)
+#  ifndef _WIN32_WINNT
+#    define _WIN32_WINNT VS2012_DEF_TARGET
+#  endif
+#  ifndef WINVER
+#    define WINVER VS2012_DEF_TARGET
+#  endif
+#  if (_WIN32_WINNT < VS2012_MIN_TARGET) || (WINVER < VS2012_MIN_TARGET)
+#    if defined(_USING_V110_SDK71_)
+#      error VS2012 does not support Windows build targets prior to Windows XP
+#    else
+#      error VS2012 does not support Windows build targets prior to Windows \
+Vista
+#    endif
+#  endif
+#endif
+
+#if defined(__POCC__) && (__POCC__ >= 500)
+#  ifndef _WIN32_WINNT
+#    define _WIN32_WINNT 0x0500
+#  endif
+#  ifndef WINVER
+#    define WINVER 0x0500
+#  endif
+#endif
+
+#endif
+
 ${define HAVE_FREEADDRINFO}
 ${define HAVE_GETADDRINFO}
 ${define USE_WIN32_CRYPTO}
