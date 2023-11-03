@@ -5,9 +5,6 @@ package("mbedtls")
     set_urls("https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/mbedtls-$(version).tar.gz")
 
     add_versions("3.5.0", "02311fc8bd032d89ff9aee535dddb55458108dc0d4c5280638fc611aea7c5e4a")
-
-    add_links("mbedtls")
-
     on_load(function (package) 
         if package:is_plat("windows", "mingw") then
             package:add("syslinks", "bcrypt")
@@ -15,10 +12,6 @@ package("mbedtls")
     end)
 
     on_install(function (package)
-        -- import("lib.detect.find_tool")
-        -- local python = assert(find_tool("python3"), "python not found!")
-        -- os.vrunv(python.program, {"-m", "pip", "install", "--user", "-r", "scripts/driver.requirements.txt"})
-        -- os.vrunv(python.program, {"scripts/generate_driver_wrappers.py"})
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
         import("package.tools.xmake").install(package, configs)
