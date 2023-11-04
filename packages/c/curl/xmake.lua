@@ -49,12 +49,13 @@ package("curl")
 
 ${define OS}
 
+#define USE_UNIX_SOCKETS
+
+#ifdef _WIN32
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)
 #define _CRT_SECURE_NO_DEPRECATE 1
 #define _CRT_NONSTDC_NO_DEPRECATE 1
 #endif
-
-#ifdef _WIN32
 #if defined(_MSC_VER)
 #  define VS2008_MIN_TARGET 0x0500
 #  if defined(_USING_V110_SDK71_)
@@ -111,7 +112,6 @@ Vista
 
 ${define HAVE_FREEADDRINFO}
 ${define HAVE_GETADDRINFO}
-${define USE_WIN32_CRYPTO}
 
 #if defined(HAVE_GETADDRINFO)
 #define HAVE_GETADDRINFO_THREADSAFE 1
@@ -198,6 +198,20 @@ ${define HAVE_SIGACTION}
 ${define HAVE_RAND_EGD}
 ${define HAVE_IOCTLSOCKET}
 ${define HAVE_IOCTLSOCKET_FIONBIO}
+${define HAVE_SNPRINTF}
+${define HAVE_SIGNAL}
+${define HAVE_STRTOLL}
+${define HAVE_STRICMP}
+${define HAVE_STRDUP}
+${define HAVE_STRCASECMP}
+${define HAVE_SETMODE}
+${define HAVE_SETLOCALE}
+${define HAVE_GETPEERNAME}
+${define HAVE_GETSOCKNAME}
+${define HAVE_GETHOSTNAME}
+${define HAVE_GETTIMEOFDAY}
+${define HAVE_FTRUNCATE}
+${define HAVE_CLOSESOCKET}
 
 ${define HAVE_STRUCT_TIMEVAL}
 ${define HAVE_FCNTL_O_NONBLOCK}
@@ -206,6 +220,8 @@ ${define HAVE_LONGLONG}
 ${define SIZEOF_INT}
 ${define SIZEOF_SIZE_T}
 ${define SIZEOF_CURL_OFF_T}
+${define SIZEOF_TIME_T}
+
 
 ${define HAVE_RECV}
 ${define HAVE_SEND}
@@ -237,6 +253,52 @@ ${define USE_WINDOWS_SSPI}
 #define SEND_TYPE_RETV ssize_t
 
 #else
+
+#if !defined(CURL_WINDOWS_APP)
+#define USE_WIN32_CRYPTO
+#endif
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#define HAVE_VARIADIC_MACROS_C99 1
+#endif
+
+#if !defined(__SALFORDC__) && !defined(__BORLANDC__)
+#define HAVE_STRUCT_SOCKADDR_STORAGE 1
+#endif
+
+#define HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID 1
+
+#if !defined(USE_SYNC_DNS) && !defined(USE_ARES) && \
+    !defined(USE_THREADS_WIN32)
+#define USE_THREADS_WIN32 1
+#endif
+
+#define RECV_TYPE_ARG1 SOCKET
+#define RECV_TYPE_ARG2 char *
+#define RECV_TYPE_ARG3 int
+#define RECV_TYPE_ARG4 int
+#define RECV_TYPE_RETV int
+
+#define SEND_TYPE_ARG1 SOCKET
+#define SEND_QUAL_ARG2 const
+#define SEND_TYPE_ARG2 char *
+#define SEND_TYPE_ARG3 int
+#define SEND_TYPE_ARG4 int
+#define SEND_TYPE_RETV int
+
+#if defined(_WIN32_WINNT) && _WIN32_WINNT >= 0x600
+#define HAVE_INET_NTOP 1
+#define HAVE_INET_PTON 1
+#endif
+
+#if defined(__MINGW32__)
+#define HAVE_BASENAME 1
+#endif
+#if defined(__MINGW32__)
+#define HAVE_STRTOK_R 1
+#endif
+
+#define in_addr_t unsigned long
 
 #if defined(_MSC_VER) && !defined(_WIN32_WCE)
 #  if (_MSC_VER >= 900) && (_INTEGRAL_MAX_BITS >= 64)
