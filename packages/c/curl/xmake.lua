@@ -1,5 +1,3 @@
-local options = {}
-
 package("curl")
     set_homepage("https://curl.se")
     set_description("A library for transferring data with URL syntax, supporting DICT, FILE, FTP, FTPS, GOPHER, GOPHERS, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP, RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP. libcurl offers a myriad of powerful features")
@@ -8,47 +6,120 @@ package("curl")
         return version:gsub("%.", "_") .. "/curl-" .. version
     end})
 
+    add_versions("8.4.0", "e5250581a9c032b1b6ed3cf2f9c114c811fc41881069e9892d115cc73f9e88c6")
     add_versions("7.86.0", "f5ca69db03eea17fa8705bdfb1a9f58d76a46c9010518109bb38f313137e0a28")
     add_versions("7.85.0", "21a7e83628ee96164ac2b36ff6bf99d467c7b0b621c1f7e317d8f0d96011539c")
 
-    for _, op in ipairs(options) do
-        add_configs(op, {description = "Support "..op, default = false, type = "boolean"})
-    end
-
     add_configs("winrt", {description = "Support winrt", default = false, type = "boolean"})
+    add_configs("wolfssl", {description = "use wolfssl", default = false, type = "boolean"})
 
-    add_deps("wolfssl", "zlib")
+    add_deps("zlib")
     add_includedirs("include")
 
     add_defines("BUILDING_LIBCURL")
 
     on_load(function (package)
-        for _, op in ipairs(options) do
-            if package:config(op) then
-                package:add("deps", op)
+        if is_plat("windows", "mingw") then
+            package:add("syslinks", "ws2_32")
+            if not package:config("winrt") then
+                package:add("syslinks", "wldap32")
             end
+        elseif package:is_plat("macosx", "iphoneos") then
+            package:add("frameworks", "CoreFoundation", "Security")
+        end
+
+        if package:config("wolfssl") then
+            package:add("deps", "wolfssl")
+        elseif package:is_plat("windows", "mingw") then
+            package:add("syslinks", "crypt32", "bcrypt", "advapi32")
         end
         if package:config("shared") ~= true then
             package:add("defines", "CURL_STATICLIB")
         end
-        if not package:config("winrt") and is_plat("windows", "mingw") then
-            package:add("syslinks", "wldap32")
-        end
     end)
 
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
-        if package:is_plat("windows", "mingw") then
-            os.cp("lib/config-win32.h", "lib/curl_config.h")
-        elseif package:is_plat("macosx") then
-            os.cp(path.join(os.scriptdir(), "port", "curl_config.h"), "lib/curl_config.h")
-        else
-            io.writefile("curl_config.h.in", [[
+        -- if is_plat("windows", "mingw") then
+        --     os.cp("lib/config-win32.h", "lib/curl_config.h")
+        -- end
+        io.writefile("curl_config.h.in", [[
 #ifndef HEADER_CURL_CONFIG_H
 #define HEADER_CURL_CONFIG_H
 
 ${define OS}
+
+#define USE_UNIX_SOCKETS
+
+#ifdef _WIN32
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#define _CRT_SECURE_NO_DEPRECATE 1
+#define _CRT_NONSTDC_NO_DEPRECATE 1
+#endif
+#if defined(_MSC_VER)
+#  define VS2008_MIN_TARGET 0x0500
+#  if defined(_USING_V110_SDK71_)
+#    define VS2012_MIN_TARGET 0x0501
+#  else
+#    define VS2012_MIN_TARGET 0x0600
+#  endif
+#  define VS2008_DEF_TARGET 0x0501
+#  if defined(_USING_V110_SDK71_)
+#    define VS2012_DEF_TARGET 0x0501
+#  else
+#    define VS2012_DEF_TARGET 0x0600
+#  endif
+#endif
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1500) && (_MSC_VER <= 1600)
+#  ifndef _WIN32_WINNT
+#    define _WIN32_WINNT VS2008_DEF_TARGET
+#  endif
+#  ifndef WINVER
+#    define WINVER VS2008_DEF_TARGET
+#  endif
+#  if (_WIN32_WINNT < VS2008_MIN_TARGET) || (WINVER < VS2008_MIN_TARGET)
+#    error VS2008 does not support Windows build targets prior to Windows 2000
+#  endif
+#endif
+#if defined(_MSC_VER) && (_MSC_VER >= 1700)
+#  ifndef _WIN32_WINNT
+#    define _WIN32_WINNT VS2012_DEF_TARGET
+#  endif
+#  ifndef WINVER
+#    define WINVER VS2012_DEF_TARGET
+#  endif
+#  if (_WIN32_WINNT < VS2012_MIN_TARGET) || (WINVER < VS2012_MIN_TARGET)
+#    if defined(_USING_V110_SDK71_)
+#      error VS2012 does not support Windows build targets prior to Windows XP
+#    else
+#      error VS2012 does not support Windows build targets prior to Windows \
+Vista
+#    endif
+#  endif
+#endif
+
+#if defined(__POCC__) && (__POCC__ >= 500)
+#  ifndef _WIN32_WINNT
+#    define _WIN32_WINNT 0x0500
+#  endif
+#  ifndef WINVER
+#    define WINVER 0x0500
+#  endif
+#endif
+
+#endif
+
+${define HAVE_FREEADDRINFO}
+${define HAVE_GETADDRINFO}
+
+#if defined(HAVE_GETADDRINFO)
+#define HAVE_GETADDRINFO_THREADSAFE 1
+#endif
+
 ${define CURL_DISABLE_LDAP}
+${define USE_WIN32_LDAP}
+${define STDC_HEADERS}
 
 ${define HAVE_ARPA_INET_H}
 ${define HAVE_ARPA_TFTP_H}
@@ -112,6 +183,10 @@ ${define HAVE_WINSOCK2_H}
 ${define HAVE_WS2TCPIP_H}
 ${define HAVE_PROCESS_H}
 ${define TIME_WITH_SYS_TIME}
+${define HAVE_ZLIB_H}
+${define HAVE_LIBZ}
+
+${define HAVE_BOOL_T}
 
 ${define HAVE_SELECT}
 ${define HAVE_ALARM}
@@ -123,6 +198,20 @@ ${define HAVE_SIGACTION}
 ${define HAVE_RAND_EGD}
 ${define HAVE_IOCTLSOCKET}
 ${define HAVE_IOCTLSOCKET_FIONBIO}
+${define HAVE_SNPRINTF}
+${define HAVE_SIGNAL}
+${define HAVE_STRTOLL}
+${define HAVE_STRICMP}
+${define HAVE_STRDUP}
+${define HAVE_STRCASECMP}
+${define HAVE_SETMODE}
+${define HAVE_SETLOCALE}
+${define HAVE_GETPEERNAME}
+${define HAVE_GETSOCKNAME}
+${define HAVE_GETHOSTNAME}
+${define HAVE_GETTIMEOFDAY}
+${define HAVE_FTRUNCATE}
+${define HAVE_CLOSESOCKET}
 
 ${define HAVE_STRUCT_TIMEVAL}
 ${define HAVE_FCNTL_O_NONBLOCK}
@@ -131,9 +220,22 @@ ${define HAVE_LONGLONG}
 ${define SIZEOF_INT}
 ${define SIZEOF_SIZE_T}
 ${define SIZEOF_CURL_OFF_T}
+${define SIZEOF_TIME_T}
 
-#define HAVE_RECV 1
-#define HAVE_SEND 1
+
+${define HAVE_RECV}
+${define HAVE_SEND}
+
+// wolfssl
+${define USE_WOLFSSL}
+${define OPENSSL_EXTRA}
+
+// apple
+${define USE_SECTRANSP}
+
+// windows
+${define USE_SCHANNEL}
+${define USE_WINDOWS_SSPI}
 
 #ifndef _WIN32
 
@@ -152,6 +254,83 @@ ${define SIZEOF_CURL_OFF_T}
 
 #else
 
+#if !defined(CURL_WINDOWS_APP)
+#define USE_WIN32_CRYPTO
+#endif
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#define HAVE_VARIADIC_MACROS_C99 1
+#endif
+
+#if !defined(__SALFORDC__) && !defined(__BORLANDC__)
+#define HAVE_STRUCT_SOCKADDR_STORAGE 1
+#endif
+
+#define HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID 1
+
+#if !defined(USE_SYNC_DNS) && !defined(USE_ARES) && \
+    !defined(USE_THREADS_WIN32)
+#define USE_THREADS_WIN32 1
+#endif
+
+#define RECV_TYPE_ARG1 SOCKET
+#define RECV_TYPE_ARG2 char *
+#define RECV_TYPE_ARG3 int
+#define RECV_TYPE_ARG4 int
+#define RECV_TYPE_RETV int
+
+#define SEND_TYPE_ARG1 SOCKET
+#define SEND_QUAL_ARG2 const
+#define SEND_TYPE_ARG2 char *
+#define SEND_TYPE_ARG3 int
+#define SEND_TYPE_ARG4 int
+#define SEND_TYPE_RETV int
+
+#if defined(_WIN32_WINNT) && _WIN32_WINNT >= 0x600
+#define HAVE_INET_NTOP 1
+#define HAVE_INET_PTON 1
+#endif
+
+#if defined(__MINGW32__)
+#define HAVE_BASENAME 1
+#endif
+#if defined(__MINGW32__)
+#define HAVE_STRTOK_R 1
+#endif
+
+#define in_addr_t unsigned long
+
+#if defined(_MSC_VER) && !defined(_WIN32_WCE)
+#  if (_MSC_VER >= 900) && (_INTEGRAL_MAX_BITS >= 64)
+#    define USE_WIN32_LARGE_FILES
+#  else
+#    define USE_WIN32_SMALL_FILES
+#  endif
+#endif
+
+#if defined(__MINGW32__) && !defined(USE_WIN32_LARGE_FILES)
+#  define USE_WIN32_LARGE_FILES
+#endif
+
+#if defined(__POCC__)
+#  undef USE_WIN32_LARGE_FILES
+#endif
+
+#if !defined(USE_WIN32_LARGE_FILES) && !defined(USE_WIN32_SMALL_FILES)
+#  define USE_WIN32_SMALL_FILES
+#endif
+
+/* Number of bits in a file offset, on hosts where this is settable. */
+#if defined(USE_WIN32_LARGE_FILES) && defined(__MINGW32__)
+#  ifndef _FILE_OFFSET_BITS
+#  define _FILE_OFFSET_BITS 64
+#  endif
+#endif
+
+#ifdef USE_WIN32_LARGE_FILES
+#define HAVE__FSEEKI64
+#endif
+
 #ifndef _SSIZE_T_DEFINED
 #  if defined(__POCC__) || defined(__MINGW32__)
 #  elif defined(_WIN64)
@@ -165,22 +344,16 @@ ${define SIZEOF_CURL_OFF_T}
 
 #endif
 
-#endif /* HEADER_CURL_CONFIG_H */
-        ]])
-        end
+#define PACKAGE "curl"
 
+#endif /* HEADER_CURL_CONFIG_H */
+]])
         local configs = {}
-        for _, op in ipairs(options) do
-            local v = "n"
-            if package:config(op) ~= false then
-                v = "y"
-            end
-            table.insert(configs, "--"..op.."="..v)
-        end
+        configs["wolfssl"] = package:config("wolfssl") and "y" or "n"
         configs["winrt"] = package:config("winrt") and "y" or "n"
         import("package.tools.xmake").install(package, configs)
     end)
 
-    -- on_test(function (package)
-    --     assert(package:has_cfuncs("curl_version()", {includes = {"curl/curl.h"}}))
-    -- end)
+    on_test(function (package)
+        assert(package:has_cfuncs("curl_version()", {includes = {"curl/curl.h"}}))
+    end)

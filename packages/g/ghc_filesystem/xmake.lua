@@ -8,7 +8,7 @@ package("ghc_filesystem")
     add_versions("1.5.14", "e783f672e49de7c5a237a0cea905ed51012da55c04fbacab397161976efc8472")
     add_versions("1.5.12", "7d62c5746c724d28da216d9e11827ba4e573df15ef40720292827a4dfd33f2e9")
 
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("ghc_filesystem")

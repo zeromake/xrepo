@@ -35,7 +35,7 @@ package("sdl2_mixer")
         add_frameworks("AudioToolbox")
     end
 
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
         for _, op in ipairs(options) do

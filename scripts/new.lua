@@ -40,7 +40,7 @@ package("%s")
 ]])
     end
     out:write([[
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
 ]])
@@ -68,7 +68,11 @@ end
 function package_target_script(opt)
     local out = io.open(opt.out, "w")
     out:write([[
-includes("check_cincludes.lua")
+if xmake.version():gt("2.8.3") then
+    includes("@builtin/check")
+else
+    includes("check_cincludes.lua")
+end
 add_rules("mode.debug", "mode.release")
 
 ]])

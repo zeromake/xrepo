@@ -1,6 +1,10 @@
-includes("check_cincludes.lua")
-includes("check_cfuncs.lua")
-includes("check_csnippets.lua")
+if xmake.version():gt("2.8.3") then
+    includes("@builtin/check")
+else
+    includes("check_cincludes.lua")
+    includes("check_cfuncs.lua")
+    includes("check_csnippets.lua")
+end
 add_rules("mode.debug", "mode.release")
 
 local options = {}
@@ -64,8 +68,11 @@ local headers = {
     "fribidi.h"
 }
 
-function configvar_check_sizeof(define_name, type_name)
-    configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..')); return 0;', {output = true, number = true})
+local configvar_check_sizeof = configvar_check_sizeof or function(define_name, type_name, opt)
+    opt = opt or {}
+    opt.output = true
+    opt.number = true
+    configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..')); return 0;', opt)
 end
 
 target("fribidi")

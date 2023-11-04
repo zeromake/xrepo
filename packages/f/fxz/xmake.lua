@@ -7,7 +7,7 @@ package("fxz")
     end})
 
     add_versions("202201090037", "dffa4ec239bd43db13b5cba8d18eecb3c34e10289d1c576cfb81066a0660e4c9")
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         io.writefile("config.h.in", [[
 ${define ASSUME_RAM}

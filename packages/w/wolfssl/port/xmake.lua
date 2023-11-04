@@ -1,5 +1,9 @@
-includes("check_cincludes.lua")
-includes("check_csnippets.lua")
+if xmake.version():gt("2.8.3") then
+    includes("@builtin/check")
+else
+    includes("check_cincludes.lua")
+    includes("check_csnippets.lua")
+end
 add_rules("mode.debug", "mode.release")
 
 local options = {}
@@ -107,8 +111,7 @@ target("wolfssl")
         "WOLFSSL_USER_SETTINGS",
         "CYASSL_USER_SETTINGS",
         "WOLFSSL_NO_MD4",
-        "OPENSSL_EXTRA",
-        "WOLFSSL_SHA512"
+        "WOLFSSL_SYS_CA_CERTS"
     )
 
     for _, op in ipairs(options) do
@@ -124,6 +127,8 @@ target("wolfssl")
     elseif is_host("macosx") then
         add_includedirs("IDE/XCODE")
         add_headerfiles("IDE/XCODE/*.h")
+        add_defines("HAVE_SECURITY_SECTRUSTSETTINGS_H")
+        add_frameworks("Security")
     end
 
     for _, f in ipairs(sourceFiles) do

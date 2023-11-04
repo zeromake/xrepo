@@ -26,7 +26,7 @@ package("sdl2_ttf")
     add_includedirs("include")
     add_includedirs("include/SDL2")
 
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
         for _, op in ipairs(options) do

@@ -90,7 +90,7 @@ package("sdl2")
         end
     end)
 
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         local configs = {}
         local packagedeps = {}
         if package:is_plat("linux") then

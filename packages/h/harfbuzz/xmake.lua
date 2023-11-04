@@ -16,7 +16,7 @@ package("harfbuzz")
         end
     end)
 
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
 

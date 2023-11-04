@@ -6,6 +6,7 @@ package("wolfssl")
     set_license("GPLv2")
     set_urls("https://github.com/wolfSSL/wolfssl/archive/refs/tags/v$(version)-stable.tar.gz")
 
+    add_versions("5.6.4", "031691906794ff45e1e792561cf31759f5d29ac74936bc8dffb8b14f16d820b4")
     add_versions("5.5.0", "c34b74b5f689fac7becb05583b044e84d3b10d39f38709f0095dd5d423ded67f")
 
     for _, op in ipairs(options) do
@@ -19,13 +20,13 @@ package("wolfssl")
         "WOLFSSL_LIB",
         "WOLFSSL_USER_SETTINGS",
         "CYASSL_USER_SETTINGS",
-        "WOLFSSL_NO_MD4",
-        "OPENSSL_EXTRA",
-        "WOLFSSL_SHA512"
+        "WOLFSSL_NO_MD4"
     )
 
     if is_plat("windows", "mingw") then
         add_syslinks("advapi32", "ws2_32")
+    elseif is_plat("macosx") then
+        add_frameworks("CoreFoundation", "Security")
     end
 
     on_load(function (package)
@@ -36,7 +37,7 @@ package("wolfssl")
         end
     end)
 
-    on_install("windows", "mingw", "macosx", "linux", "iphoneos", "android", function (package)
+    on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         os.cp("wolfssl/options.h.in", "wolfssl/options.h")
         local configs = {}
