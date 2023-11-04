@@ -307,8 +307,20 @@ target("sdl2")
     add_headerfiles(path.join("include", "*.h"), {prefixdir="SDL2"})
 
 target("sdl2_main")
-    set_kind("$(kind)")
+    set_kind("static")
     add_includedirs("include")
+    if get_config("winrt") then
+        add_packages("cppwinrt")
+        add_defines(
+            "SDL_BUILDING_WINRT=1",
+            "WINAPI_FAMILY=WINAPI_FAMILY_APP",
+            "UNICODE",
+            "_UNICODE"
+        )
+        -- support cx
+        set_runtimes("MD")
+        add_cxxflags("/ZW")
+    end
     for _, f in ipairs(sdlMainSrc) do
         add_files(f)
     end
