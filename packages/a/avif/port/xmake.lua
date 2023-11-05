@@ -1,5 +1,11 @@
 add_rules("mode.debug", "mode.release")
 
+local options = {
+    "yuv",
+    "webp"
+}
+
+
 if is_plat("windows") then
     add_cxflags("/utf-8")
 end
@@ -13,6 +19,16 @@ option_end()
 local codec = get_config("codec")
 if codec == "dav1d" then
     add_requires("dav1d")
+end
+
+for _, op in ipairs(options) do
+    option(op)
+        set_default(false)
+        set_showmenu(true)
+    option_end()
+    if has_config(op) then 
+        add_requires(op)
+    end
 end
 
 target("avif")
@@ -29,4 +45,15 @@ target("avif")
     if is_kind("shared") then
         add_defines("AVIF_DLL=1")
         add_defines("AVIF_BUILDING_SHARED_LIBS=1")
+    end
+    
+    for _, op in ipairs(options) do
+        if has_config(op) then
+            add_packages(op)
+            if op == "yuv" then
+                add_defines("AVIF_LIBYUV_ENABLED=1")
+            elseif op == "webp" then
+                add_defines("AVIF_LIBSHARPYUV_ENABLED=1")
+            end
+        end
     end

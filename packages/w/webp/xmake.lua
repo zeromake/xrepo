@@ -15,6 +15,7 @@ target("webp")
     set_kind("$(kind)")
     add_includedirs(".")
     add_headerfiles("src/webp/*.h", {prefixdir = "webp"})
+    add_headerfiles("sharpyuv/*.h", {prefixdir = "sharpyuv"})
     for _, f in ipairs({
         "sharpyuv",
         "src/dec",
@@ -25,7 +26,11 @@ target("webp")
         "src/utils",
     }) do
         add_files(path.join(f, "*.c"))
-    end]])
+    end
+    if is_kind("shared") and is_plat("windows", "mingw") then
+        add_defines("WEBP_EXTERN=__declspec(dllexport)")
+    end
+]])
         local configs = {}
         import("package.tools.xmake").install(package, configs)
     end)
