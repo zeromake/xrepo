@@ -17,10 +17,16 @@ package("dav1d")
     add_versions("2023.10.19", "ca076dbca6683076011ebdd5d791342bb58575cc5a226caee05643096d4a7af9")
     on_install(function (package)
         io.writefile('config.h.in', [[
+#pragma once
+
+#ifdef __CONFIG_H
+#define __CONFIG_H
+
 ${define CONFIG_8BPC}
 ${define CONFIG_16BPC}
 ${define CONFIG_LOG}
 ${define _GNU_SOURCE}
+${define HAVE_ASM}
 
 ${define _WIN32_WINNT}
 ${define UNICODE}
@@ -49,6 +55,8 @@ ${define ARCH_AARCH64}
 ${define ARCH_ARM}
 ${define HAVE_AS_FUNC}
 ${define PIC}
+
+#endif
 ]])
         io.writefile("version.h", [[
 #ifndef DAV1D_VERSION_H
@@ -86,11 +94,49 @@ extern "C" {
 %define ARCH_X86_64 ${ASM_ARCH_X86_64}
 %define FORCE_VEX_ENCODING ${ASM_FORCE_VEX_ENCODING}
 %define PIC ${ASM_PIC}
-%define PREFIX ${ASM_PREFIX}
 %define STACK_ALIGNMENT ${ASM_STACK_ALIGNMENT}
 %define private_prefix dav1d
 ]])
         end
+        for _, f in ipairs({
+            'cdef_apply_tmpl',
+            'cdef_tmpl',
+            'fg_apply_tmpl',
+            'filmgrain_tmpl',
+            'ipred_prepare_tmpl',
+            'ipred_tmpl',
+            'itx_tmpl',
+            'lf_apply_tmpl',
+            'loopfilter_tmpl',
+            'looprestoration_tmpl',
+            'lr_apply_tmpl',
+            'mc_tmpl',
+            'recon_tmpl'
+        }) do
+            local content = io.readfile(path.join("src", f..".c"))
+            local bpc8 = content:gsub('#include "config%.h"', '#include "config.8bpc.h"')
+            io.writefile(path.join("src", f..".8bpc.c"), bpc8)
+            local bpc16 = content:gsub('#include "config%.h"', '#include "config.16bpc.h"')
+            io.writefile(path.join("src", f..".16bpc.c"), bpc16)
+        end
+        io.writefile("config.8bpc.h", [[
+#ifdef __CONFIG_8BPC_H
+#define __CONFIG_8BPC_H
+
+#include "config.h"
+#define BITDEPTH 8
+
+#endif
+]])
+        io.writefile("config.16bpc.h", [[
+#ifdef __CONFIG_16BPC_H
+#define __CONFIG_16BPC_H
+
+#include "config.h"
+#define BITDEPTH 16
+
+#endif
+]])
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
         import("package.tools.xmake").install(package, configs)

@@ -20,11 +20,21 @@ option("bitdepths")
     set_showmenu(true)
     set_description("Enable only specified bitdepths")
 
-
 option("logging")
     set_default(true)
     set_showmenu(true)
     set_description("Print error log messages using the provided callback function")
+
+function string.split(input, delimiter)
+    if (delimiter == "") then return false end
+    local pos, arr = 0, {}
+    for st, sp in function() return string.find(input, delimiter, pos, true) end do
+        table.insert(arr, string.sub(input, pos, st - 1))
+        pos = sp + 1
+    end
+    table.insert(arr, string.sub(input, pos))
+    return arr
+end
 
 target("dav1d")
     set_kind("$(kind)")
@@ -34,8 +44,14 @@ target("dav1d")
     add_includedirs("$(buildir)/config")
     add_configfiles("config.h.in")
 
-    if get_config("bitdepths") then
-        set_configvar(string.format("CONFIG_%sBPC", get_config("bitdepths")), 1)
+    set_configvar("HAVE_ASM", 1)
+
+    local bitdepths = get_config("bitdepths") or ""
+    if bitdepths ~= "" then
+        for _, bit in ipairs(string.split(bitdepths, ";")) do
+            set_configvar(string.format("CONFIG_%sBPC", bit), 1)
+        end
+        add_defines("BITDEPTH="..(bitdepths:find("8") and "8" or "16"))
     end
     if get_config('logging') then
         set_configvar("CONFIG_LOG", 1)
@@ -46,10 +62,11 @@ target("dav1d")
 
     if is_plat("windows", "mingw") then
         add_defines("_WIN32_WINNT=0x0601")
-        add_defines("UNICODE=1")
-        add_defines("_UNICODE=1")
-        add_defines("__USE_MINGW_ANSI_STDIO=1")
-        add_defines("_CRT_DECLARE_NONSTDC_NAMES=1")
+        -- set_configvar("_WIN32_WINNT", 0x0601)
+        set_configvar("UNICODE", 1)
+        set_configvar("_UNICODE", 1)
+        set_configvar("__USE_MINGW_ANSI_STDIO", 1)
+        set_configvar("_CRT_DECLARE_NONSTDC_NAMES", 1)
         configvar_check_cfuncs("HAVE_FSEEKO", "fseeko", {includes = {"stdio.h"}})
         add_files("src/win32/*.c")
     else
@@ -69,6 +86,23 @@ target("dav1d")
 
     configvar_check_cfuncs("HAVE_GETAUXVAL", "getauxval", {includes = {'sys/auxv.h'}})
     configvar_check_cfuncs("HAVE_ELF_AUX_INFO", "elf_aux_info", {includes = {'sys/auxv.h'}})
+    for _, f in ipairs({
+        'cdef_apply_tmpl',
+        'cdef_tmpl',
+        'fg_apply_tmpl',
+        'filmgrain_tmpl',
+        'ipred_prepare_tmpl',
+        'ipred_tmpl',
+        'itx_tmpl',
+        'lf_apply_tmpl',
+        'loopfilter_tmpl',
+        'looprestoration_tmpl',
+        'lr_apply_tmpl',
+        'mc_tmpl',
+        'recon_tmpl'
+    }) do
+        add_files(path.join("src", f..".c"))
+    end
 
     add_files(
         'src/cdf.c',
@@ -109,7 +143,7 @@ target("dav1d")
             'src/arm/64/msac.S',
             'src/arm/64/refmvs.S'
         )
-        if get_config("bitdepths") == "8" then
+        if bitdepths:find("8") then
             add_files(
                 'src/arm/64/cdef.S',
                 'src/arm/64/filmgrain.S',
@@ -118,7 +152,7 @@ target("dav1d")
                 'src/arm/64/looprestoration.S',
                 'src/arm/64/mc.S'
             )
-        elseif get_config("bitdepths") == "16" then
+        elseif bitdepths:find("16") then
             add_files(
                 'src/arm/64/cdef16.S',
                 'src/arm/64/filmgrain16.S',
@@ -142,7 +176,7 @@ target("dav1d")
             'src/arm/32/refmvs.S'
         )
 
-        if get_config("bitdepths") == "8" then
+        if bitdepths:find("8") then
             add_files(
                 'src/arm/32/cdef.S',
                 'src/arm/32/filmgrain.S',
@@ -151,7 +185,7 @@ target("dav1d")
                 'src/arm/32/looprestoration.S',
                 'src/arm/32/mc.S'
             )
-        elseif get_config("bitdepths") == "16" then
+        elseif bitdepths:find("16") then
             add_files(
                 'src/arm/32/cdef16.S',
                 'src/arm/32/filmgrain16.S',
@@ -168,7 +202,7 @@ target("dav1d")
         add_configfiles("config.asm.in")
         set_configvar("ASM_FORCE_VEX_ENCODING", 0)
         set_configvar("ASM_PIC", 1)
-        set_configvar("ASM_PREFIX", 1)
+
         if is_arch("x86") then
             set_configvar("ASM_ARCH_X86_32", 1)
             set_configvar("ASM_ARCH_X86_64", 0)
@@ -192,7 +226,7 @@ target("dav1d")
             'src/x86/itx_sse.asm'
         )
 
-        if get_config("bitdepths") == "8" then
+        if bitdepths:find("8") then
             add_files(
                 'src/x86/cdef_avx512.asm',
                 'src/x86/filmgrain_avx512.asm',
@@ -210,7 +244,7 @@ target("dav1d")
                 'src/x86/looprestoration_sse.asm',
                 'src/x86/mc_sse.asm'
             )
-        elseif get_config("bitdepths") == "16" then
+        elseif bitdepths:find("16") then
             add_files(
                 'src/x86/cdef16_avx512.asm',
                 'src/x86/filmgrain16_avx512.asm',
@@ -239,4 +273,6 @@ target("dav1d")
 
     add_headerfiles("include/dav1d/*.h", {prefixdir = "dav1d"})
     add_headerfiles("version.h", {prefixdir = "dav1d"})
-    
+    if is_kind("shared") then
+        add_defines("DAV1D_BUILDING_DLL=1")
+    end

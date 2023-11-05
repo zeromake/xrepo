@@ -5,6 +5,8 @@ package("avif")
     set_urls("https://github.com/AOMediaCodec/libavif/archive/refs/tags/v$(version).tar.gz")
 
     add_versions("1.0.1", "398fe7039ce35db80fe7da8d116035924f2c02ea4a4aa9f4903df6699287599c")
+
+    -- add_deps("yuv")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
