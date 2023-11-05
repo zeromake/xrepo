@@ -16,7 +16,7 @@ option("enable_asm")
     set_description("enable asm")
 
 option("bitdepths")
-    set_default("8")
+    set_default("8;16")
     set_showmenu(true)
     set_description("Enable only specified bitdepths")
 
@@ -36,56 +36,26 @@ function string.split(input, delimiter)
     return arr
 end
 
-target("dav1d")
-    set_kind("$(kind)")
-    add_includedirs(".", "include", "include/dav1d", "src")
-
-    set_configdir("$(buildir)/config")
+local function use_common()
     add_includedirs("$(buildir)/config")
-    add_configfiles("config.h.in")
-
-    set_configvar("HAVE_ASM", 1)
-
-    local bitdepths = get_config("bitdepths") or ""
-    if bitdepths ~= "" then
-        for _, bit in ipairs(string.split(bitdepths, ";")) do
-            set_configvar(string.format("CONFIG_%sBPC", bit), 1)
-        end
-        add_defines("BITDEPTH="..(bitdepths:find("8") and "8" or "16"))
-    end
-    if get_config('logging') then
-        set_configvar("CONFIG_LOG", 1)
-    end
-    if is_plat("linux", "wasm") then
-        set_configvar("_GNU_SOURCE", 1)
-    end
-
+    add_includedirs(".", "include", "include/dav1d", "src")
     if is_plat("windows", "mingw") then
         add_defines("_WIN32_WINNT=0x0601")
-        -- set_configvar("_WIN32_WINNT", 0x0601)
-        set_configvar("UNICODE", 1)
-        set_configvar("_UNICODE", 1)
-        set_configvar("__USE_MINGW_ANSI_STDIO", 1)
-        set_configvar("_CRT_DECLARE_NONSTDC_NAMES", 1)
-        configvar_check_cfuncs("HAVE_FSEEKO", "fseeko", {includes = {"stdio.h"}})
-        add_files("src/win32/*.c")
-    else
-        configvar_check_cfuncs("HAVE_CLOCK_GETTIME", "clock_gettime", {includes = {"time.h"}})
-        configvar_check_cfuncs("HAVE_POSIX_MEMALIGN", "posix_memalign", {includes = {"stdlib.h"}})
+        if is_plat("windows") then
+            add_includedirs("include/compat")
+            add_includedirs("include/compat/msvc")
+        end
     end
-    configvar_check_cfuncs("HAVE_DLSYM", "dlsym", {includes = {"dlfcn.h"}})
-    if is_plat("windows") then
-        add_includedirs("include/compat")
-        add_includedirs("include/compat/msvc")
-        add_files("tools/compat/getopt.c")
+    if is_kind("shared") then
+        add_defines("DAV1D_BUILDING_DLL=1")
     end
+end
 
-    configvar_check_cincludes("HAVE_UNISTD_H", "unistd.h")
-    configvar_check_cincludes("HAVE_IO_H", "io.h")
-    configvar_check_cincludes("HAVE_PTHREAD_NP_H", "pthread_np.h")
-
-    configvar_check_cfuncs("HAVE_GETAUXVAL", "getauxval", {includes = {'sys/auxv.h'}})
-    configvar_check_cfuncs("HAVE_ELF_AUX_INFO", "elf_aux_info", {includes = {'sys/auxv.h'}})
+target("dav1d_bpc8")
+    set_default(false)
+    set_kind("object")
+    use_common()
+    add_defines("BITDEPTH=8")
     for _, f in ipairs({
         'cdef_apply_tmpl',
         'cdef_tmpl',
@@ -103,6 +73,75 @@ target("dav1d")
     }) do
         add_files(path.join("src", f..".c"))
     end
+
+target("dav1d_bpc16")
+    set_default(false)
+    set_kind("object")
+    use_common()
+    add_defines("BITDEPTH=16")
+    for _, f in ipairs({
+        'cdef_apply_tmpl',
+        'cdef_tmpl',
+        'fg_apply_tmpl',
+        'filmgrain_tmpl',
+        'ipred_prepare_tmpl',
+        'ipred_tmpl',
+        'itx_tmpl',
+        'lf_apply_tmpl',
+        'loopfilter_tmpl',
+        'looprestoration_tmpl',
+        'lr_apply_tmpl',
+        'mc_tmpl',
+        'recon_tmpl'
+    }) do
+        add_files(path.join("src", f..".c"))
+    end
+    if is_kind("shared") then
+        add_defines("DAV1D_BUILDING_DLL=1")
+    end
+
+target("dav1d")
+    set_kind("$(kind)")
+    use_common()
+    set_configdir("$(buildir)/config")
+    add_configfiles("config.h.in")
+    set_configvar("HAVE_ASM", 1)
+    local bitdepths = get_config("bitdepths") or ""
+    if bitdepths ~= "" then
+        for _, bit in ipairs(string.split(bitdepths, ";")) do
+            set_configvar(string.format("CONFIG_%sBPC", bit), 1)
+            add_deps("dav1d_bpc"..bit)
+        end
+    end
+    if get_config('logging') then
+        set_configvar("CONFIG_LOG", 1)
+    end
+    if is_plat("linux", "wasm") then
+        set_configvar("_GNU_SOURCE", 1)
+    end
+
+    if is_plat("windows", "mingw") then
+        set_configvar("UNICODE", 1)
+        set_configvar("_UNICODE", 1)
+        set_configvar("__USE_MINGW_ANSI_STDIO", 1)
+        set_configvar("_CRT_DECLARE_NONSTDC_NAMES", 1)
+        configvar_check_cfuncs("HAVE_FSEEKO", "fseeko", {includes = {"stdio.h"}})
+        add_files("src/win32/*.c")
+    else
+        configvar_check_cfuncs("HAVE_CLOCK_GETTIME", "clock_gettime", {includes = {"time.h"}})
+        configvar_check_cfuncs("HAVE_POSIX_MEMALIGN", "posix_memalign", {includes = {"stdlib.h"}})
+    end
+    configvar_check_cfuncs("HAVE_DLSYM", "dlsym", {includes = {"dlfcn.h"}})
+    if is_plat("windows") then
+        add_files("tools/compat/getopt.c")
+    end
+
+    configvar_check_cincludes("HAVE_UNISTD_H", "unistd.h")
+    configvar_check_cincludes("HAVE_IO_H", "io.h")
+    configvar_check_cincludes("HAVE_PTHREAD_NP_H", "pthread_np.h")
+
+    configvar_check_cfuncs("HAVE_GETAUXVAL", "getauxval", {includes = {'sys/auxv.h'}})
+    configvar_check_cfuncs("HAVE_ELF_AUX_INFO", "elf_aux_info", {includes = {'sys/auxv.h'}})
 
     add_files(
         'src/cdf.c',
@@ -273,6 +312,3 @@ target("dav1d")
 
     add_headerfiles("include/dav1d/*.h", {prefixdir = "dav1d"})
     add_headerfiles("version.h", {prefixdir = "dav1d"})
-    if is_kind("shared") then
-        add_defines("DAV1D_BUILDING_DLL=1")
-    end
