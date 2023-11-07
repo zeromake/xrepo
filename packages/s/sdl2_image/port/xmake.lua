@@ -100,7 +100,9 @@ target("sdl2_image")
     elseif backend == "imageio" then
         add_defines("PNG_USES_IMAGEIO=1")
         add_defines("JPG_USES_IMAGEIO=1")
-        add_defines("BMP_USES_IMAGEIO=1")
+        if not is_plat("iphoneos") then
+            add_defines("BMP_USES_IMAGEIO=1")
+        end
         add_defines("LOAD_PNG=1")
         add_defines("LOAD_JPG=1")
         add_defines("LOAD_TIF=1")
