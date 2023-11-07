@@ -17,6 +17,25 @@ package("ghc_filesystem")
         ]])
         local configs = {}
         import("package.tools.xmake").install(package, configs)
+        if package:is_plat("iphoneos") then
+            local n = 0
+            local file = io.open(path.join(package:installdir("include/ghc"), "filesystem.hpp"), "wb")
+            for line in io.lines("include/ghc/filesystem.hpp") do
+                local space, variable = line:match('(%s+).*std::find%(.*, ?(preferred_separator)%)')
+                if line == '    using path_helper_base<value_type>::preferred_separator;' then
+                    file:write(line..'\n')
+                    file:write('    const static value_type __global_preferred_separator = preferred_separator;\n')
+                elseif variable then
+                    line = line:gsub(', ?preferred_separator%)', ', __global_preferred_separator)')
+                    file:write(
+                        line..'\n'
+                    )
+                else
+                    file:write(line..'\n')
+                end
+            end
+            file:close()
+        end
     end)
 
     on_test(function (package)
