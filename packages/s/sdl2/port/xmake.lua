@@ -75,6 +75,8 @@ if is_plat("macosx") then
         "src/video/dummy/*.c",
     })
 elseif is_plat("iphoneos") then
+    add_cxflags("-fembed-bitcode")
+    add_mxflags("-fembed-bitcode")
     table.join2(sdlMainSrc, {
         'src/main/uikit/*.c'
     })
