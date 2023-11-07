@@ -22,11 +22,13 @@ package("ghc_filesystem")
             local file = io.open(path.join(package:installdir("include/ghc"), "filesystem.hpp"), "wb")
             for line in io.lines("include/ghc/filesystem.hpp") do
                 local space, variable = line:match('(%s+).*std::find%(.*, ?(preferred_separator)%)')
-                if line == '    using path_helper_base<value_type>::preferred_separator;' then
-                    file:write(line..'\n')
-                    file:write('    const static value_type __global_preferred_separator = preferred_separator;\n')
-                elseif variable then
-                    line = line:gsub(', ?preferred_separator%)', ', __global_preferred_separator)')
+                -- if line == '    using path_helper_base<value_type>::preferred_separator;' then
+                --     file:write(line..'\n')
+                --     file:write('    const static value_type __global_preferred_separator = preferred_separator;\n')
+                if variable then
+                    n = n + 1
+                    file:write(space..'const static auto __preferred_separator_'..n..' = preferred_separator;\n')
+                    line = line:gsub(', ?preferred_separator%)', ', __preferred_separator_'..n..')')
                     file:write(
                         line..'\n'
                     )
