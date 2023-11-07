@@ -27,7 +27,7 @@ package("ghc_filesystem")
                 --     file:write('    const static value_type __global_preferred_separator = preferred_separator;\n')
                 if variable then
                     n = n + 1
-                    file:write(space..'const static auto __preferred_separator_'..n..' = preferred_separator;\n')
+                    file:write(space..'auto __preferred_separator_'..n..' = preferred_separator;\n')
                     line = line:gsub(', ?preferred_separator%)', ', __preferred_separator_'..n..')')
                     file:write(
                         line..'\n'
