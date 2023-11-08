@@ -10,6 +10,7 @@ package("sdl2")
     add_versions("2.26.1", "02537cc7ebd74071631038b237ec4bfbb3f4830ba019e569434da33f42373e04")
 
     add_configs("winrt", {description = "Support winrt", default = false, type = "boolean"})
+    add_configs("bmp_compat", {description = "Support bmp save use compat", default = false, type = "boolean"})
 
     if is_plat("macosx") then
         add_frameworks(
@@ -100,6 +101,7 @@ package("sdl2")
         else
             os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
             configs["winrt"] = package:config("winrt") and "y" or "n"
+            configs["bmp_compat"] = package:config("bmp_compat") and "y" or "n"
             import("package.tools.xmake").install(package, configs)
         end
     end)

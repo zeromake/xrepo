@@ -15,8 +15,17 @@ option("wayland")
     set_showmenu(true)
 option_end()
 
+option("bmp_compat")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
 if is_plat("windows") then
     add_cxflags("/utf-8")
+end
+
+if get_config("bmp_compat") then
+    add_defines("LCS_WINDOWS_COLOR_SPACE=1")
 end
 
 local sdlMainSrc = {}
