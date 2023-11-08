@@ -191,8 +191,15 @@ function configvar_check_csymbol_exists(define_name, var_name, opt)
     configvar_check_csnippets(define_name, 'void* a = (void*)'..var_name..';', opt)
 end
 
-function configvar_check_sizeof(define_name, type_name)
-    configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..'));return 0;', {output = true, number = true, includes={"stdint.h"}})
+local configvar_check_sizeof = configvar_check_sizeof or function(define_name, type_name, opt)
+    opt = opt or {}
+    opt.output = true
+    opt.number = true
+    configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..')); return 0;', opt)
+end
+
+function have_configvar_check_sizeof(define_name, type_name)
+    configvar_check_sizeof(define_name, type_name, {includes={"stdint.h"}})
     configvar_check_csnippets("HAVE_"..define_name, type_name..' a;', {includes={"stdint.h"}})
 end
 
@@ -412,26 +419,26 @@ target("archive")
     configvar_check_has_member("TIME_WITH_SYS_TIME", "struct tm", "tm_sec", {includes={"sys/types.h","sys/time.h","time.h"}})
     configvar_check_has_member("HAVE_STRUCT_STATVFS_F_IOSIZE", "struct statvfs", "f_iosize", {includes={"sys/types.h","sys/statvfs.h"}})
 
-    configvar_check_sizeof("SIZEOF_SHORT", "short")
-    configvar_check_sizeof("SIZEOF_INT", "int")
-    configvar_check_sizeof("SIZEOF_LONG", "long")
-    configvar_check_sizeof("SIZEOF_LONG_LONG", "long long")
-    configvar_check_sizeof("SIZEOF_UNSIGNED_SHORT", "unsigned short")
-    configvar_check_sizeof("SIZEOF_UNSIGNED", "unsigned")
-    configvar_check_sizeof("SIZEOF_UNSIGNED_LONG", "unsigned long")
-    configvar_check_sizeof("SIZEOF_UNSIGNED_LONG_LONG", "unsigned long long")
+    have_configvar_check_sizeof("SIZEOF_SHORT", "short")
+    have_configvar_check_sizeof("SIZEOF_INT", "int")
+    have_configvar_check_sizeof("SIZEOF_LONG", "long")
+    have_configvar_check_sizeof("SIZEOF_LONG_LONG", "long long")
+    have_configvar_check_sizeof("SIZEOF_UNSIGNED_SHORT", "unsigned short")
+    have_configvar_check_sizeof("SIZEOF_UNSIGNED", "unsigned")
+    have_configvar_check_sizeof("SIZEOF_UNSIGNED_LONG", "unsigned long")
+    have_configvar_check_sizeof("SIZEOF_UNSIGNED_LONG_LONG", "unsigned long long")
 
-    configvar_check_sizeof("__INT64", "__int64")
-    configvar_check_sizeof("UNSIGNED___INT64", "unsigned __int64")
-    configvar_check_sizeof("INT16_T", "int16_t")
-    configvar_check_sizeof("INT32_T", "int32_t")
-    configvar_check_sizeof("INT64_T", "int64_t")
-    configvar_check_sizeof("INTMAX_T", "intmax_t")
-    configvar_check_sizeof("UINT8_T", "uint8_t")
-    configvar_check_sizeof("UINT16_T", "uint16_t")
-    configvar_check_sizeof("UINT32_T", "uint32_t")
-    configvar_check_sizeof("UINT64_T", "uint64_t")
-    configvar_check_sizeof("UINTMAX_T", "uintmax_t")
+    have_configvar_check_sizeof("__INT64", "__int64")
+    have_configvar_check_sizeof("UNSIGNED___INT64", "unsigned __int64")
+    have_configvar_check_sizeof("INT16_T", "int16_t")
+    have_configvar_check_sizeof("INT32_T", "int32_t")
+    have_configvar_check_sizeof("INT64_T", "int64_t")
+    have_configvar_check_sizeof("INTMAX_T", "intmax_t")
+    have_configvar_check_sizeof("UINT8_T", "uint8_t")
+    have_configvar_check_sizeof("UINT16_T", "uint16_t")
+    have_configvar_check_sizeof("UINT32_T", "uint32_t")
+    have_configvar_check_sizeof("UINT64_T", "uint64_t")
+    have_configvar_check_sizeof("UINTMAX_T", "uintmax_t")
 
     set_configvar("HAVE_LZMA_STREAM_ENCODER_MT", 1)
     -- set_configvar("_FILE_OFFSET_BITS", 1)
