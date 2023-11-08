@@ -273,6 +273,10 @@ target("sdl2")
         end
         add_syslinks("pthread", "dl")
     elseif is_plat("windows", "mingw") then
+        add_defines(
+            "UNICODE",
+            "_UNICODE"
+        )
         if is_kind("shared") then
             add_defines("DLL_EXPORT")
         end
@@ -280,9 +284,7 @@ target("sdl2")
             add_packages("cppwinrt")
             add_defines(
                 "SDL_BUILDING_WINRT=1",
-                "WINAPI_FAMILY=WINAPI_FAMILY_APP",
-                "UNICODE",
-                "_UNICODE"
+                "WINAPI_FAMILY=WINAPI_FAMILY_APP"
             )
             add_syslinks(
                 "msvcrt",
