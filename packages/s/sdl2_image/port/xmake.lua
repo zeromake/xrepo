@@ -84,13 +84,13 @@ target("sdl2_image")
             backend = "stb"
         end
     end
-    print("bk:", backend)
     local files = {
         "*.c",
     }
     if is_plat("macosx", "iphoneos") then
         set_values("objc.build.arc", false)
         add_mflags("-fno-objc-arc")
+        table.insert(files, "*.m")
     end
     if backend == "wic" then
         add_defines("SDL_IMAGE_USE_WIC_BACKEND=1")
@@ -106,7 +106,6 @@ target("sdl2_image")
         add_defines("LOAD_PNG=1")
         add_defines("LOAD_JPG=1")
         add_defines("LOAD_TIF=1")
-        table.insert(files, "*.m")
     elseif backend == "stb" then
         add_defines("USE_STBIMAGE=1")
         add_defines("LOAD_PNG=1")
@@ -117,3 +116,7 @@ target("sdl2_image")
     for _, f in ipairs(files) do
         add_files(f)
     end
+    remove_files(
+        "showanim.c",
+        "showimage.c"
+    )

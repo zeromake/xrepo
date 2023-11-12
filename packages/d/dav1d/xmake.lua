@@ -1,5 +1,5 @@
 
-local function getVersion(version) 
+local function getVersion(version)
     local versions = {
         ['2023.10.19'] = 'archive/fd4ecc2fd870fa267e1995600dddf212c6e49300.tar.gz'
     }
