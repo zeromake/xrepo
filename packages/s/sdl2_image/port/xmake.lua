@@ -92,6 +92,11 @@ target("sdl2_image")
         add_mflags("-fno-objc-arc")
         table.insert(files, "*.m")
     end
+    if is_plat("macosx") then
+        add_frameworks("CoreFoundation", "CoreGraphics", "ImageIO", "CoreServices")
+    elseif is_plat("iphoneos") then
+        add_frameworks("ImageIO", "CoreServices")
+    end
     if backend == "wic" then
         add_defines("SDL_IMAGE_USE_WIC_BACKEND=1")
         add_defines("LOAD_PNG=1")
