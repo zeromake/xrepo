@@ -314,7 +314,6 @@ target("sdl2")
         end
     elseif is_plat("android") then
         add_packages("ndk-cpufeatures")
-        add_ldflags("-static-libstdc++")
         add_syslinks("GLESv1_CM", "GLESv2", "OpenSLES", "log", "android")
     end
     add_headerfiles(path.join("include", "*.h"), {prefixdir="SDL2"})
