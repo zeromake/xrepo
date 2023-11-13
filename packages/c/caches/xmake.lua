@@ -1,0 +1,11 @@
+package("caches")
+    set_kind("library", {headeronly = true})
+    set_homepage("https://github.com/vpetrigo/caches")
+    set_description("C++ cache with LRU/LFU/FIFO policies implementation ")
+    set_license("BSD-3")
+    set_urls("https://github.com/vpetrigo/caches/archive/refs/tags/v0.0.5.tar.gz")
+
+    add_versions("0.0.5", "4f9175f87e7b3d2365f512ec66b7cd6712294f17befcc3607b1020a9729fcad3")
+    on_install(function (package)
+        os.cp("include/*.hpp", package:installdir("include"))
+    end)
