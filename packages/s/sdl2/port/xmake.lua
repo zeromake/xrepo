@@ -212,7 +212,6 @@ target("sdl2")
     for _, f in ipairs(sdlSrc) do
         add_files(f)
     end
-    remove_files("src/render/opengles/*.c")
     if is_plat("macosx") then
         add_frameworks(
             "OpenGL",
