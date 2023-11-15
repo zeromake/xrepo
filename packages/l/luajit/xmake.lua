@@ -173,6 +173,7 @@ package("luajit")
     )
     add_versions("2023.09.25", "6d7e8fc691d45fe837d05e2a03f3a41b0886a237544d30f74f1355ce2c8d9157")
     on_install(function (package)
+        print("luajit: ", os.getpid())
         local lua_target = nil
         local lua_os = nil
         local lua_arch32 = 0
