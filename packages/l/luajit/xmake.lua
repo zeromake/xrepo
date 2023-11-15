@@ -173,7 +173,6 @@ package("luajit")
     )
     add_versions("2023.09.25", "6d7e8fc691d45fe837d05e2a03f3a41b0886a237544d30f74f1355ce2c8d9157")
     on_install(function (package)
-        print("luajit: ", os.getpid())
         local lua_target = nil
         local lua_os = nil
         local lua_arch32 = 0
@@ -217,14 +216,13 @@ package("luajit")
         )
         if os.exists("src/host/genversion.lua") and os.exists(".relver") then
             os.cp(".relver", "src/luajit_relver.txt")
-            os.cd("src")
             os.vrunv(
                 package:installdir("bin").."/minilua",
                 {
                     "host/genversion.lua"
-                }
+                },
+                {curdir = "src"}
             )
-            os.cd("-")
         end
         local _buildvmScript = string.format(buildvmScript, commonDefines)
         io.writefile("xmake.lua", _buildvmScript)
