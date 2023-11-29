@@ -132,7 +132,7 @@ ${define HAVE_VSNPRINTF}
 #endif
 
 #endif /* already included */
-        ]])
+]], {encoding = "binary"})
         local configs = {}
         import("package.tools.xmake").install(package, configs)
     end)

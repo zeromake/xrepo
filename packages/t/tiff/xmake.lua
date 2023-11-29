@@ -75,7 +75,7 @@ ${define MDI_SUPPORT}
 #define IPTC_SUPPORT
 
 #endif /* _TIFFCONF_ */
-]])
+]], {encoding = "binary"})
 
         io.writefile("tif_config.h.in", [[
 #include "tiffconf.h"
@@ -146,7 +146,7 @@ ${define SIZEOF_SIZE_T}
 #else
 #  error "Unsupported size_t size; please submit a bug report"
 #endif
-]])
+]], {encoding = "binary"})
         local configs = {}
         for _, op in ipairs(options) do
             local v = "n"

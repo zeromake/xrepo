@@ -222,7 +222,7 @@ ${define _XOPEN_SOURCE}
 #else
 ${define WORDS_BIGENDIAN}
 #endif
-        ]])
+]], {encoding = "binary"})
         local configs = {}
         import("package.tools.xmake").install(package, configs)
         io.writefile(path.join(package:installdir("include"), "lzma.h"), [[
@@ -232,7 +232,7 @@ ${define WORDS_BIGENDIAN}
 #include "flzma.h"
 
 #endif
-]])
+]], {encoding = "binary"})
     end)
 
     on_test(function (package)

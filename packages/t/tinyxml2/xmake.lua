@@ -8,13 +8,13 @@ package("tinyxml2")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
-            add_rules("mode.debug", "mode.release")
-            target("tinyxml2")
-                set_kind("$(kind)")
-                set_languages("cxx11")
-                add_headerfiles("tinyxml2.h")
-                add_files("tinyxml2.cpp")
-        ]])
+add_rules("mode.debug", "mode.release")
+target("tinyxml2")
+    set_kind("$(kind)")
+    set_languages("cxx11")
+    add_headerfiles("tinyxml2.h")
+    add_files("tinyxml2.cpp")
+]], {encoding = "binary"})
         local configs = {}
         if package:config("shared") then
             configs["kind"] = "shared"

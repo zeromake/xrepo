@@ -17,12 +17,12 @@ package("mongoose")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
-            add_rules("mode.debug", "mode.release")
-            target("mongoose")
-                set_kind("$(kind)")
-                add_headerfiles("mongoose.h")
-                add_files("mongoose.c")
-        ]])
+add_rules("mode.debug", "mode.release")
+target("mongoose")
+    set_kind("$(kind)")
+    add_headerfiles("mongoose.h")
+    add_files("mongoose.c")
+]], {encoding = "binary"})
         local configs = {}
         configs["kind"] = package:config("shared") and "shared" or "static"
         import("package.tools.xmake").install(package, configs)

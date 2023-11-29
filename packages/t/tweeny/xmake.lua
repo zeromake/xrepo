@@ -8,7 +8,11 @@ package("tweeny")
     add_versions("3.2.0", "bdb8ad985a1d7ee30a3f441d67030f55de47d1961b71a0e2c3062df3c1d80fa3")
     on_install(function (package)
         local content = io.readfile("../tweeny-"..package:version()..".h"):gsub("namespace tweeny", "#include <string>\n\nnamespace tweeny")
-        io.writefile(path.join(package:installdir("include"), "tweeny.h"), content);
+        io.writefile(
+            path.join(package:installdir("include"), "tweeny.h"),
+            content,
+            {encoding = "binary"}
+        )
     end)
 
     -- on_test(function (package)

@@ -32,80 +32,80 @@ package("jpeg")
 #define GIF_SUPPORTED
 #define PPM_SUPPORTED
 #define TARGA_SUPPORTED
-#endif]])      
+#endif]], {encoding = "binary"})      
         io.writefile("xmake.lua", [[
 if xmake.version():gt("2.8.3") then
     includes("@builtin/check")
 else
     includes("check_cincludes.lua")
 end
-            add_rules("mode.debug", "mode.release")
-            target("jpeg")
-                set_kind("$(kind)")
-                if is_plat("windows", "mingw") then
-                    add_configfiles("jconfig.vc", {filename = "jconfig.h"})
-                else
-                    add_configfiles("jconfig.txt", {filename = "jconfig.h"})
-                end
-                add_includedirs("$(buildir)", {public = true})
-                add_headerfiles(
-                    "$(buildir)/jconfig.h",
-                    "jpeglib.h",
-                    "jmorecfg.h",
-                    "jpegint.h",
-                    "jerror.h"
-                )
-                for _, f in ipairs({
-                    "jaricom.c",
-                    "jcapimin.c",
-                    "jcapistd.c",
-                    "jcarith.c",
-                    "jccoefct.c",
-                    "jccolor.c",
-                    "jcdctmgr.c",
-                    "jchuff.c",
-                    "jcinit.c",
-                    "jcmainct.c",
-                    "jcmarker.c",
-                    "jcmaster.c",
-                    "jcomapi.c",
-                    "jcparam.c",
-                    "jcprepct.c",
-                    "jcsample.c",
-                    "jctrans.c",
-                    "jdapimin.c",
-                    "jdapistd.c",
-                    "jdarith.c",
-                    "jdatadst.c",
-                    "jdatasrc.c",
-                    "jdcoefct.c",
-                    "jdcolor.c",
-                    "jddctmgr.c",
-                    "jdhuff.c",
-                    "jdinput.c",
-                    "jdmainct.c",
-                    "jdmarker.c",
-                    "jdmaster.c",
-                    "jdmerge.c",
-                    "jdpostct.c",
-                    "jdsample.c",
-                    "jdtrans.c",
-                    "jerror.c",
-                    "jfdctflt.c",
-                    "jfdctfst.c",
-                    "jfdctint.c",
-                    "jidctflt.c",
-                    "jidctfst.c",
-                    "jidctint.c",
-                    "jquant1.c",
-                    "jquant2.c",
-                    "jutils.c",
-                    "jmemmgr.c",
-                    "jmemansi.c",
-                }) do
-                    add_files(f)
-                end
-        ]])
+add_rules("mode.debug", "mode.release")
+target("jpeg")
+    set_kind("$(kind)")
+    if is_plat("windows", "mingw") then
+        add_configfiles("jconfig.vc", {filename = "jconfig.h"})
+    else
+        add_configfiles("jconfig.txt", {filename = "jconfig.h"})
+    end
+    add_includedirs("$(buildir)", {public = true})
+    add_headerfiles(
+        "$(buildir)/jconfig.h",
+        "jpeglib.h",
+        "jmorecfg.h",
+        "jpegint.h",
+        "jerror.h"
+    )
+    for _, f in ipairs({
+        "jaricom.c",
+        "jcapimin.c",
+        "jcapistd.c",
+        "jcarith.c",
+        "jccoefct.c",
+        "jccolor.c",
+        "jcdctmgr.c",
+        "jchuff.c",
+        "jcinit.c",
+        "jcmainct.c",
+        "jcmarker.c",
+        "jcmaster.c",
+        "jcomapi.c",
+        "jcparam.c",
+        "jcprepct.c",
+        "jcsample.c",
+        "jctrans.c",
+        "jdapimin.c",
+        "jdapistd.c",
+        "jdarith.c",
+        "jdatadst.c",
+        "jdatasrc.c",
+        "jdcoefct.c",
+        "jdcolor.c",
+        "jddctmgr.c",
+        "jdhuff.c",
+        "jdinput.c",
+        "jdmainct.c",
+        "jdmarker.c",
+        "jdmaster.c",
+        "jdmerge.c",
+        "jdpostct.c",
+        "jdsample.c",
+        "jdtrans.c",
+        "jerror.c",
+        "jfdctflt.c",
+        "jfdctfst.c",
+        "jfdctint.c",
+        "jidctflt.c",
+        "jidctfst.c",
+        "jidctint.c",
+        "jquant1.c",
+        "jquant2.c",
+        "jutils.c",
+        "jmemmgr.c",
+        "jmemansi.c",
+    }) do
+        add_files(f)
+    end
+]], {encoding = "binary"})
         local configs = {}
         import("package.tools.xmake").install(package, configs)
     end)

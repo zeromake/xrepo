@@ -18,7 +18,7 @@ package("raqm")
         io.writefile("config.h.in", [[
 ${define RAQM_API}
 ${define RAQM_SHEENBIDI}
-]])
+]], {encoding = "binary"})
         local version = package:version()
         local versionFile = io.open("raqm-version.h.in", "w")
         versionFile:write([[

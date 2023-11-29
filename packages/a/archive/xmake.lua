@@ -502,7 +502,7 @@ typedef uint64_t uintmax_t;
 #endif /* SAFE_TO_DEFINE_EXTENSIONS */
 
 #endif
-        ]])
+        ]], {encoding = "binary"})
         local configs = {}
         for _, op in ipairs(options) do
             local v = "n"

@@ -32,7 +32,7 @@ target("webp")
     if is_kind("shared") and is_plat("windows", "mingw") then
         add_defines("WEBP_EXTERN=__declspec(dllexport)")
     end
-]])
+]], {encoding = "binary"})
         local configs = {}
         import("package.tools.xmake").install(package, configs)
     end)

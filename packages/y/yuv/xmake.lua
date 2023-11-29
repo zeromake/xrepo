@@ -34,7 +34,7 @@ target("yuv")
     if is_kind("shared") then
         add_defines("LIBYUV_BUILDING_SHARED_LIBRARY")
     end
-]])
+]], {encoding = "binary"})
         local configs = {}
         import("package.tools.xmake").install(package, configs)
     end)

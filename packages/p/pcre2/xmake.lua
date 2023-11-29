@@ -66,7 +66,7 @@ ${define PCRE2GREP_BUFSIZE}
 ${define PCRE2GREP_MAX_BUFSIZE}
 ${define MAX_NAME_SIZE}
 ${define MAX_NAME_COUNT}
-]])
+]], {encoding = "binary"})
         local configs = {}
         if package:config("PCRE2_8") then
             table.insert(configs, "--PCRE2_8=y")

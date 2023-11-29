@@ -20,7 +20,7 @@ package("cpr")
 #define CPR_VERSION_PATCH 5
 #define CPR_VERSION_NUM 0x011005
 #endif
-]])
+]], {encoding = "binary"})
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
 
@@ -34,7 +34,7 @@ target("cpr")
     add_includedirs("include")
     add_headerfiles("include/cpr/*.h", {prefixdir = "cpr"})
     add_files("cpr/*.cpp")
-]])
+]], {encoding = "binary"})
         import("package.tools.xmake").install(package, configs)
     end)
 

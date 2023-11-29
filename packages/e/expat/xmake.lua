@@ -82,7 +82,7 @@ ${define HAVE_SYS_PARAM_H}
 ${define HAVE_SYS_STAT_H}
 ${define HAVE_SYS_TYPES_H}
 ${define HAVE_UNISTD_H}
-]])
+]], {encoding = "binary"})
         local configs = {}
         for _, op in ipairs(options) do
             local v = "n"

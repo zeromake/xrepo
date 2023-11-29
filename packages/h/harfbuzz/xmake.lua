@@ -51,7 +51,7 @@ target("harfbuzz")
     }) do
         add_files(f)
     end
-]])
+]], {encoding = "binary"})
         local configs = {}
         local v = "n"
         if package:config("freetype") then

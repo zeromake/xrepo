@@ -69,7 +69,7 @@ ${define SIZEOF_VOID_P}
 ${define SIZEOF_WCHAR_T}
 
 #define STDC_HEADERS 1
-]])
+]], {encoding = "binary"})
         io.writefile("fribidi-config.h.in", [[
 #ifndef FRIBIDI_CONFIG_H
 #define FRIBIDI_CONFIG_H
@@ -87,7 +87,7 @@ ${define SIZEOF_WCHAR_T}
 ${define FRIBIDI_SIZEOF_INT}
 
 #endif /* FRIBIDI_CONFIG_H */
-        ]])
+]], {encoding = "binary"})
         local configs = {}
         for _, op in ipairs(options) do
             local v = "n"

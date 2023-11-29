@@ -57,7 +57,7 @@ ${define HAVE_AS_FUNC}
 ${define PIC}
 
 #endif
-]])
+]], {encoding = "binary"})
         io.writefile("version.h", [[
 #ifndef DAV1D_VERSION_H
 #define DAV1D_VERSION_H
@@ -83,11 +83,11 @@ extern "C" {
 #endif
 
 #endif /* DAV1D_VERSION_H */
-]])
+]], {encoding = "binary"})
 
         io.writefile("vcs_version.h", [[
 #define DAV1D_VERSION "ca076db"
-]])
+]], {encoding = "binary"})
         if package:is_arch("x86", "x64", "x86_64") then
             io.writefile("config.asm.in", [[
 %define ARCH_X86_32 ${ASM_ARCH_X86_32}
@@ -96,7 +96,7 @@ extern "C" {
 %define PIC ${ASM_PIC}
 %define STACK_ALIGNMENT ${ASM_STACK_ALIGNMENT}
 %define private_prefix dav1d
-]])
+]], {encoding = "binary"})
         end
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}

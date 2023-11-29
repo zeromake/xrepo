@@ -49,7 +49,7 @@ ${define PUGIXML_MEMORY_XPATH_PAGE_SIZE}
 ${define PUGIXML_HEADER_ONLY}
 ${define PUGIXML_HAS_LONG_LONG}
 #endif
-]])
+]], {encoding = "binary"})
         import("package.tools.xmake").install(package, configs)
     end)
 

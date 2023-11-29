@@ -25,7 +25,7 @@ target("brotli")
         "c/enc/*.c"
     }) do
         add_files(f)
-    end]])
+    end]], {encoding = "binary"})
         local configs = {}
         import("package.tools.xmake").install(package, configs)
     end)

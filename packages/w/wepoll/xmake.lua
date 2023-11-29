@@ -19,7 +19,7 @@ target("wepoll")
     add_headerfiles("wepoll.h", {prefixdir = "wepoll"})
     add_defines("WEPOLL_EXPORT=__declspec(dllexport)")
     add_syslinks("ws2_32")
-]])
+]], {encoding = "binary"})
         local configs = {}
         import("package.tools.xmake").install(package, configs)
     end)

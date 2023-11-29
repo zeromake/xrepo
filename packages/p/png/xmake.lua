@@ -49,7 +49,8 @@ target("png")
     add_packages("zlib")
     if is_kind("shared") and is_plat("windows") then
         add_defines("PNG_BUILD_DLL")
-    end]])
+    end
+]], {encoding = "binary"})
 
         if package:is_plat("android") and package:is_arch("armeabi-v7a") then
             io.replace("arm/filter_neon.S", ".func", ".hidden", {plain = true})

@@ -21,7 +21,11 @@ package("yasio")
 #define YASIO_SSL_BACKEND 2
 #define YASIO_ENABLE_HPERF_IO 1
 ]])
-        io.writefile("yasio/config.hpp", config_lines)
+        io.writefile(
+            "yasio/config.hpp",
+            config_lines,
+            {encoding = "binary"}
+        )
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
         configs["http"] = package:config("http") and "y" or "n"

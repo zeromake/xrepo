@@ -35,7 +35,11 @@ package("vulkan")
             os.cp("VulkanRT-1.3.250.1-Components/x64/vulkan-1.dll", "./")
             local outdata, errdata = os.iorunv("pexports", {"vulkan-1.dll"})
             if not errdata or errdata == "" then
-                io.writefile("vulkan-1.def", outdata)
+                io.writefile(
+                    "vulkan-1.def",
+                    outdata,
+                    {encoding = "binary"}
+                )
                 os.execv("dlltool", {"-D", "vulkan-1.dll", "-d", "vulkan-1.def", "-l", path.join(package:installdir("lib"), "libvulkan-1.dll.a")})
             end
         end

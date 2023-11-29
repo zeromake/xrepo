@@ -206,7 +206,11 @@ package("luajit")
         else
             commonDefines = commonDefines.."    add_defines(\"TARGET_OS_IPHONE=0\")\n"
         end
-        io.writefile("xmake.lua", string.format(miniluaScript, commonDefines, lua_arch32))
+        io.writefile(
+            "xmake.lua",
+            string.format(miniluaScript, commonDefines, lua_arch32),
+            {encoding = "binary"}
+        )
         local configs = {}
         import("package.tools.xmake").install(package, configs)
         local args = generateBuildvm(package)
@@ -225,7 +229,11 @@ package("luajit")
             )
         end
         local _buildvmScript = string.format(buildvmScript, commonDefines)
-        io.writefile("xmake.lua", _buildvmScript)
+        io.writefile(
+            "xmake.lua",
+            _buildvmScript,
+            {encoding = "binary"}
+        )
         print(_buildvmScript)
         local buildvmConfig = {
             plat=os.host(),

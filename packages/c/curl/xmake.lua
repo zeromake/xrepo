@@ -347,7 +347,7 @@ ${define USE_WINDOWS_SSPI}
 #define PACKAGE "curl"
 
 #endif /* HEADER_CURL_CONFIG_H */
-]])
+]], {encoding = "binary"})
         local configs = {}
         configs["wolfssl"] = package:config("wolfssl") and "y" or "n"
         configs["winrt"] = package:config("winrt") and "y" or "n"

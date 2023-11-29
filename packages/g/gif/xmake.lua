@@ -30,7 +30,7 @@ package("gif")
 #define _UNISTD_H
 #include <io.h>
 #include <process.h>
-#endif /* _UNISTD_H */]])
+#endif /* _UNISTD_H */]], {encoding = "binary"})
         end
         local configs = {}
         for _, op in ipairs(options) do
