@@ -12,7 +12,8 @@ target("flecs")
     set_kind("$(kind)")
     add_includedirs("include")
     add_files(
-        "src/**.c"
+        "src/**.c",
+        "*.c"
     )
     if is_kind("shared") then
         add_defines("flecs_EXPORTS")
