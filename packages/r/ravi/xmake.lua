@@ -5,6 +5,10 @@ package("ravi")
     set_urls("https://github.com/dibyendumajumdar/ravi/archive/refs/tags/$(version).tar.gz")
 
     add_versions("1.0-beta11", "7730b264ded32d4b211b344c44ff4e3e92f1ee9ff6b2279ca3e15bb86c75ef6e")
+
+    add_configs("jit", {description = "support jit", default = true, type = "boolean"})
+    add_configs("compiler", {description = "support compiler", default = true, type = "boolean"})
+
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         io.writefile('ravicomp/include/ravicomp_export.h', [[
@@ -42,6 +46,8 @@ package("ravi")
 #endif /* RAVICOMP_EXPORT_H */
 ]], {encoding = "binary"})
         local configs = {}
+        configs["jit"] = package:config("jit") and "y" or "n"
+        configs["compiler"] = package:config("compiler") and "y" or "n"
         import("package.tools.xmake").install(package, configs)
     end)
 

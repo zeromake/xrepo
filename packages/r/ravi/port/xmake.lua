@@ -121,12 +121,25 @@ target("ravi")
         add_deps("c2mir")
         add_defines("USE_MIRJIT=1")
     end
+    if is_plat("windows", "mingw") then
+    elseif is_plat("iphoneos") then
+        add_defines("LUA_USE_IOS")
+    elseif is_plat("macosx") then
+        add_defines("LUA_USE_MACOSX")
+    else
+        add_defines("LUA_USE_LINUX")
+    end
     if not is_plat("windows") then
         add_defines("RAVI_USE_COMPUTED_GOTO")
         -- add_cflags("-fno-crossjumping", "-fno-gcse")
     end
     add_vectorexts("all")
 
+target("ravi-cli")
+    set_default(false)
+    add_includedirs("include")
+    add_files("src/lua.c")
+    add_deps("ravi")
 
 target("ravi-debugger")
     set_default(false)
