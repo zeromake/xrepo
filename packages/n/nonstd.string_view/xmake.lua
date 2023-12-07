@@ -1,4 +1,4 @@
-package("string-view-lite")
+package("nonstd.string_view")
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/martinmoene/string-view-lite")
     set_description("string_view lite - A C++17-like string_view for C++98, C++11 and later in a single-file header-only library")

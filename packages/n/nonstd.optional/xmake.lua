@@ -1,4 +1,4 @@
-package("optional-lite")
+package("nonstd.optional")
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/martinmoene/optional-lite")
     set_description("optional lite - A C++17-like optional, a nullable object for C++98, C++11 and later in a single-file header-only library")
