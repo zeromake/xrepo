@@ -66,7 +66,7 @@ package("%s")
 end
 
 function package_target_script(opt)
-    local out = io.open(opt.out, "w")
+    local out = io.open(opt.out, "wb")
     out:write([[
 if xmake.version():gt("2.8.3") then
     includes("@builtin/check")

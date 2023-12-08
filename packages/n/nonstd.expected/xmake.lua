@@ -1,0 +1,11 @@
+package("nonstd.expected")
+    set_kind("library", {headeronly = true})
+    set_homepage("https://github.com/martinmoene/expected-lite")
+    set_description("expected lite - Expected objects in C++11 and later in a single-file header-only library")
+    set_license("BSL-1.0")
+    set_urls("https://github.com/martinmoene/expected-lite/archive/refs/tags/v$(version).tar.gz")
+
+    add_versions("0.6.3", "b2f90d5f03f6423ec67cc3c06fd0c4e813ec10c4313062b875b37d17593b57b4")
+    on_install(function (package)
+        os.cp("include/nonstd", package:installdir("include").."/")
+    end)
