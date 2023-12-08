@@ -43,34 +43,40 @@ package("sdl3")
             "CoreBluetooth"
         )
     elseif is_plat("windows", "mingw") then
-        if get_config("winrt") then
-            add_syslinks(
-                "msvcrt",
-                "dxgi",
-                "d3d11",
-                "synchronization",
-                "xinput",
-                "mmdevapi"
-            )
-        else
-            add_syslinks(
-                "gdi32",
-                "user32",
-                "winmm",
-                "shell32",
-                "setupapi",
-                "advapi32",
-                "version",
-                "ole32",
-                "cfgmgr32",
-                "imm32",
-                "oleaut32"
-            )
-        end
     elseif is_plat("android") then
         add_deps("ndk-cpufeatures")
         add_syslinks("GLESv2", "OpenSLES", "log", "android")
     end
+    on_load(function (package)
+        if package:is_plat("windows", "mingw") then
+            if package:config("winrt") then
+                package:add(
+                    "syslinks",
+                    "msvcrt",
+                    "dxgi",
+                    "d3d11",
+                    "synchronization",
+                    "xinput",
+                    "mmdevapi"
+                )
+            else
+                package:add(
+                    "syslinks",
+                    "gdi32",
+                    "user32",
+                    "winmm",
+                    "shell32",
+                    "setupapi",
+                    "advapi32",
+                    "version",
+                    "ole32",
+                    "cfgmgr32",
+                    "imm32",
+                    "oleaut32"
+                )
+            end
+        end
+    end)
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
