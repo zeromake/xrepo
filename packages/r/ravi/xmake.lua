@@ -14,23 +14,30 @@ package("ravi")
         io.writefile('ravicomp/include/ravicomp_export.h', [[
 #ifndef RAVICOMP_EXPORT_H
 #define RAVICOMP_EXPORT_H
+
+#ifdef _WIN32
+#define __RAVICOMP_EXPORT __declspec(dllexport)
+#define __RAVICOMP_NO_EXPORT
+#define __RAVICOMP_DEPRECATED
+#else
+#define __RAVICOMP_EXPORT __attribute__((visibility("default")))
+#define __RAVICOMP_NO_EXPORT __attribute__((visibility("hidden")))
+#define __RAVICOMP_DEPRECATED __attribute__((__deprecated__))
+#endif
+
 #ifdef RAVICOMP_STATIC_DEFINE
 #  define RAVICOMP_EXPORT
 #  define RAVICOMP_NO_EXPORT
 #else
 #  ifndef RAVICOMP_EXPORT
-#    ifdef ravicomp_EXPORTS
-#      define RAVICOMP_EXPORT __attribute__((visibility("default")))
-#    else
-#      define RAVICOMP_EXPORT __attribute__((visibility("default")))
-#    endif
+#    define RAVICOMP_EXPORT __RAVICOMP_EXPORT
 #  endif
 #  ifndef RAVICOMP_NO_EXPORT
-#    define RAVICOMP_NO_EXPORT __attribute__((visibility("hidden")))
+#    define RAVICOMP_NO_EXPORT __RAVICOMP_NO_EXPORT
 #  endif
 #endif
 #ifndef RAVICOMP_DEPRECATED
-#  define RAVICOMP_DEPRECATED __attribute__ ((__deprecated__))
+#  define RAVICOMP_DEPRECATED __RAVICOMP_DEPRECATED
 #endif
 #ifndef RAVICOMP_DEPRECATED_EXPORT
 #  define RAVICOMP_DEPRECATED_EXPORT RAVICOMP_EXPORT RAVICOMP_DEPRECATED
@@ -38,10 +45,8 @@ package("ravi")
 #ifndef RAVICOMP_DEPRECATED_NO_EXPORT
 #  define RAVICOMP_DEPRECATED_NO_EXPORT RAVICOMP_NO_EXPORT RAVICOMP_DEPRECATED
 #endif
-#if 0 /* DEFINE_NO_DEPRECATED */
-#  ifndef RAVICOMP_NO_DEPRECATED
-#    define RAVICOMP_NO_DEPRECATED
-#  endif
+#ifndef RAVICOMP_NO_DEPRECATED
+#  define RAVICOMP_NO_DEPRECATED
 #endif
 #endif /* RAVICOMP_EXPORT_H */
 ]], {encoding = "binary"})
