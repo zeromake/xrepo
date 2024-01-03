@@ -82,6 +82,9 @@ target("imgui")
     if backend and backend ~= "" then
         local backends = string.split(backend, ";")
         for _, item in ipairs(backends) do
+            if item == "none" then
+                break
+            end 
             if packages[item] ~= nil then
                 add_packages(item)
             end
