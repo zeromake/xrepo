@@ -44,7 +44,18 @@ local packages = {
 }
 
 local backend = get_config("backend")
-if backend and backend ~= "" then
+if backend == nil or backend == "" then
+    if is_plat("windows", "mingw") then
+        backend = "win32;dx11"
+    elseif is_plat("macosx") then
+        backend = "metal;osx"
+    elseif is_plat("iphoneos") then
+        backend = "metal"
+    elseif is_plat("android") then
+        backend = "android;opengl3"
+    end
+end
+if backend ~= nil and backend ~= "" then
     local backends = string.split(backend, ";")
     for _, item in ipairs(backends) do
         if packages[item] ~= nil then
@@ -57,7 +68,6 @@ target("imgui")
     set_kind("$(kind)")
     add_files("*.cpp|imgui_demo.cpp")
     add_includedirs(".")
-    local backend = get_config("backend")
     on_config(function (target)
         local pkgs = target:pkgs()
         for n, v in pairs(pkgs) do
