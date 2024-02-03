@@ -16,11 +16,11 @@ for _, op in ipairs(options) do
         set_showmenu(true)
     option_end()
     if has_config(op) then 
-        add_requires(op, {system=false})
+        add_requires(op)
     end
 end
 
-add_requires("sdl2", {system=false})
+add_requires("sdl2")
 
 if is_plat("windows") then
     add_cxflags("/utf-8")

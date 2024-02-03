@@ -24,7 +24,7 @@ package("cpr")
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
 
-add_requires("curl", {system=false})
+add_requires("curl")
 
 set_languages("c++17")
 

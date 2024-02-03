@@ -173,7 +173,7 @@ elseif is_plat("android") then
         "src/sensor/android/*.c",
         "src/locale/android/*.c",
     })
-    add_requires("ndk-cpufeatures", {system=false})
+    add_requires("ndk-cpufeatures")
 elseif is_plat("linux") then
     table.join2(sdlMainSrc, {
         'src/main/dummy/*.c'

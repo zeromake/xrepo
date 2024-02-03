@@ -23,10 +23,10 @@ option("httponly")
     set_showmenu(true)
 option_end()
 
-add_requires("zlib", {system=false})
+add_requires("zlib")
 
 if get_config("wolfssl") then
-    add_requires("wolfssl", {system=false})
+    add_requires("wolfssl")
 end
 
 if is_plat("windows") then

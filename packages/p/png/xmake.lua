@@ -21,7 +21,7 @@ package("png")
     on_install(function (package) 
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
-add_requires("zlib", {system=false})
+add_requires("zlib")
 target("png")
     set_kind("$(kind)")
     add_files("*.c|example.c|pngtest.c")

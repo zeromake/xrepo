@@ -86,7 +86,7 @@ for _, op in ipairs(options) do
         set_showmenu(true)
     option_end()
     if has_config(op) then 
-        add_requires(op, {system=false})
+        add_requires(op)
     end
 end
 
