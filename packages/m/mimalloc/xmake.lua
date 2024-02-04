@@ -5,6 +5,14 @@ package("mimalloc")
     set_urls("https://github.com/microsoft/mimalloc/archive/refs/tags/v2.1.2.tar.gz")
 
     add_versions("2.1.2", "2b1bff6f717f9725c70bf8d79e4786da13de8a270059e4ba0bdd262ae7be46eb")
+
+    on_load(function (package)
+        if is_plat("windows", "mingw") then
+            package:add("syslinks", "psapi", "shell32", "user32", "advapi32", "bcrypt")
+        else
+            package:add("syslinks", "pthread")
+        end
+    end)
     on_install(function (package)
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
