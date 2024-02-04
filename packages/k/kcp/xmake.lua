@@ -71,7 +71,7 @@ target("kcp")
     else
         add_cflags("-fPIC")
         on_config(function(target)
-            local is_clang = not not (target:toolchain("clang") or target:toolchain("clang-cl"))
+            local is_clang = not not (target:toolchain("clang") or target:toolchain("clang-cl") or target:toolchain("zig"))
             if is_clang then
                 target:add("shflags", "-exported_symbols_list exports.exp", {force = true})
             else
