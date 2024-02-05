@@ -9,7 +9,7 @@ package("jpeg")
     set_homepage("https://www.ijg.org")
     set_description("A widely used C library for reading and writing JPEG image files.")
 
-    set_license("bsd")
+    set_license("BSD-2-Clause")
     set_urls("https://github.com/libsdl-org/jpeg/$(version)", {
         version = getVersion
     })

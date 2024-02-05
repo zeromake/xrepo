@@ -1,7 +1,7 @@
 package("pcre2")
     set_homepage("https://www.pcre.org")
     set_description("The PCRE library is a set of functions that implement regular expression pattern matching using the same syntax and semantics as Perl5. PCRE has its own native API, as well as a set of wrapper functions that correspond to the POSIX regular expression API.")
-    set_license("BSD")
+    set_license("BSD-2-Clause")
     set_urls("https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(version)/pcre2-$(version).tar.bz2")
 
     add_versions("10.42", "8d36cd8cb6ea2a4c2bb358ff6411b0c788633a2a45dabbf1aeb4b701d1b5e840")

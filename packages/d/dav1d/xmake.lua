@@ -10,7 +10,7 @@ end
 package("dav1d")
     set_homepage("https://code.videolan.org/videolan/dav1d/")
     set_description("dav1d is an AV1 cross-platform decoder, open-source, and focused on speed and correctness.")
-    set_license("BSD-2")
+    set_license("BSD-2-Clause")
     set_urls("https://github.com/videolan/dav1d/$(version)", {
         version = getVersion
     })
