@@ -13,7 +13,7 @@ package("mongoose")
             version = getVersion
         }
     )
-    add_versions("2024.02.18", "08af9ca0923ca0b792edd4589f41f27d7290382f7d50d8359b740f06cfe49120")
+    add_versions("2024.02.28", "08af9ca0923ca0b792edd4589f41f27d7290382f7d50d8359b740f06cfe49120")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
