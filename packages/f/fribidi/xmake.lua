@@ -56,10 +56,10 @@ ${define HAVE_STRINGIZE}
 
 #define PACKAGE_BUGREPORT "https://github.com/fribidi/fribidi/issues/new"
 #define PACKAGE_NAME "GNU FriBidi"
-#define PACKAGE_STRING "GNU FriBidi 1.0.12"
+#define PACKAGE_STRING "GNU FriBidi 1.0.13"
 #define PACKAGE_TARNAME "fribidi"
 #define PACKAGE_URL "http://fribidi.org/"
-#define PACKAGE_VERSION "1.0.12"
+#define PACKAGE_VERSION "1.0.13"
 
 #define RETSIGTYPE void
 
@@ -77,10 +77,10 @@ ${define SIZEOF_WCHAR_T}
 #define FRIBIDI "fribidi"
 #define FRIBIDI_NAME "GNU FriBidi"
 #define FRIBIDI_BUGREPORT "https://github.com/fribidi/fribidi/issues/new"
-#define FRIBIDI_VERSION "1.0.12"
+#define FRIBIDI_VERSION "1.0.13"
 #define FRIBIDI_MAJOR_VERSION 1
 #define FRIBIDI_MINOR_VERSION 0
-#define FRIBIDI_MICRO_VERSION 12
+#define FRIBIDI_MICRO_VERSION 13
 #define FRIBIDI_INTERFACE_VERSION 4
 #define FRIBIDI_INTERFACE_VERSION_STRING "4"
 

@@ -53,10 +53,10 @@ if is_plat("windows", "mingw") then
     table.join2(freetypeFiles, {
         "builds/windows/ftdebug.c",
         "builds/windows/ftsystem.c",
+        "src/base/ftver.rc",
     })
 elseif is_plat("macosx") then
     table.join2(freetypeFiles, {
-        "builds/mac/ftmac.c",
         "src/base/ftdebug.c",
         "builds/unix/ftsystem.c",
     })
@@ -69,6 +69,11 @@ elseif is_plat("iphoneos") then
     table.join2(freetypeFiles, {
         "src/base/ftdebug.c",
         "builds/unix/ftsystem.c",
+    })
+else
+    table.join2(freetypeFiles, {
+        "src/base/ftdebug.c",
+        "builds/base/ftsystem.c",
     })
 end
 
