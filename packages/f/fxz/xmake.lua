@@ -1,12 +1,18 @@
+
+local function getVersion(version)
+    local versions = {
+        ['2022.01.09-alpha'] = 'archive/f12d7eb3ecebcfa5e2d3dc8a016772b3cd101f39.tar.gz'
+    }
+    return versions[tostring(version)]
+end
+
 package("fxz")
     set_homepage("https://github.com/conor42/fxz")
     set_description("FXZ Utils is a fork of XZ Utils. It adds a multi-threaded radix match finder and optimized encoder. The documentation, including this file, is based upon the XZ Utils documentation.")
     set_license("MIT")
-    set_urls("https://github.com/conor42/fxz/archive/$(version).zip", {version = function (version)
-        return "f12d7eb3ecebcfa5e2d3dc8a016772b3cd101f39"
-    end})
+    set_urls("https://github.com/conor42/fxz/$(version)", {version = getVersion})
 
-    add_versions("202201090037", "dffa4ec239bd43db13b5cba8d18eecb3c34e10289d1c576cfb81066a0660e4c9")
+    add_versions("2022.01.09-alpha", "dffa4ec239bd43db13b5cba8d18eecb3c34e10289d1c576cfb81066a0660e4c9")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         io.writefile("config.h.in", [[

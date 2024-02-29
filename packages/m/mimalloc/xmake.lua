@@ -2,7 +2,7 @@ package("mimalloc")
     set_homepage("https://github.com/microsoft/mimalloc")
     set_description("mimalloc is a compact general purpose allocator with excellent performance.")
     set_license("MIT")
-    set_urls("https://github.com/microsoft/mimalloc/archive/refs/tags/v2.1.2.tar.gz")
+    set_urls("https://github.com/microsoft/mimalloc/archive/refs/tags/v$(version).tar.gz")
 
     add_versions("2.1.2", "2b1bff6f717f9725c70bf8d79e4786da13de8a270059e4ba0bdd262ae7be46eb")
 

@@ -1,10 +1,17 @@
+local function getVersion(version)
+    local versions = {
+        ['2024.02.20-alpha'] = 'archive/8cbe4cae93e29c64eec3262ab5deb8ca9a6f8fc2.tar.gz'
+    }
+    return versions[tostring(version)]
+end
+
 package("magma")
     set_homepage("https://github.com/vcoda/magma")
     set_description("Abstraction layer over Khronos Vulkan API")
     set_license("GPLv3")
-    set_urls("https://github.com/vcoda/magma/archive/905d7cb99d77961d22bd3dbdd5fec8e7171feeb5.zip")
+    set_urls("https://github.com/vcoda/magma/$(version)", {version = getVersion})
 
-    add_versions("latest", "76c385e7bd1f240552d69f6c8408e64b0c059f924c329dc8f2b8d38de14ffc6d")
+    add_versions("2024.02.20-alpha", "76c385e7bd1f240552d69f6c8408e64b0c059f924c329dc8f2b8d38de14ffc6d")
     on_install(function (package)
         local function writefile(p, content) 
             local out = io.open(p, "wb")

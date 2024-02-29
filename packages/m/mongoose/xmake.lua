@@ -1,19 +1,18 @@
 
 local function getVersion(version)
     local versions ={
-        ["2024.02.27"] = "archive/05fe1f8e3617cf2f84f461f7c6708fe8c17a151b.zip",
+        ["2024.02.27"] = "archive/05fe1f8e3617cf2f84f461f7c6708fe8c17a151b.tar.gz",
     }
     return versions[tostring(version)]
 end
 
 package("mongoose")
-    set_urls(
-        "https://github.com/xfangfang/mongoose/$(version)",
+    set_urls("https://github.com/xfangfang/mongoose/$(version)",
         {
             version = getVersion
         }
     )
-    add_versions("2024.02.27", "08af9ca0923ca0b792edd4589f41f27d7290382f7d50d8359b740f06cfe49120")
+    add_versions("2024.02.27", "5669f3939e874995493a2c059436b5b520a9eb03487651b05ab042fc01cd0f73")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

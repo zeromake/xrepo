@@ -1,6 +1,6 @@
 package("spirv_reflect")
-    set_homepage("Todo")
-    set_description("Todo")
+    set_homepage("https://github.com/KhronosGroup/SPIRV-Reflect")
+    set_description("SPIRV-Reflect is a lightweight library that provides a C/C++ reflection API for SPIR-V shader bytecode in Vulkan applications.")
     set_license("MIT")
     set_urls("https://github.com/KhronosGroup/SPIRV-Reflect/archive/refs/tags/sdk-$(version).1.tar.gz")
 

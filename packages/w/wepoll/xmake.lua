@@ -1,6 +1,6 @@
 package("wepoll")
-    set_homepage("Todo")
-    set_description("Todo")
+    set_homepage("https://github.com/piscisaureus/wepoll")
+    set_description("wepoll: fast epoll for windows🎭")
     set_license("MIT")
     set_urls("https://github.com/piscisaureus/wepoll/archive/refs/tags/v$(version).tar.gz")
 

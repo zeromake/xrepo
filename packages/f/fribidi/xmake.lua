@@ -1,8 +1,8 @@
 local options = {}
 
 package("fribidi")
-    set_homepage("Todo")
-    set_description("Todo")
+    set_homepage("https://github.com/fribidi/fribidi")
+    set_description("GNU FriBidi")
     set_license("MIT")
     set_urls("https://github.com/fribidi/fribidi/releases/download/v$(version)/fribidi-$(version).tar.xz")
 

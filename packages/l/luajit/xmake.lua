@@ -165,8 +165,7 @@ package("luajit")
     set_homepage("https://luajit.org")
     set_description("LuaJIT is a Just-In-Time Compiler (JIT) for the Lua programming language. Lua is a powerful, dynamic and light-weight programming language. It may be embedded or used as a general-purpose, stand-alone language.")
     set_license("MIT")
-    set_urls(
-        "https://github.com/LuaJIT/LuaJIT/$(version)",
+    set_urls("https://github.com/LuaJIT/LuaJIT/$(version)",
         {
             version = getVersion
         }

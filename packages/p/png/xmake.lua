@@ -3,7 +3,7 @@ package("png")
     set_description("The official PNG reference library")
     set_license("libpng-2.0")
 
-    set_urls("https://github.com/glennrp/libpng/archive/refs/tags/v$(version).tar.gz")
+    set_urls("https://github.com/pnggroup/libpng/archive/refs/tags/v$(version).tar.gz")
     add_versions("1.6.40", "62d25af25e636454b005c93cae51ddcd5383c40fa14aa3dae8f6576feb5692c2")
     add_versions("1.6.38", "d4160037fa5d09fa7cff555037f2a7f2fefc99ca01e21723b19bfcda33015234")
     add_deps("zlib")

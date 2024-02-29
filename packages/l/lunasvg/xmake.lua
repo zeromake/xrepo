@@ -4,7 +4,7 @@ package("lunasvg")
     set_description("LunaSVG - SVG rendering library in C++")
     set_license("MIT")
 
-    add_urls("https://github.com/sammycage/lunasvg/archive/refs/tags/v$(version).tar.gz")
+    set_urls("https://github.com/sammycage/lunasvg/archive/refs/tags/v$(version).tar.gz")
     add_versions("2.3.8", "54d697e271a5aca36f9999d546b1b346e98a8183140027330f69a3eb0c184194")
     add_versions("2.3.5", "350ff56aa1acdedefe2ad8a4241a9fb8f9b232868adc7bd36dfb3dbdd57e2e93")
 

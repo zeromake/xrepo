@@ -2,7 +2,7 @@ package("flecs")
     set_homepage("https://www.flecs.dev")
     set_description("A fast entity component system (ECS) for C & C++")
     set_license("MIT")
-    set_urls("https://github.com/SanderMertens/flecs/archive/refs/tags/v3.2.9.tar.gz")
+    set_urls("https://github.com/SanderMertens/flecs/archive/refs/tags/v(version).tar.gz")
 
     add_versions("3.2.9", "65d50d6058cd38308a0ad2a971afa9f64aef899ebf78d6a074d905922ec5fdf8")
     on_install(function (package)

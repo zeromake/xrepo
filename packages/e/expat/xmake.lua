@@ -1,4 +1,3 @@
-local options = {}
 
 package("expat")
     set_homepage("https://libexpat.github.io")
@@ -10,19 +9,9 @@ package("expat")
 
     add_versions("2.5.0", "6f0e6e01f7b30025fa05c85fdad1e5d0ec7fd35d9f61b22f34998de11969ff67")
     add_versions("2.4.8", "a247a7f6bbb21cf2ca81ea4cbb916bfb9717ca523631675f99b3d4a5678dcd16")
-
-    for _, op in ipairs(options) do
-        add_configs(op, {description = "Support "..op, default = false, type = "boolean"})
-    end
-
     add_includedirs("include")
 
     on_load(function (package)
-        for _, op in ipairs(options) do
-            if package:config(op) then
-                package:add("deps", op)
-            end
-        end
         if package:config("shared") ~= true then
             package:add("defines", "XML_STATIC")
         end
@@ -84,13 +73,6 @@ ${define HAVE_SYS_TYPES_H}
 ${define HAVE_UNISTD_H}
 ]], {encoding = "binary"})
         local configs = {}
-        for _, op in ipairs(options) do
-            local v = "n"
-            if package:config(op) ~= false then
-                v = "y"
-            end
-            table.insert(configs, "--"..op.."="..v)
-        end
         import("package.tools.xmake").install(package, configs)
     end)
 

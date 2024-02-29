@@ -9,8 +9,7 @@ package("yuv")
     set_homepage("https://chromium.googlesource.com/libyuv/libyuv")
     set_description("libyuv is an open source project that includes YUV scaling and conversion functionality.")
     set_license("BSD-3-Clause")
-    set_urls(
-        "https://github.com/lemenkov/libyuv/$(version)",
+    set_urls("https://github.com/lemenkov/libyuv/$(version)",
         {
             version = getVersion
         }

@@ -1,10 +1,16 @@
+local function getVersion(version) 
+    return tostring(version):gsub('-release', '')
+end
+
+
 package("cppwinrt")
     set_homepage("https://github.com/microsoft/cppwinrt")
     set_description("C++/WinRT is an entirely standard C++ language projection for Windows Runtime (WinRT) APIs")
     set_license("MIT")
-    set_urls("https://github.com/microsoft/cppwinrt/releases/download/2.0.230706.1/Microsoft.Windows.CppWinRT.2.0.230706.1.nupkg")
-
-    add_versions("latest", "e4a827fee480291d4598ea3bb751cb5696a42ded0b795c16f52da729502e07e8")
+    set_urls("https://github.com/microsoft/cppwinrt/releases/download/$(version)/Microsoft.Windows.CppWinRT.$(version).nupkg", {
+        version = getVersion
+    })
+    add_versions("2.0.230706-release.1", "e4a827fee480291d4598ea3bb751cb5696a42ded0b795c16f52da729502e07e8")
     on_install("windows", "mingw", function (package)
         import("lib.detect.find_tool")
         import("detect.sdks.find_vstudio")

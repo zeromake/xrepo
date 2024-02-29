@@ -12,8 +12,7 @@ package("stb")
     set_homepage("https://github.com/nothings/stb")
     set_description("single-file public domain (or MIT licensed) libraries for C/C++")
 
-    add_urls(
-        "https://github.com/nothings/stb/$(version)",
+    set_urls("https://github.com/nothings/stb/$(version)",
         {
             version = getVersion
         }

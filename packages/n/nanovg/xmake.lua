@@ -15,8 +15,7 @@ package("nanovg")
     if os.exists(p) and os.isdir(p) then
         set_sourcedir(p)
     else
-        set_urls(
-            "https://github.com/zeromake/nanovg/$(version)",
+        set_urls("https://github.com/zeromake/nanovg/$(version)",
             {
                 version = getVersion
             }

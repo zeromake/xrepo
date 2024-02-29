@@ -14,8 +14,7 @@ package("sokol")
     set_description("Simple STB-style cross-platform libraries for C and C++, written in C.")
     set_license("zlib")
 
-    set_urls(
-        "https://github.com/floooh/sokol/$(version)",
+    set_urls("https://github.com/floooh/sokol/$(version)",
         {
             version = getVersion
         }
