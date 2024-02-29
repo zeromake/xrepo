@@ -1,7 +1,7 @@
 package("lzo")
     set_homepage("https://www.oberhumer.com/opensource/lzo/")
     set_description("real-time data compression library")
-    set_license("MIT")
+    set_license("GPLv2")
     set_urls("https://www.oberhumer.com/opensource/lzo/download/lzo-$(version).tar.gz")
 
     add_versions("2.10", "c0f892943208266f9b6543b3ae308fab6284c5c90e627931446fb49b4221a072")

@@ -1,6 +1,6 @@
 
 package("lz4")
-    set_homepage("https://lz4.github.io/lz4")
+    set_homepage("https://lz4.org")
     set_description("Extremely Fast Compression algorithm")
     set_license("BSD-2-Clause")
     set_urls("https://github.com/lz4/lz4/archive/refs/tags/v$(version).tar.gz")

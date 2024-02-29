@@ -9,8 +9,13 @@ package("d3d12_memory_allocator")
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
         import("package.tools.xmake").install(package, configs)
+        os.cp('src/D3D12MemAlloc.natvis', package:installdir('include'))
     end)
 
-    -- on_test(function (package)
-    --     assert(package:has_cfuncs("xxx", {includes = {"xx.h"}}))
-    -- end)
+    on_test(function (package)
+        assert(package:check_cxxsnippets([[
+void test() {
+    D3D12MA::Allocation* allocation;
+}
+]], {includes = {"D3D12MemAlloc.h"}}))
+    end)
