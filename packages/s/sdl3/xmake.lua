@@ -1,6 +1,6 @@
 local function getVersion(version)
     local versions ={
-        ["2023.11.14"] = "archive/2c1fbe1967457c6b95323a5ea4136849c66bc307.tar.gz",
+        ["2023.11.14-alpha"] = "archive/2c1fbe1967457c6b95323a5ea4136849c66bc307.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -12,7 +12,7 @@ package("sdl3")
     set_license("zlib")
     set_urls("https://github.com/libsdl-org/SDL/$(version)", {version = getVersion})
 
-    add_versions("2023.11.14", "f6a239d22dad806ac7038e656aea9266f3e489139bfc5408625e4a92a359dbeb")
+    add_versions("2023.11.14-alpha", "f6a239d22dad806ac7038e656aea9266f3e489139bfc5408625e4a92a359dbeb")
 
     if is_plat("macosx") then
         add_frameworks(

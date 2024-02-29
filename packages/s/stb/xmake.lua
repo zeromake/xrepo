@@ -1,7 +1,8 @@
 
 local function getVersion(version)
     local versions = {
-        ['2023.10.12'] = 'archive/beebb24b945efdea3b9bba23affb8eb3ba8982e7.tar.gz'
+        ['2023.10.12-alpha'] = 'archive/beebb24b945efdea3b9bba23affb8eb3ba8982e7.tar.gz',
+        ['2024.02.13-alpha'] = 'archive/ae721c50eaf761660b4f90cc590453cdb0c2acd0.tar.gz'
     }
     return versions[tostring(version)]
 end
@@ -17,7 +18,8 @@ package("stb")
             version = getVersion
         }
     )
-    add_versions("2023.10.12", "2fb3c1bb1d796f159c08ae7bfc230f7b257fcacbd393fa67ad0f66f32070f741")
+    add_versions("2024.02.13-alpha", "cd82be3ddc4146ef738f80a794a83f2ed45faab1c5b23278121788ef7b598e89")
+    add_versions("2023.10.12-alpha", "2fb3c1bb1d796f159c08ae7bfc230f7b257fcacbd393fa67ad0f66f32070f741")
     add_includedirs("include", "include/stb")
 
     on_install(function (package)

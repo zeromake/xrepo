@@ -1,8 +1,8 @@
 function getVersion(version)
     local versions = {
-        ["2023.12.21-docking"] = "archive/20e1caec858caa8123a6d52d410fa3f2578d3054.tar.gz"
+        ["2024.02.28-alpha"] = "archive/77dff5a735afd821fea1ac54dda63ef5d8bded96.tar.gz"
     }
-    local url = version == nil and versions["latest"] or versions[tostring(version)]
+    local url = versions[tostring(version)]
     return url ~= nil and url or "archive/refs/tags/v"..tostring(version)..".tar.gz"
 end
 
@@ -13,10 +13,9 @@ package("imgui")
     set_urls("https://github.com/ocornut/imgui/$(version)", {
         version=getVersion
     })
-    add_versions("2023.12.21-docking", "979d559f9ff4a3d8491242795df2e00e2b3eb75a46213d7eab03346e7df0ed87")
+    add_versions("2024.02.28-alpha", "07862e69971c811b388aef47297feb788e0c7d905b5d45eb81e2a2afda9c961f")
+    add_versions("1.90.4", "5d9dc738af74efa357f2a9fc39fe4a28d29ef1dfc725dd2977ccf3f3194e996e")
     add_versions("1.90", "170986e6a4b83d165bfc1d33c2c5a5bc2d67e5b97176287485c51a2299249296")
-    add_versions("1.89.9", "1acc27a778b71d859878121a3f7b287cd81c29d720893d2b2bf74455bf9d52d6")
-    add_versions("1.89.8", "6680ccc32430009a8204291b1268b2367d964bd6d1b08a4e0358a017eb8e8c9e")
 
     add_configs("backend", {description = "Select backend", default = "", type = "string"})
     add_configs("freetype", {description = "Use freetype", default = false, type = "boolean"})
