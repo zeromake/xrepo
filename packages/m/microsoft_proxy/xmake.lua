@@ -5,59 +5,38 @@ package("microsoft_proxy")
     set_license("MIT")
     set_urls("https://github.com/microsoft/proxy/archive/refs/tags/$(version).tar.gz")
 
-    add_versions("1.1.1", "6852b135f0bb6de4dc723f76724794cff4e3d0d5706d09d0b2a4f749f309055d")
+    add_versions("2.2.0", "a18ecc395e5f962c79e3231ad7492a267b61463a595220be118ceb00009c86cf")
     on_install(function (package)
-        os.cp("*.h", package:installdir("include"))
+        os.cp("*.h", package:installdir("include/proxy"))
     end)
 
     on_test(function (package)
         assert(package:check_cxxsnippets({
             test = [[
+#include <iostream>
+#include <map>
 #include <string>
-#include <sstream>
+#include <vector>
 
-#include <proxy.h>
+#include <proxy/proxy.h>
 
-// Abstraction
-struct Draw : pro::dispatch<void(std::ostream&)> {
-  template <class T>
-  void operator()(const T& self, std::ostream& out) { self.Draw(out); }
-};
-struct Area : pro::dispatch<double()> {
-  template <class T>
-  double operator()(const T& self) { return self.Area(); }
-};
-struct DrawableFacade : pro::facade<Draw, Area> {};
+namespace poly {
 
-// Implementation
-class Rectangle {
- public:
-  void Draw(std::ostream& out) const
-      { out << "{Rectangle: width = " << width_ << ", height = " << height_ << "}"; }
-  void SetWidth(double width) { width_ = width; }
-  void SetHeight(double height) { height_ = height; }
-  double Area() const { return width_ * height_; }
+PRO_DEF_MEMBER_DISPATCH(at, std::string(int));
+PRO_DEF_FACADE(Dictionary, at);
 
- private:
-  double width_;
-  double height_;
-};
+}  // namespace poly
 
-// Client - Consumer
-std::string PrintDrawableToString(pro::proxy<DrawableFacade> p) {
-  std::stringstream result;
-  result << "shape = ";
-  p.invoke<Draw>(result);
-  result << ", area = " << p.invoke<Area>();
-  return std::move(result).str();
+void demo_print(pro::proxy<poly::Dictionary> dictionary) {
+  std::cout << dictionary(1) << std::endl;
 }
 
-// Client - Producer
-pro::proxy<DrawableFacade> CreateRectangleAsDrawable(int width, int height) {
-  Rectangle rect;
-  rect.SetWidth(width);
-  rect.SetHeight(height);
-  return pro::make_proxy<DrawableFacade>(rect);
+int main() {
+  std::map<int, std::string> container1{{1, "hello"}};
+  std::vector<std::string> container2{"hello", "world"};
+  demo_print(&container1);  // print: hello\n
+  demo_print(&container2);  // print: world\n
+  return 0;
 }
 ]]
         }, {configs = {languages = "c++20"}}))

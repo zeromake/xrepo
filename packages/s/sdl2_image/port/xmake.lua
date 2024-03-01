@@ -55,11 +55,17 @@ target("sdl2_image")
         "LOAD_QOI=1"
     )
     add_packages("sdl2")
-    add_headerfiles("SDL_image.h", {prefixdir="SDL2"})
     for _, op in ipairs(options) do
         if has_config(op) then
             add_packages(op)
         end
+    end
+    local prefix_dir = os.exists('src') and 'src/' or ''
+    if os.exists('include') then
+        add_includedirs('include')
+        add_headerfiles("include/*.h", {prefixdir="SDL2"})
+    else
+        add_headerfiles("SDL_image.h", {prefixdir="SDL2"})
     end
 
     if has_config("avif") then
@@ -85,7 +91,7 @@ target("sdl2_image")
         end
     end
     local files = {
-        "*.c",
+        prefix_dir.."*.c",
     }
     if is_plat("macosx", "iphoneos") then
         set_values("objc.build.arc", false)
@@ -122,6 +128,6 @@ target("sdl2_image")
         add_files(f)
     end
     remove_files(
-        "showanim.c",
-        "showimage.c"
+        prefix_dir.."showanim.c",
+        prefix_dir.."showimage.c"
     )

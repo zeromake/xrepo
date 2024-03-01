@@ -75,6 +75,8 @@ local sdlSrc = {
     -- "src/video/x11/*.c",
     "src/joystick/hidapi/*.c",
     "src/joystick/virtual/*.c",
+    "src/camera/SDL_camera.c",
+    "src/camera/dummy/*.c",
 }
 
 
@@ -98,6 +100,7 @@ if is_plat("macosx") then
         "src/sensor/dummy/*.c",
         "src/video/dummy/*.c",
         "src/hidapi/mac/*.c",
+        "src/camera/coremedia/*.m",
     })
 elseif is_plat("iphoneos") then
     add_cxflags("-fembed-bitcode")
@@ -119,6 +122,7 @@ elseif is_plat("iphoneos") then
         "src/file/cocoa/*.m",
         "src/hidapi/ios/*.m",
         "src/locale/dummy/*.c",
+        "src/camera/coremedia/*.m",
     })
 elseif is_plat("windows", "mingw") then
     table.join2(sdlSrc, {
@@ -137,6 +141,7 @@ elseif is_plat("windows", "mingw") then
         "src/sensor/dummy/*.c",
         "src/video/dummy/*.c",
         "src/hidapi/windows/*.c",
+        "src/camera/mediafoundation/*.c"
     })
     if get_config("winrt") then
         table.join2(sdlSrc, {
@@ -232,7 +237,9 @@ target("sdl3")
             "Carbon",
             "GameController",
             "CoreHaptics",
-            "QuartzCore"
+            "QuartzCore",
+            "AVFoundation",
+            "CoreMedia"
         )
     elseif is_plat("iphoneos") then
         add_frameworks(
@@ -246,7 +253,9 @@ target("sdl3")
             "CoreHaptics",
             "GameController",
             "CoreMotion",
-            "CoreBluetooth"
+            "CoreBluetooth",
+            "AVFoundation",
+            "CoreMedia"
         )
     elseif is_plat("linux", "bsd") then
         if is_plat("bsd") then

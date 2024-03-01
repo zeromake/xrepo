@@ -30,6 +30,7 @@ local sourceFiles = {
     "emojidef.c",
     "unibreakbase.c",
     "unibreakdef.c",
+    "eastasianwidthdef.c",
 }
 
 target("unibreak")

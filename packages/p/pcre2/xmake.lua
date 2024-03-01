@@ -4,6 +4,7 @@ package("pcre2")
     set_license("BSD-2-Clause")
     set_urls("https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(version)/pcre2-$(version).tar.bz2")
 
+    add_versions("10.43", "e2a53984ff0b07dfdb5ae4486bbb9b21cca8e7df2434096cc9bf1b728c350bcb")
     add_versions("10.42", "8d36cd8cb6ea2a4c2bb358ff6411b0c788633a2a45dabbf1aeb4b701d1b5e840")
     add_configs("PCRE2_8", {description = "Support 8bit unicode", default = true, type = "boolean"})
     add_configs("PCRE2_16", {description = "Support 16bit unicode", default = false, type = "boolean"})
@@ -31,6 +32,8 @@ package("pcre2")
         os.cp("src/pcre2.h.generic", "src/pcre2.h")
         os.cp("src/pcre2_chartables.c.dist", "src/pcre2_chartables.c")
         io.writefile("config.h.in", [[
+#define PCRE2_EXPORT
+#define MAX_VARLOOKBEHIND 255
 ${define HAVE_ATTRIBUTE_UNINITIALIZED}
 ${define HAVE_DIRENT_H}
 ${define HAVE_STRERROR}

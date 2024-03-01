@@ -1,6 +1,6 @@
 function getVersion(version)
     local versions = {
-        ["2024.02.28-alpha"] = "archive/77dff5a735afd821fea1ac54dda63ef5d8bded96.tar.gz"
+        ["2024.02.29-alpha"] = "archive/04f40014a62898d325cbc987c9f56073b2d17e73.tar.gz",
     }
     local url = versions[tostring(version)]
     return url ~= nil and url or "archive/refs/tags/v"..tostring(version)..".tar.gz"
@@ -13,7 +13,7 @@ package("imgui")
     set_urls("https://github.com/ocornut/imgui/$(version)", {
         version=getVersion
     })
-    add_versions("2024.02.28-alpha", "07862e69971c811b388aef47297feb788e0c7d905b5d45eb81e2a2afda9c961f")
+    add_versions("2024.02.29-alpha", "a42ba44824b29de233c8554e03eb65a6d0850e05354ccb6d16e1d91c1dc576aa")
     add_versions("1.90.4", "5d9dc738af74efa357f2a9fc39fe4a28d29ef1dfc725dd2977ccf3f3194e996e")
     add_versions("1.90", "170986e6a4b83d165bfc1d33c2c5a5bc2d67e5b97176287485c51a2299249296")
 

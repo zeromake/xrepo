@@ -5,6 +5,7 @@ package("lunasvg")
     set_license("MIT")
 
     set_urls("https://github.com/sammycage/lunasvg/archive/refs/tags/v$(version).tar.gz")
+    add_versions("2.3.9", "088bc9fd1191a004552c65bdcc260989b83da441b0bdaa965e79d984feba88fa")
     add_versions("2.3.8", "54d697e271a5aca36f9999d546b1b346e98a8183140027330f69a3eb0c184194")
     add_versions("2.3.5", "350ff56aa1acdedefe2ad8a4241a9fb8f9b232868adc7bd36dfb3dbdd57e2e93")
 

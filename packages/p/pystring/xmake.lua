@@ -13,9 +13,9 @@ package("pystring")
     set_urls("https://github.com/imageworks/pystring/$(version)", {
         version = getVersion,
     })
+    add_versions("2023.07.23-alpha", "40a694bb42b41e245ff68712db59b67fcd59091cb7cb933c0873c20a75354f9d")
     add_versions("2020.02.04-alpha", "46161e75f85a3e8867233aebb6f4399f405c565db76dc07731a7ef662459609d")
     add_versions("2022.09.27-alpha", "4f38af53aebc35924699aa41482a44a31aa52e4c6f921acee37a52ebea7333d4")
-    add_configs("shared", {description = "Build shared library.", default = false, type = "boolean", readonly = true})
 
     add_includedirs("include")
     add_includedirs("include/pystring")

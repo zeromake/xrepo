@@ -11,6 +11,7 @@ package("sdl2_image")
     set_license("zlib")
     set_urls("https://github.com/libsdl-org/SDL_image/releases/download/release-$(version)/SDL2_image-$(version).tar.gz")
 
+    add_versions("2.8.2", "8f486bbfbcf8464dd58c9e5d93394ab0255ce68b51c5a966a918244820a76ddc")
     add_versions("2.6.3", "931c9be5bf1d7c8fae9b7dc157828b7eee874e23c7f24b44ba7eff6b4836312c")
     add_versions("2.6.2", "48355fb4d8d00bac639cd1c4f4a7661c4afef2c212af60b340e06b7059814777")
     add_configs("backend", {description = "Support backend", default = "", type = "string"})

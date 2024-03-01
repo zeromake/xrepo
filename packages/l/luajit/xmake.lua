@@ -157,6 +157,7 @@ target("buildvm")
 local function getVersion(version)
     local versions ={
         ["2023.09.25-alpha"] = "archive/becf5cc65d966a8926466dd43407c48bfea0fa13.tar.gz",
+        ["2024.02.04-alpha"] = "archive/0d313b243194a0b8d2399d8b549ca5a0ff234db5.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -170,6 +171,7 @@ package("luajit")
             version = getVersion
         }
     )
+    add_versions("2024.02.04-alpha", "53731880dbc4adbbf82ba69a85b5dbe15266032b8b94a077c0835bc10ec75f12")
     add_versions("2023.09.25-alpha", "6d7e8fc691d45fe837d05e2a03f3a41b0886a237544d30f74f1355ce2c8d9157")
     on_install(function (package)
         local lua_target = nil

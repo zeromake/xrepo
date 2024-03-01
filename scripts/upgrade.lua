@@ -11,6 +11,20 @@ local function sdl_version_transform(version)
     return version:sub(9):gsub('_', '.')
 end
 
+function string.rfind(str, substr, plain)
+    assert(substr ~= "")
+    local plain = plain or false
+    local index = 0
+    while true do
+      local new_start, _ = string.find(str, substr, index, plain)
+      if new_start == nil then
+              if index == 0 then return nil end
+        return #str - #str:sub(index)
+      end
+      index = new_start + 1
+    end
+end
+
 local version_transform = {
     unibreak = function (version) return version:sub(13):gsub('_', '.') end,
     expat = function (version) return version:sub(3):gsub('_', '.') end,
@@ -21,8 +35,13 @@ local version_transform = {
     sdl2_mixer = sdl_version_transform,
     spirv_reflect = function (version) return version:sub(11) end,
     cppwinrt = function (version)
-        local latest = #version
-        return version:sub(1, -3).."-release"..version:sub(-2)
+        local index = string.rfind(version, '.', true)
+        return version:sub(1, index-1).."-release"..version:sub(index)
+    end,
+    spirv_reflect = function (version)
+        local start = string.rfind(version, '-', true)
+        local index = string.rfind(version, '.', true)
+        return version:sub(start+1, index-1).."-release"..version:sub(index)
     end,
     curl = function (version) return version:sub(6):gsub('_', '.') end,
     pcre2 = function (version) return version:sub(7) end,
@@ -39,8 +58,8 @@ local download_transform = {
     cppwinrt = function (opt)
         return 'https://github.com/'..opt.repo..'/releases/download/'..opt.tag..'/Microsoft.Windows.CppWinRT.'..opt.tag..'.nupkg'
     end,
-    curl = function (opt) return default_transform(opt, 'curl-') end,
-    expat = function (opt) return default_transform(opt, 'expat-') end,
+    curl = function (opt) return default_transform(opt, 'curl-', '.tar.bz2') end,
+    expat = function (opt) return default_transform(opt, 'expat-', '.tar.bz2') end,
     fmt = function (opt) return default_transform(opt, 'fmt-', '.zip') end,
     fribidi = function (opt) return default_transform(opt, 'fribidi-', '.tar.xz') end,
     harfbuzz = function (opt) return default_transform(opt, 'harfbuzz-', '.tar.xz') end,
@@ -54,6 +73,8 @@ local download_transform = {
     sdl2_image = function (opt) return default_transform(opt, 'SDL2_image-') end,
     tweeny = function (opt) return default_transform(opt, 'tweeny-') end,
     unibreak = function (opt) return default_transform(opt, 'libunibreak-') end,
+    zlib = function (opt) return default_transform(opt, 'zlib-') end,
+    zstd = function (opt) return default_transform(opt, 'zstd-') end,
 }
 
 
@@ -138,7 +159,7 @@ function download_file(repo, opt)
     end
     local filename = hash.md5(bytes(download_url))
     local filepath = 'downloads/'..filename
-    -- print('download', download_url, filepath)
+    print('download', download_url, filepath)
     if not os.exists(filepath) and opt.download then
         os.runv('curl', {
             '-L',
@@ -234,8 +255,8 @@ function main(...)
                 if os.exists(download_path) then
                     download_sha256 = hash.sha256('./'..download_path)
                 end
-                print(packageDir, '-------------release new-------------')
-                print('add_versions("'..latest_version..'", "'..(download_sha256 or 'nil')..'"')
+                print('\n', packageDir, '-------------release new-------------')
+                print('add_versions("'..latest_version..'", "'..(download_sha256 or 'nil')..'")')
             end
         end
         if has_alpha then
@@ -252,9 +273,9 @@ function main(...)
                 if os.exists(download_path) then
                     download_sha256 = hash.sha256('./'..download_path)
                 end
-                print(packageDir, '-------------alpha new-------------')
+                print('\n', packageDir, '-------------alpha new-------------')
                 print('["'..alpha_version..'"] = "archive/'..alpha_sha..'.tar.gz",')
-                print('add_versions("'..alpha_version..'", "'..(download_sha256 or 'nil')..'"')
+                print('add_versions("'..alpha_version..'", "'..(download_sha256 or 'nil')..'")')
             end
         end
         ::continue::

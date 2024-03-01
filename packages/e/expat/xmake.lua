@@ -7,9 +7,9 @@ package("expat")
         return version:gsub("%.", "_") .. "/expat-" .. version
     end})
 
+    add_versions("2.6.1", "4677d957c0c6cb2a3321101944574c24113b637c7ab1cf0659a27c5babc201fd")
     add_versions("2.5.0", "6f0e6e01f7b30025fa05c85fdad1e5d0ec7fd35d9f61b22f34998de11969ff67")
     add_versions("2.4.8", "a247a7f6bbb21cf2ca81ea4cbb916bfb9717ca523631675f99b3d4a5678dcd16")
-    add_includedirs("include")
 
     on_load(function (package)
         if package:config("shared") ~= true then
@@ -31,6 +31,7 @@ ${define _HOST_BIGENDIAN}
 #define XML_CONTEXT_BYTES 1024
 #define XML_DTD 1
 #define XML_NS 1
+#define XML_GE 1
 #define PACKAGE "expat"
 #define PACKAGE_BUGREPORT "expat-bugs@libexpat.org"
 #define PACKAGE_NAME "expat"
