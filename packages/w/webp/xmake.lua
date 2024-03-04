@@ -9,15 +9,29 @@ package("webp")
     add_versions("1.2.4", "dfe7bff3390cd4958da11e760b65318f0a48c32913e4d5bc5e8d55abaaa2d32e")
 
     add_includedirs("include")
+    if is_plat("android") then
+        add_deps("ndk-cpufeatures")
+    end
     on_install(function (package)
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
+
+if is_plat("android") then
+    add_requires("ndk-cpufeatures")
+elseif is_plat("windows") then
+    add_cxflags("/utf-8")
+    add_definitions("UNICODE", "_UNICODE")
+end
 
 target("webp")
     set_kind("$(kind)")
     add_includedirs(".")
     add_headerfiles("src/webp/*.h", {prefixdir = "webp"})
     add_headerfiles("sharpyuv/*.h", {prefixdir = "sharpyuv"})
+    if is_plat("android") then
+        add_packages("ndk-cpufeatures")
+        add_defines("HAVE_CPU_FEATURES_H=1")
+    end
     for _, f in ipairs({
         "sharpyuv",
         "src/dec",
