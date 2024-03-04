@@ -55,6 +55,8 @@ package("sdl2")
     if is_plat("android") then
         add_deps("ndk-cpufeatures")
         add_syslinks("OpenSLES", "log", "android")
+    elseif is_plat("linux") then
+        add_links("SDL2")
     end
 
     on_load(function (package)

@@ -20,7 +20,7 @@ package("curl")
     add_defines("BUILDING_LIBCURL")
 
     on_load(function (package)
-        if is_plat("windows", "mingw") then
+        if package:is_plat("windows", "mingw") then
             package:add("syslinks", "ws2_32")
             if not package:config("winrt") then
                 package:add("syslinks", "wldap32")
