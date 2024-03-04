@@ -12,6 +12,7 @@ package("unibreak")
         version = getVersion
     })
 
+    add_versions("6.1", "cc4de0099cf7ff05005ceabff4afed4c582a736abc38033e70fdac86335ce93f")
     add_versions("6.0", "f189daa18ead6312c5db6ed3d0c76799135910ed6c06637c7eea20a7e5e7cc7f")
     add_versions("5.0", "58f2fe4f9d9fc8277eb324075ba603479fa847a99a4b134ccb305ca42adf7158")
 
