@@ -20,7 +20,7 @@ if is_plat("android") then
     add_requires("ndk-cpufeatures")
 elseif is_plat("windows") then
     add_cxflags("/utf-8")
-    add_definitions("UNICODE", "_UNICODE")
+    add_defines("UNICODE", "_UNICODE")
 end
 
 target("webp")
