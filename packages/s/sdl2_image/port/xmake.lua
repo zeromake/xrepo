@@ -96,7 +96,7 @@ target("sdl2_image")
     if is_plat("macosx", "iphoneos") then
         set_values("objc.build.arc", false)
         add_mflags("-fno-objc-arc")
-        table.insert(files, "*.m")
+        table.insert(files, prefix_dir.."*.m")
     end
     if is_plat("macosx") then
         add_frameworks("CoreFoundation", "CoreGraphics", "ImageIO", "CoreServices")
