@@ -60,7 +60,7 @@ local HOST_ASM_MASM_X86_64 = false
 local HOST_ASM_MINGW64_X86_64 = false
 
 if is_plat("macosx") and is_arch("x64", "x86_64") then
-    HOST_ASM_MASM_X86_64 = true
+    HOST_ASM_MACOSX_X86_64 = true
 elseif is_plat("windows") and is_arch("x64", "x86_64") then
     HOST_ASM_MASM_X86_64 = true
 elseif is_plat("mingw") and is_arch("x64", "x86_64") then
@@ -73,19 +73,61 @@ else
     end
 end
 
+target("check.object")
+    set_kind("object")
+    on_config(function (target)
+        local check = import("check")(target)
+    end)
+
 
 target("crypto")
     set_kind("$(kind)")
     add_defines("LIBRESSL_CRYPTO_INTERNAL")
+    add_includedirs("include")
+    add_includedirs("include/compat")
+    add_deps("check.object")
+    for _, dir in ipairs({
+        "",
+        "asn1",
+        "bio",
+        "bn",
+        "bytestring",
+        "dh",
+        "dsa",
+        "curve25519",
+        "ec",
+        "ecdh",
+        "ecdsa",
+        "evp",
+        "hidden",
+        "hmac",
+        "modes",
+        "ocsp",
+        "pkcs12",
+        "rsa",
+        "sha",
+        "x509",
+    }) do
+        add_includedirs("crypto/"..dir)
+    end
     local crypto_asm_files = {}
     if is_plat("windows", "mingw") then
         add_defines("OPENSSLDIR=\"C:/Windows/libressl/ssl\"")
     else
         add_defines("OPENSSLDIR=\"/etc/ssl\"")
     end
+    if is_arch("arm64.*") then
+        add_includedirs("crypto/bn/arch/aarch64")
+    elseif is_arch("arm.*") then
+        add_includedirs("crypto/bn/arch/arm")
+    elseif is_arch("x64", "x86_64") then
+        add_includedirs("crypto/bn/arch/amd64")
+    elseif is_arch("x86", "i386") then
+        add_includedirs("crypto/bn/arch/i386")
+    end
 
     if HOST_ASM_ELF_ARMV4 then
-        table.join(crypto_asm_files, {
+        table.join2(crypto_asm_files, {
             "aes/aes-elf-armv4.S",
             "bn/mont-elf-armv4.S",
             "sha/sha1-elf-armv4.S",
@@ -105,7 +147,7 @@ target("crypto")
             "OPENSSL_CPUID_OBJ"
         )
     elseif HOST_ASM_ELF_X86_64 then
-        table.join(crypto_asm_files, {
+        table.join2(crypto_asm_files, {
             "aes/aes-elf-x86_64.S",
             "aes/bsaes-elf-x86_64.S",
             "aes/vpaes-elf-x86_64.S",
@@ -155,7 +197,7 @@ target("crypto")
             "OPENSSL_CPUID_OBJ"
         )
     elseif HOST_ASM_MACOSX_X86_64 then
-        table.join(crypto_asm_files, {
+        table.join2(crypto_asm_files, {
             "aes/aes-macosx-x86_64.S",
             "aes/bsaes-macosx-x86_64.S",
             "aes/vpaes-macosx-x86_64.S",
@@ -205,7 +247,7 @@ target("crypto")
             "OPENSSL_CPUID_OBJ"
         )
     elseif HOST_ASM_MASM_X86_64 then
-        table.join(crypto_asm_files, {
+        table.join2(crypto_asm_files, {
             "aes/aes-masm-x86_64.S",
             "aes/bsaes-masm-x86_64.S",
             "aes/vpaes-masm-x86_64.S",
@@ -259,6 +301,9 @@ target("crypto")
             "crypto/whrlpool/wp_block.c"
         )
     end
+    for _, f in ipairs(crypto_asm_files) do
+        add_files(path.join("crypto", f), {sourcekind = "as"})
+    end
     for _, f in ipairs({
         "cpt_err.c",
         "cryptlib.c",
@@ -271,24 +316,27 @@ target("crypto")
         "o_fips.c",
         "o_init.c",
         "o_str.c",
+        "empty.c",
     }) do
         add_files(path.join("crypto", f))
     end
     for _, f in ipairs({
+        "aes/*.c|aes_cbc.c|aes_core.c",
         "asn1/*.c",
         "bf/*.c",
         "bio/*.c|b_win.c|b_posix.c|bss_log.c",
         "bn/*.c",
         "buffer/*.c",
         "bytestring/*.c",
-        "camellia/*.c",
         "cast/*.c",
         "chacha/*.c|chacha-merged.c",
+        "camellia/*.c|camellia.c|cmll_cbc.c",
         "cmac/*.c",
+        "cms/*.c",
         "conf/*.c",
         "ct/*.c",
         "curve25519/*.c",
-        "des/*.c",
+        "des/*.c|ncbc_enc.c",
         "dh/*.c",
         "dsa/*.c",
         "ec/*.c",
@@ -311,7 +359,7 @@ target("crypto")
         "pem/*.c",
         "pkcs12/*.c",
         "pkcs7/*.c",
-        "poly1305/*.c",
+        "poly1305/*.c|poly1305-donna.c",
         "rand/*.c",
         "rc2/*.c",
         "ripemd/*.c",
@@ -323,100 +371,116 @@ target("crypto")
         "ts/*.c",
         "txt_db/*.c",
         "ui/*.c|ui_openssl.c|ui_openssl_win.c",
-        "whrlpool/*.c",
+        "whrlpool/*.c|wp_block.c",
         "x509/*.c",
     }) do
         add_files(path.join("crypto", f))
     end
+    if is_plat("windows", "mingw") then
+        add_files(
+            "crypto/compat/posix_win.c",
+            "crypto/compat/crypto_lock_win.c",
+            "crypto/bio/b_win.c",
+            "crypto/ui/ui_openssl_win.c"
+        )
+    else
+        add_files(
+            "crypto/crypto_lock.c",
+            "crypto/compat/crypto_lock_win.c",
+            "crypto/bio/b_posix.c",
+            "crypto/bio/bss_log.c",
+            "crypto/ui/ui_openssl.c"
+        )
+    end
     on_config(function (target)
         local check = import("check")(target)
         if not check.HAVE_ASPRINTF then
-            add_files("crypto/compat/bsd-asprintf.c")
+            target:add("files", "crypto/compat/bsd-asprintf.c")
         end
         if not check.HAVE_FREEZERO then
-            add_files("crypto/compat/freezero.c")
+            target:add("files", "crypto/compat/freezero.c")
         end
         if not check.HAVE_GETOPT then
-            add_files("crypto/compat/getopt_long.c")
+            target:add("files", "crypto/compat/getopt_long.c")
         end
         if not check.HAVE_GETPAGESIZE then
-            add_files("crypto/compat/getpagesize.c")
+            target:add("files", "crypto/compat/getpagesize.c")
         end
         if not check.HAVE_GETPROGNAME then
             if is_plat("windows", "mingw") then
-                add_files("crypto/compat/getprogname_windows.c")
+                target:add("files", "crypto/compat/getprogname_windows.c")
             elseif is_plat("linux") then
-                add_files("crypto/compat/getprogname_linux.c")
+                target:add("files", "crypto/compat/getprogname_linux.c")
             else
-                add_files("crypto/compat/getprogname_unimpl.c")
+                target:add("files", "crypto/compat/getprogname_unimpl.c")
             end
         end
         if not check.HAVE_REALLOCARRAY then
-            add_files("crypto/compat/reallocarray.c")
+            target:add("files", "crypto/compat/reallocarray.c")
         end
         if not check.HAVE_RECALLOCARRAY then
-            add_files("crypto/compat/recallocarray.c")
+            target:add("files", "crypto/compat/recallocarray.c")
         end
         if not check.HAVE_STRCASECMP then
-            add_files("crypto/compat/strcasecmp.c")
+            target:add("files", "crypto/compat/strcasecmp.c")
         end
         if not check.HAVE_STRLCAT then
-            add_files("crypto/compat/strlcat.c")
+            target:add("files", "crypto/compat/strlcat.c")
         end
         if not check.HAVE_STRLCPY then
-            add_files("crypto/compat/strlcpy.c")
+            target:add("files", "crypto/compat/strlcpy.c")
         end
         if not check.HAVE_STRNDUP then
-            add_files("crypto/compat/strndup.c")
+            target:add("files", "crypto/compat/strndup.c")
         end
         if not check.HAVE_STRNLEN then
-            add_files("crypto/compat/strnlen.c")
+            target:add("files", "crypto/compat/strnlen.c")
         end
         if not check.HAVE_STRSEP then
-            add_files("crypto/compat/strsep.c")
+            target:add("files", "crypto/compat/strsep.c")
         end
         if not check.HAVE_STRTONUM then
-            add_files("crypto/compat/strtonum.c")
+            target:add("files", "crypto/compat/strtonum.c")
         end
         if not check.HAVE_SYSLOG_R then
-            add_files("crypto/compat/syslog_r.c")
+            target:add("files", "crypto/compat/syslog_r.c")
         end
         if not check.HAVE_TIMEGM then
-            add_files("crypto/compat/timegm.c")
+            target:add("files", "crypto/compat/timegm.c")
         end
         if not check.HAVE_EXPLICIT_BZERO then
             if is_plat("windows", "mingw") then
-                add_files("crypto/compat/explicit_bzero_win.c")
+                target:add("files", "crypto/compat/explicit_bzero_win.c")
             else
-                add_files("crypto/compat/explicit_bzero.c")
+                target:add("files", "crypto/compat/explicit_bzero.c")
             end
         end
         if not check.HAVE_ARC4RANDOM_BUF then
-            add_files("crypto/compat/arc4random.c")
-            add_files("crypto/compat/arc4random_uniform.c")
+            target:add("files", "crypto/compat/arc4random.c")
+            target:add("files", "crypto/compat/arc4random_uniform.c")
         end
         if not check.HAVE_GETENTROPY then
             if is_plat("windows", "mingw") then
-                add_files("crypto/compat/getentropy_win.c")
+                target:add("files", "crypto/compat/getentropy_win.c")
             elseif is_plat("linux", "android") then
-                add_files("crypto/compat/getentropy_linux.c")
+                target:add("files", "crypto/compat/getentropy_linux.c")
             elseif is_plat("bsd") then
-                add_files("crypto/compat/getentropy_freebsd.c")
+                target:add("files", "crypto/compat/getentropy_freebsd.c")
             else
-                add_files("crypto/compat/getentropy_osx.c")
+                target:add("files", "crypto/compat/getentropy_osx.c")
             end
-            add_files("crypto/compat/getentropy_win.c")
+            target:add("files", "crypto/compat/getentropy_win.c")
         end
         if not check.HAVE_TIMINGSAFE_BCMP then
-            add_files("crypto/compat/timingsafe_bcmp.c")
+            target:add("files", "crypto/compat/timingsafe_bcmp.c")
         end
         if not check.HAVE_TIMINGSAFE_MEMCMP then
-            add_files("crypto/compat/timingsafe_memcmp.c")
+            target:add("files", "crypto/compat/timingsafe_memcmp.c")
         end
     end)
 
-target("ssl")
-    set_kind("$(kind)")
+-- target("ssl")
+--     set_kind("$(kind)")
 
-target("tls")
-    set_kind("$(kind)")
+-- target("tls")
+--     set_kind("$(kind)")
