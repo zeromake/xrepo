@@ -1,7 +1,7 @@
 includes("@builtin/check")
 add_rules("mode.debug", "mode.release")
 
-option("enable_asm")
+option("asm")
     set_default(true)
     set_description("enable asm")
     set_showmenu(true)
@@ -58,19 +58,26 @@ local HOST_ASM_ELF_ARMV4 = false
 local HOST_ASM_MACOSX_X86_64 = false
 local HOST_ASM_MASM_X86_64 = false
 local HOST_ASM_MINGW64_X86_64 = false
+local HOST_ENABLE_ASM = true
 
-if is_plat("macosx") and is_arch("x64", "x86_64") then
-    HOST_ASM_MACOSX_X86_64 = true
-elseif is_plat("windows") and is_arch("x64", "x86_64") then
-    HOST_ASM_MASM_X86_64 = true
-elseif is_plat("mingw") and is_arch("x64", "x86_64") then
-    HOST_ASM_MINGW64_X86_64 = true
-else
-    if is_arch("x64", "x86_64") then
-        HOST_ASM_ELF_X86_64 = true
-    elseif is_arch("arm.*") or is_arch("arm64.*") then
-        HOST_ASM_ELF_ARMV4 = true
+if get_config("asm") then
+    if is_plat("macosx") and is_arch("x64", "x86_64") then
+        HOST_ASM_MACOSX_X86_64 = true
+    elseif is_plat("windows") and is_arch("x64", "x86_64") then
+        HOST_ASM_MASM_X86_64 = true
+    elseif is_plat("mingw") and is_arch("x64", "x86_64") then
+        HOST_ASM_MINGW64_X86_64 = true
+    else
+        if is_arch("x64", "x86_64") then
+            HOST_ASM_ELF_X86_64 = true
+        elseif is_arch("arm.*") or is_arch("arm64.*") then
+            HOST_ASM_ELF_ARMV4 = true
+        else
+            HOST_ENABLE_ASM = false
+        end
     end
+else
+    HOST_ENABLE_ASM = false
 end
 
 target("check.object")
@@ -113,6 +120,7 @@ target("crypto")
     local crypto_asm_files = {}
     if is_plat("windows", "mingw") then
         add_defines("OPENSSLDIR=\"C:/Windows/libressl/ssl\"")
+        add_files("crypto/crypto.def")
     else
         add_defines("OPENSSLDIR=\"/etc/ssl\"")
     end
@@ -124,6 +132,9 @@ target("crypto")
         add_includedirs("crypto/bn/arch/amd64")
     elseif is_arch("x86", "i386") then
         add_includedirs("crypto/bn/arch/i386")
+    end
+    if not HOST_ENABLE_ASM then
+        add_defines("OPENSSL_NO_ASM")
     end
 
     if HOST_ASM_ELF_ARMV4 then
@@ -393,6 +404,13 @@ target("crypto")
         )
     end
     on_config(function (target)
+        if not os.exists("crypto/crypto.def") then
+            local f = io.open("crypto/crypto.def", "wb")
+            f:write("EXPORTS\n")
+            local sym = io.readfile("crypto/crypto.sym"):gsub("BIO_s_log\n", "")
+            f:write(sym)
+            f:close()
+        end
         local check = import("check")(target)
         if not check.HAVE_ASPRINTF then
             target:add("files", "crypto/compat/bsd-asprintf.c")
