@@ -8,8 +8,7 @@ package("libressl")
     add_configs("asm", {description = "use asm", default = true, type = "boolean"})
     
     on_install(function (package)
-        os.cp(path.join(os.scriptdir(), "port", "check.lua"), "check.lua")
-        os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
+        os.cp(path.join(os.scriptdir(), "port", "*.lua"), "./")
         local configs = {}
         table.insert(configs, "--asm="..(package:config("asm") and 'y' or 'n'))
         import("package.tools.xmake").install(package, configs)

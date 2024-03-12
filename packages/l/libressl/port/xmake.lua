@@ -52,33 +52,9 @@ add_defines(
     "__BEGIN_HIDDEN_DECLS=",
     "__END_HIDDEN_DECLS="
 )
-
-local HOST_ASM_ELF_X86_64 = false
-local HOST_ASM_ELF_ARMV4 = false
-local HOST_ASM_MACOSX_X86_64 = false
-local HOST_ASM_MASM_X86_64 = false
-local HOST_ASM_MINGW64_X86_64 = false
-local HOST_ENABLE_ASM = true
-
-if get_config("asm") then
-    if is_plat("macosx") and is_arch("x64", "x86_64") then
-        HOST_ASM_MACOSX_X86_64 = true
-    elseif is_plat("windows") and is_arch("x64", "x86_64") then
-        HOST_ASM_MASM_X86_64 = true
-    elseif is_plat("mingw") and is_arch("x64", "x86_64") then
-        HOST_ASM_MINGW64_X86_64 = true
-    else
-        if is_arch("x64", "x86_64") then
-            HOST_ASM_ELF_X86_64 = true
-        elseif is_arch("arm.*") or is_arch("arm64.*") then
-            HOST_ASM_ELF_ARMV4 = true
-        else
-            HOST_ENABLE_ASM = false
-        end
-    end
-else
-    HOST_ENABLE_ASM = false
-end
+includes("files.lua")
+includes("util.lua")
+includes("export_symbol.lua")
 
 target("check.object")
     set_kind("object")
@@ -91,218 +67,50 @@ target("crypto")
     set_kind("$(kind)")
     add_defines("LIBRESSL_CRYPTO_INTERNAL")
     add_deps("check.object")
-    for _, dir in ipairs({
-        "",
-        "asn1",
-        "bio",
-        "bn",
-        "bytestring",
-        "dh",
-        "dsa",
-        "curve25519",
-        "ec",
-        "ecdh",
-        "ecdsa",
-        "evp",
-        "hidden",
-        "hmac",
-        "modes",
-        "ocsp",
-        "pkcs12",
-        "rsa",
-        "sha",
-        "x509",
-    }) do
-        add_includedirs("crypto/"..dir)
+    
+    for _, dir in ipairs(CRYPTO_INCLUDE_DIRS) do
+        add_includedirs(dir)
     end
-    add_includedirs("include/compat")
-    add_includedirs("include")
+    local host_asm_check = CheckAsmPlat()
     local crypto_asm_files = {}
+    local unexport = {}
     if is_plat("windows", "mingw") then
         add_defines("OPENSSLDIR=\"C:/Windows/libressl/ssl\"")
         add_files("crypto/crypto.def")
+        table.insert(unexport, 'BIO_s_log')
     else
         add_defines("OPENSSLDIR=\"/etc/ssl\"")
     end
-    if is_arch("arm64.*") then
-        add_includedirs("crypto/bn/arch/aarch64")
-    elseif is_arch("arm.*") then
-        add_includedirs("crypto/bn/arch/arm")
-    elseif is_arch("x64", "x86_64") then
-        add_includedirs("crypto/bn/arch/amd64")
-    elseif is_arch("x86", "i386") then
-        add_includedirs("crypto/bn/arch/i386")
-    end
-    if not HOST_ENABLE_ASM then
+    add_rules("export_symbol", {file = 'crypto/crypto.sym', unexport = unexport})
+    if not host_asm_check.HOST_ENABLE_ASM then
         add_defines("OPENSSL_NO_ASM")
     end
-
-    if HOST_ASM_ELF_ARMV4 then
-        table.join2(crypto_asm_files, {
-            "aes/aes-elf-armv4.S",
-            "bn/mont-elf-armv4.S",
-            "sha/sha1-elf-armv4.S",
-            "sha/sha512-elf-armv4.S",
-            "sha/sha256-elf-armv4.S",
-            "modes/ghash-elf-armv4.S",
-            "armv4cpuid.S",
-            "armcap.c",
-        })
-        add_defines(
-            "AES_ASM",
-            "OPENSSL_BN_ASM_MONT",
-            "GHASH_ASM",
-            "SHA1_ASM",
-            "SHA256_ASM",
-            "SHA512_ASM",
-            "OPENSSL_CPUID_OBJ"
-        )
-    elseif HOST_ASM_ELF_X86_64 then
-        table.join2(crypto_asm_files, {
-            "aes/aes-elf-x86_64.S",
-            "aes/bsaes-elf-x86_64.S",
-            "aes/vpaes-elf-x86_64.S",
-            "aes/aesni-elf-x86_64.S",
-            "aes/aesni-sha1-elf-x86_64.S",
-            "bn/modexp512-elf-x86_64.S",
-            "bn/mont-elf-x86_64.S",
-            "bn/mont5-elf-x86_64.S",
-            "camellia/cmll-elf-x86_64.S",
-            "md5/md5-elf-x86_64.S",
-            "modes/ghash-elf-x86_64.S",
-            "rc4/rc4-elf-x86_64.S",
-            "rc4/rc4-md5-elf-x86_64.S",
-            "sha/sha1-elf-x86_64.S",
-            "sha/sha256-elf-x86_64.S",
-            "sha/sha512-elf-x86_64.S",
-            "whrlpool/wp-elf-x86_64.S",
-            "cpuid-elf-x86_64.S",
-
-            "bn/arch/amd64/bignum_add.S",
-            "bn/arch/amd64/bignum_cmadd.S",
-            "bn/arch/amd64/bignum_cmul.S",
-            "bn/arch/amd64/bignum_mul.S",
-            "bn/arch/amd64/bignum_mul_4_8_alt.S",
-            "bn/arch/amd64/bignum_mul_8_16_alt.S",
-            "bn/arch/amd64/bignum_sqr.S",
-            "bn/arch/amd64/bignum_sqr_4_8_alt.S",
-            "bn/arch/amd64/bignum_sqr_8_16_alt.S",
-            "bn/arch/amd64/bignum_sub.S",
-            "bn/arch/amd64/word_clz.S",
-            "bn/arch/amd64/bn_arch.c",
-        })
-        add_defines(
-            "AES_ASM",
-            "BSAES_ASM",
-            "VPAES_ASM",
-            "OPENSSL_IA32_SSE2",
-            "OPENSSL_BN_ASM_MONT",
-            "OPENSSL_BN_ASM_MONT5",
-            "MD5_ASM",
-            "GHASH_ASM",
-            "RSA_ASM",
-            "SHA1_ASM",
-            "SHA256_ASM",
-            "SHA512_ASM",
-            "WHIRLPOOL_ASM",
-            "OPENSSL_CPUID_OBJ"
-        )
-    elseif HOST_ASM_MACOSX_X86_64 then
-        table.join2(crypto_asm_files, {
-            "aes/aes-macosx-x86_64.S",
-            "aes/bsaes-macosx-x86_64.S",
-            "aes/vpaes-macosx-x86_64.S",
-            "aes/aesni-macosx-x86_64.S",
-            "aes/aesni-sha1-macosx-x86_64.S",
-            "bn/modexp512-macosx-x86_64.S",
-            "bn/mont-macosx-x86_64.S",
-            "bn/mont5-macosx-x86_64.S",
-            "camellia/cmll-macosx-x86_64.S",
-            "md5/md5-macosx-x86_64.S",
-            "modes/ghash-macosx-x86_64.S",
-            "rc4/rc4-macosx-x86_64.S",
-            "rc4/rc4-md5-macosx-x86_64.S",
-            "sha/sha1-macosx-x86_64.S",
-            "sha/sha256-macosx-x86_64.S",
-            "sha/sha512-macosx-x86_64.S",
-            "whrlpool/wp-macosx-x86_64.S",
-            "cpuid-macosx-x86_64.S",
-
-            "bn/arch/amd64/bignum_add.S",
-            "bn/arch/amd64/bignum_cmadd.S",
-            "bn/arch/amd64/bignum_cmul.S",
-            "bn/arch/amd64/bignum_mul.S",
-            "bn/arch/amd64/bignum_mul_4_8_alt.S",
-            "bn/arch/amd64/bignum_mul_8_16_alt.S",
-            "bn/arch/amd64/bignum_sqr.S",
-            "bn/arch/amd64/bignum_sqr_4_8_alt.S",
-            "bn/arch/amd64/bignum_sqr_8_16_alt.S",
-            "bn/arch/amd64/bignum_sub.S",
-            "bn/arch/amd64/word_clz.S",
-            "bn/arch/amd64/bn_arch.c",
-        })
-        add_defines(
-            "AES_ASM",
-            "BSAES_ASM",
-            "VPAES_ASM",
-            "OPENSSL_IA32_SSE2",
-            "OPENSSL_BN_ASM_MONT",
-            "OPENSSL_BN_ASM_MONT5",
-            "MD5_ASM",
-            "GHASH_ASM",
-            "RSA_ASM",
-            "SHA1_ASM",
-            "SHA256_ASM",
-            "SHA512_ASM",
-            "WHIRLPOOL_ASM",
-            "OPENSSL_CPUID_OBJ"
-        )
-    elseif HOST_ASM_MASM_X86_64 then
-        table.join2(crypto_asm_files, {
-            "aes/aes-masm-x86_64.S",
-            "aes/bsaes-masm-x86_64.S",
-            "aes/vpaes-masm-x86_64.S",
-            "aes/aesni-masm-x86_64.S",
-            "aes/aesni-sha1-masm-x86_64.S",
-            "camellia/cmll-masm-x86_64.S",
-            "md5/md5-masm-x86_64.S",
-            "modes/ghash-masm-x86_64.S",
-            "rc4/rc4-masm-x86_64.S",
-            "rc4/rc4-md5-masm-x86_64.S",
-            "sha/sha1-masm-x86_64.S",
-            "sha/sha256-masm-x86_64.S",
-            "sha/sha512-masm-x86_64.S",
-            "whrlpool/wp-masm-x86_64.S",
-            "cpuid-masm-x86_64.S",
-        })
-        add_defines(
-            "endbr64=",
-            "AES_ASM",
-            "BSAES_ASM",
-            "VPAES_ASM",
-            "OPENSSL_IA32_SSE2",
-            "MD5_ASM",
-            "GHASH_ASM",
-            "RSA_ASM",
-            "SHA1_ASM",
-            "SHA256_ASM",
-            "SHA512_ASM",
-            "WHIRLPOOL_ASM",
-            "OPENSSL_CPUID_OBJ"
-        )
-    elseif HOST_ASM_MINGW64_X86_64 then
-
+    if host_asm_check.HOST_ASM_ELF_ARMV4 then
+        add_files(table.unpack(CRYPTO_ELF_ARMV4_FILE))
+        add_defines(table.unpack(CRYPTO_ELF_ARMV4_DEFINE))
+    elseif host_asm_check.HOST_ASM_ELF_X86_64 then
+        add_files(table.unpack(CRYPTO_ELF_X86_64_FILE))
+        add_defines(table.unpack(CRYPTO_ELF_X86_64_DEFINE))
+    elseif host_asm_check.HOST_ASM_MACOSX_X86_64 then
+        add_files(table.unpack(CRYPTO_MACOSX_X86_64_FILE))
+        add_defines(table.unpack(CRYPTO_MACOSX_X86_64_DEFINE))
+    elseif host_asm_check.HOST_ASM_MASM_X86_64 then
+        add_files(table.unpack(CRYPTO_MASM_X86_64_FILE))
+        add_defines(table.unpack(CRYPTO_MASM_X86_64_DEFINE))
+    elseif host_asm_check.HOST_ASM_MINGW64_X86_64 then
+        add_files(table.unpack(CRYPTO_MINGW64_X86_64_FILE))
+        add_defines(table.unpack(CRYPTO_MINGW64_X86_64_DEFINE))
     end
-    if not HOST_ASM_ELF_X86_64 and 
-        not HOST_ASM_MACOSX_X86_64 and
-        not HOST_ASM_MASM_X86_64 and
-        not HOST_ASM_ELF_ARMV4 then
+    if not host_asm_check.HOST_ASM_ELF_X86_64 and 
+        not host_asm_check.HOST_ASM_MACOSX_X86_64 and
+        not host_asm_check.HOST_ASM_MASM_X86_64 and
+        not host_asm_check.HOST_ASM_ELF_ARMV4 then
         add_files("crypto/aes/aes_core.c")
     end
 
-    if not HOST_ASM_ELF_X86_64 and 
-        not HOST_ASM_MACOSX_X86_64 and
-        not HOST_ASM_MASM_X86_64 then
+    if not host_asm_check.HOST_ASM_ELF_X86_64 and 
+        not host_asm_check.HOST_ASM_MACOSX_X86_64 and
+        not host_asm_check.HOST_ASM_MASM_X86_64 then
         add_files(
             "crypto/aes/aes_cbc.c",
             "crypto/camellia/camellia.c",
@@ -311,9 +119,6 @@ target("crypto")
             "crypto/rc4/rc4_skey.c",
             "crypto/whrlpool/wp_block.c"
         )
-    end
-    for _, f in ipairs(crypto_asm_files) do
-        add_files(path.join("crypto", f), {sourcekind = "as"})
     end
     for _, f in ipairs({
         "cpt_err.c",
@@ -387,6 +192,8 @@ target("crypto")
     }) do
         add_files(path.join("crypto", f))
     end
+    local CRYPTO_UNEXPORT = {}
+    local CRYPTO_EXTRA_EXPORT = {}
     if is_plat("windows", "mingw") then
         add_files(
             "crypto/compat/posix_win.c",
@@ -394,6 +201,22 @@ target("crypto")
             "crypto/bio/b_win.c",
             "crypto/ui/ui_openssl_win.c"
         )
+        CRYPTO_UNEXPORT['BIO_s_log'] = true
+        table.join2(CRYPTO_EXTRA_EXPORT, {
+            'gettimeofday',
+            'getuid',
+            'posix_perror',
+            'posix_fopen',
+            'posix_fgets',
+            'posix_open',
+            'posix_rename',
+            'posix_connect',
+            'posix_close',
+            'posix_read',
+            'posix_write',
+            'posix_getsockopt',
+            'posix_setsockopt',
+        })
     else
         add_files(
             "crypto/crypto_lock.c",
@@ -403,22 +226,27 @@ target("crypto")
         )
     end
     on_config(function (target)
-        if not os.exists("crypto/crypto.def") then
-            local f = io.open("crypto/crypto.def", "wb")
-            f:write("EXPORTS\n")
-            local sym = io.readfile("crypto/crypto.sym"):gsub("BIO_s_log\n", "")
-            f:write(sym)
-            f:close()
-        end
         local check = import("check")(target)
         if not check.HAVE_ASPRINTF then
             target:add("files", "crypto/compat/bsd-asprintf.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'asprintf',
+                'vasprintf',
+            })
         end
         if not check.HAVE_FREEZERO then
             target:add("files", "crypto/compat/freezero.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'freezero',
+            })
         end
         if not check.HAVE_GETOPT then
             target:add("files", "crypto/compat/getopt_long.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'getopt',
+                'optarg',
+                'optind',
+            })
         end
         if not check.HAVE_GETPAGESIZE then
             target:add("files", "crypto/compat/getpagesize.c")
@@ -434,36 +262,66 @@ target("crypto")
         end
         if not check.HAVE_REALLOCARRAY then
             target:add("files", "crypto/compat/reallocarray.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'reallocarray',
+            })
         end
         if not check.HAVE_RECALLOCARRAY then
             target:add("files", "crypto/compat/recallocarray.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'recallocarray',
+            })
         end
         if not check.HAVE_STRCASECMP then
             target:add("files", "crypto/compat/strcasecmp.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'strcasecmp',
+            })
         end
         if not check.HAVE_STRLCAT then
             target:add("files", "crypto/compat/strlcat.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'strlcat',
+            })
         end
         if not check.HAVE_STRLCPY then
             target:add("files", "crypto/compat/strlcpy.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'strlcpy',
+            })
         end
         if not check.HAVE_STRNDUP then
             target:add("files", "crypto/compat/strndup.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'strndup',
+            })
         end
         if not check.HAVE_STRNLEN then
             target:add("files", "crypto/compat/strnlen.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'strnlen',
+            })
         end
         if not check.HAVE_STRSEP then
             target:add("files", "crypto/compat/strsep.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'strsep',
+            })
         end
         if not check.HAVE_STRTONUM then
             target:add("files", "crypto/compat/strtonum.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'strtonum',
+            })
         end
         if not check.HAVE_SYSLOG_R then
             target:add("files", "crypto/compat/syslog_r.c")
         end
         if not check.HAVE_TIMEGM then
             target:add("files", "crypto/compat/timegm.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'timegm',
+            })
         end
         if not check.HAVE_EXPLICIT_BZERO then
             if is_plat("windows", "mingw") then
@@ -471,10 +329,18 @@ target("crypto")
             else
                 target:add("files", "crypto/compat/explicit_bzero.c")
             end
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'explicit_bzero',
+            })
         end
         if not check.HAVE_ARC4RANDOM_BUF then
             target:add("files", "crypto/compat/arc4random.c")
             target:add("files", "crypto/compat/arc4random_uniform.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'arc4random',
+                'arc4random_buf',
+                'arc4random_uniform',
+            })
         end
         if not check.HAVE_GETENTROPY then
             if is_plat("windows", "mingw") then
@@ -486,14 +352,31 @@ target("crypto")
             else
                 target:add("files", "crypto/compat/getentropy_osx.c")
             end
-            target:add("files", "crypto/compat/getentropy_win.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'getentropy',
+            })
         end
         if not check.HAVE_TIMINGSAFE_BCMP then
             target:add("files", "crypto/compat/timingsafe_bcmp.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'timingsafe_bcmp',
+            })
         end
         if not check.HAVE_TIMINGSAFE_MEMCMP then
             target:add("files", "crypto/compat/timingsafe_memcmp.c")
+            table.join2(CRYPTO_EXTRA_EXPORT, {
+                'timingsafe_memcmp',
+            })
         end
+        -- local syms = io.readfile("crypto/crypto.sym"):split('\n')
+        -- local syms_p = {}
+        -- for _, s in ipairs(syms) do
+        --     if not CRYPTO_UNEXPORT[s] then
+        --         table.insert(syms_p, s)
+        --     end
+        -- end
+        -- table.join2(syms_p, CRYPTO_EXTRA_EXPORT)
+        -- target:add('rules', 'export_symbol', {list = syms_p})
     end)
 
 -- target("ssl")
