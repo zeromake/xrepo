@@ -90,8 +90,6 @@ target("check.object")
 target("crypto")
     set_kind("$(kind)")
     add_defines("LIBRESSL_CRYPTO_INTERNAL")
-    add_includedirs("include")
-    add_includedirs("include/compat")
     add_deps("check.object")
     for _, dir in ipairs({
         "",
@@ -117,6 +115,8 @@ target("crypto")
     }) do
         add_includedirs("crypto/"..dir)
     end
+    add_includedirs("include/compat")
+    add_includedirs("include")
     local crypto_asm_files = {}
     if is_plat("windows", "mingw") then
         add_defines("OPENSSLDIR=\"C:/Windows/libressl/ssl\"")
@@ -397,7 +397,6 @@ target("crypto")
     else
         add_files(
             "crypto/crypto_lock.c",
-            "crypto/compat/crypto_lock_win.c",
             "crypto/bio/b_posix.c",
             "crypto/bio/bss_log.c",
             "crypto/ui/ui_openssl.c"

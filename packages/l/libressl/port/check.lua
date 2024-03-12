@@ -3,8 +3,8 @@ local checkFuns = {
     getopt = {"getopt.h"},
     reallocarray = {"stdlib.h"},
     strcasecmp = {"strings.h"},
-    strlcat = {"bsd/string.h"},
-    strlcpy = {"bsd/string.h"},
+    strlcat = {"string.h"},
+    strlcpy = {"string.h"},
     strndup = {"string.h"},
     strnlen = {"string.h"},
     strsep = {"string.h"},
@@ -23,6 +23,13 @@ local checkFuns = {
     timingsafe_memcmp = {"string.h"},
     memmem = {"string.h"},
 }
+
+if is_plat("macosx") then
+    checkFuns['getentropy'] = {'sys/random.h'}
+elseif is_plat("bsd") then
+    checkFuns['strlcat'] = {"bsd/string.h"}
+    checkFuns['strlcpy'] = {"bsd/string.h"}
+end
 
 local checkHeaders = {
     "endian.h",
