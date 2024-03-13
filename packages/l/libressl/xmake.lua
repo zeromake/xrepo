@@ -7,8 +7,11 @@ package("libressl")
     add_versions("3.8.2", "fe4019a388804f7e08135ffb115d5feaca94844f4ef4d7e3dbf36c4fe338ceb5")
     add_configs("asm", {description = "use asm", default = true, type = "boolean"})
     add_configs("openssldir", {description = "openssldir set", default = nil, type = "string"})
-
-    -- add_links("tls")
+    if is_plat("windows", "mingw") then
+        add_syslinks("ws2_32", "bcrypt")
+    elseif is_plat("linux") then
+        add_syslinks("pthread")
+    end
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "*.lua"), "./")
         local configs = {}
