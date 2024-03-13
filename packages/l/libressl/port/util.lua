@@ -17,7 +17,9 @@ function CheckAsmPlat()
         else
             if is_arch("x64", "x86_64") then
                 check.HOST_ASM_ELF_X86_64 = true
-            elseif is_arch("arm.*") or is_arch("arm64.*") then
+            elseif is_arch("arm64.*") then
+                check.HOST_ENABLE_ASM = false
+            elseif is_arch("arm.*") then
                 check.HOST_ASM_ELF_ARMV4 = true
             else
                 check.HOST_ENABLE_ASM = false
