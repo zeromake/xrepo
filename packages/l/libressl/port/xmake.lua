@@ -7,6 +7,30 @@ option("asm")
     set_showmenu(true)
 option_end()
 
+option("openssldir")
+    set_default(nil)
+    set_description("openssl dir")
+    set_showmenu(true)
+option_end()
+
+option("installdir")
+    if is_host("windows") then
+        set_default("C:/Windows/libressl/ssl")
+    else
+        set_default("/usr/local")
+    end
+    set_description("openssl install dir")
+    set_showmenu(true)
+option_end()
+
+option("merge_archive")
+    set_default(false)
+    set_description("merge static to tls")
+    set_showmenu(true)
+option_end()
+
+set_installdir(get_config('installdir'))
+
 if is_plat("windows") then
     add_cxflags("/utf-8")
     add_defines(
@@ -62,7 +86,6 @@ target("check.object")
         local check = import("check")(target)
     end)
 
-
 target("crypto")
     set_kind("$(kind)")
     add_defines("LIBRESSL_CRYPTO_INTERNAL")
@@ -74,32 +97,34 @@ target("crypto")
     local host_asm_check = CheckAsmPlat()
     local crypto_asm_files = {}
     local unexport = {}
-    if is_plat("windows", "mingw") then
-        add_defines("OPENSSLDIR=\"C:/Windows/libressl/ssl\"")
-        add_files("crypto/crypto.def")
-        table.insert(unexport, 'BIO_s_log')
+    if get_config('openssldir') then
+        add_defines('OPENSSLDIR=$(openssldir)')
     else
-        add_defines("OPENSSLDIR=\"/etc/ssl\"")
+        if is_plat("windows", "mingw") then
+            add_defines('OPENSSLDIR="C:/Windows/libressl/ssl"')
+        else
+            add_defines('OPENSSLDIR="$(installdir)/etc/ssl"')
+        end
     end
-    add_rules("export_symbol", {file = 'crypto/crypto.sym', unexport = unexport})
+    add_rules("export_symbol", {file = 'crypto/crypto.sym'})
     if not host_asm_check.HOST_ENABLE_ASM then
         add_defines("OPENSSL_NO_ASM")
     end
+    local asm_host = nil
     if host_asm_check.HOST_ASM_ELF_ARMV4 then
-        add_files(table.unpack(CRYPTO_ELF_ARMV4_FILE))
-        add_defines(table.unpack(CRYPTO_ELF_ARMV4_DEFINE))
+        asm_host = 'ELF_ARMV4'
     elseif host_asm_check.HOST_ASM_ELF_X86_64 then
-        add_files(table.unpack(CRYPTO_ELF_X86_64_FILE))
-        add_defines(table.unpack(CRYPTO_ELF_X86_64_DEFINE))
+        asm_host = 'ELF_X86_64'
     elseif host_asm_check.HOST_ASM_MACOSX_X86_64 then
-        add_files(table.unpack(CRYPTO_MACOSX_X86_64_FILE))
-        add_defines(table.unpack(CRYPTO_MACOSX_X86_64_DEFINE))
+        asm_host = 'MACOSX_X86_64'
     elseif host_asm_check.HOST_ASM_MASM_X86_64 then
-        add_files(table.unpack(CRYPTO_MASM_X86_64_FILE))
-        add_defines(table.unpack(CRYPTO_MASM_X86_64_DEFINE))
+        asm_host = 'MASM_X86_64'
     elseif host_asm_check.HOST_ASM_MINGW64_X86_64 then
-        add_files(table.unpack(CRYPTO_MINGW64_X86_64_FILE))
-        add_defines(table.unpack(CRYPTO_MINGW64_X86_64_DEFINE))
+        asm_host = 'MINGW64_X86_64'
+    end
+    if asm_host then
+        add_files(table.unpack(CRYPTO_ASM_FILE[asm_host]))
+        add_defines(table.unpack(CRYPTO_ASM_DEFINE[asm_host]))
     end
     if not host_asm_check.HOST_ASM_ELF_X86_64 and 
         not host_asm_check.HOST_ASM_MACOSX_X86_64 and
@@ -120,78 +145,7 @@ target("crypto")
             "crypto/whrlpool/wp_block.c"
         )
     end
-    for _, f in ipairs({
-        "cpt_err.c",
-        "cryptlib.c",
-        "crypto_init.c",
-        "cversion.c",
-        "ex_data.c",
-        "malloc-wrapper.c",
-        "mem_clr.c",
-        "mem_dbg.c",
-        "o_fips.c",
-        "o_init.c",
-        "o_str.c",
-        "empty.c",
-    }) do
-        add_files(path.join("crypto", f))
-    end
-    for _, f in ipairs({
-        "aes/*.c|aes_cbc.c|aes_core.c",
-        "asn1/*.c",
-        "bf/*.c",
-        "bio/*.c|b_win.c|b_posix.c|bss_log.c",
-        "bn/*.c",
-        "buffer/*.c",
-        "bytestring/*.c",
-        "cast/*.c",
-        "chacha/*.c|chacha-merged.c",
-        "camellia/*.c|camellia.c|cmll_cbc.c",
-        "cmac/*.c",
-        "cms/*.c",
-        "conf/*.c",
-        "ct/*.c",
-        "curve25519/*.c",
-        "des/*.c|ncbc_enc.c",
-        "dh/*.c",
-        "dsa/*.c",
-        "ec/*.c",
-        "ecdh/*.c",
-        "ecdsa/*.c",
-        "engine/*.c",
-        "err/*.c",
-        "evp/*.c",
-        "gost/*.c",
-        "hkdf/*.c",
-        "hmac/*.c",
-        "idea/*.c",
-        "kdf/*.c",
-        "lhash/*.c",
-        "md4/*.c",
-        "md5/*.c",
-        "modes/*.c",
-        "objects/*.c",
-        "ocsp/*.c",
-        "pem/*.c",
-        "pkcs12/*.c",
-        "pkcs7/*.c",
-        "poly1305/*.c|poly1305-donna.c",
-        "rand/*.c",
-        "rc2/*.c",
-        "ripemd/*.c",
-        "rsa/*.c",
-        "sha/*.c",
-        "sm3/*.c",
-        "sm4/*.c",
-        "stack/*.c",
-        "ts/*.c",
-        "txt_db/*.c",
-        "ui/*.c|ui_openssl.c|ui_openssl_win.c",
-        "whrlpool/*.c|wp_block.c",
-        "x509/*.c",
-    }) do
-        add_files(path.join("crypto", f))
-    end
+    add_files(table.unpack(CRYPTO_FILES))
     local CRYPTO_UNEXPORT = {}
     local CRYPTO_EXTRA_EXPORT = {}
     if is_plat("windows", "mingw") then
@@ -201,7 +155,7 @@ target("crypto")
             "crypto/bio/b_win.c",
             "crypto/ui/ui_openssl_win.c"
         )
-        CRYPTO_UNEXPORT['BIO_s_log'] = true
+        table.insert(CRYPTO_UNEXPORT, 'BIO_s_log')
         table.join2(CRYPTO_EXTRA_EXPORT, {
             'gettimeofday',
             'getuid',
@@ -368,19 +322,71 @@ target("crypto")
                 'timingsafe_memcmp',
             })
         end
-        -- local syms = io.readfile("crypto/crypto.sym"):split('\n')
-        -- local syms_p = {}
-        -- for _, s in ipairs(syms) do
-        --     if not CRYPTO_UNEXPORT[s] then
-        --         table.insert(syms_p, s)
-        --     end
-        -- end
-        -- table.join2(syms_p, CRYPTO_EXTRA_EXPORT)
-        -- target:add('rules', 'export_symbol', {list = syms_p})
+        import("export_symbol_imp")(target, {
+            file = 'crypto/crypto.sym',
+            export = CRYPTO_EXTRA_EXPORT,
+            unexport = CRYPTO_UNEXPORT,
+        })
     end)
 
--- target("ssl")
---     set_kind("$(kind)")
+target("ssl")
+    -- if get_config("merge") and is_kind("static") then
+    --     set_kind("object")
+    -- else
+    set_kind("$(kind)")
+    add_deps("crypto")
+    -- end
+    add_rules("export_symbol", {file = 'ssl/ssl.sym'})
+    add_files("ssl/*.c|empty.c")
+    add_includedirs(
+        "ssl",
+        "ssl/hidden",
+        "crypto/bio",
+        "include/compat",
+        "include"
+    )
+    if is_kind("static") then
+        remove_files("ssl/bs_ber.c")
+        remove_files("ssl/bs_cbb.c")
+        remove_files("ssl/bs_cbs.c")
+    end
+    on_config(function (target)
+        local check = import("check")(target)
+    end)
 
--- target("tls")
---     set_kind("$(kind)")
+
+target("tls")
+    set_kind("$(kind)")
+    add_deps("crypto", "ssl")
+    add_rules("export_symbol", {file = 'tls/tls.sym'})
+    add_files("tls/*.c|empty.c")
+    add_includedirs(
+        "tls",
+        "include/compat",
+        "include"
+    )
+    if get_config('openssldir') then
+        add_defines('TLS_DEFAULT_CA_FILE="$(openssldir)/cert.pem"')
+    else
+        add_defines('TLS_DEFAULT_CA_FILE="$(installdir)/etc/ssl/cert.pem"')
+    end
+    if is_plat("windows", "mingw") then
+        add_files("tls/compat/*.c")
+    end
+    on_config(function (target)
+        local check = import("check")(target)
+        local arch_dir = nil
+        if is_arch('arm64.*') then
+            arch_dir = 'aarch64'
+        elseif is_arch('arm.*') then
+            arch_dir = 'arm'
+        elseif is_arch("x64", "x86_64") then
+            arch_dir = 'aarch64'
+        elseif is_arch("i[3456]86", "x86") then
+            arch_dir = 'amd64'
+        end
+        os.cp('include/arch/'..arch_dir..'/opensslconf.h', 'include/openssl/opensslconf.h')
+    end)
+    add_headerfiles("include/openssl/*.h", {prefixdir = "openssl"})
+    add_headerfiles("include/tls.h")
+    set_policy("build.merge_archive", get_config("merge_archive"))

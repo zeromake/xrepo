@@ -52,10 +52,8 @@ end
 
 function main(target)
     local global_check = {}
-    if not os.exists("$(buildir)/$(host)-$(arch)") then
-        os.mkdir("$(buildir)/$(host)-$(arch)")
-    end
-    local global_check_path = string.vformat("$(buildir)/$(host)-$(arch)/check_snippet.cache")
+    local out = vformat('$(buildir)/.gens/$(host)-$(arch)')
+    local global_check_path = out.."/check_snippet.cache"
     if os.exists(global_check_path) then
         global_check = string.deserialize(io.readfile(global_check_path))
     else
@@ -100,6 +98,5 @@ function main(target)
             end
         end
     end
-
     return global_check
 end
