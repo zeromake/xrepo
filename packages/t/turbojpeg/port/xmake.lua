@@ -342,8 +342,14 @@ target("turbojpeg16")
 
 target("turbojpeg")
     set_kind("$(kind)")
-
     add_headerfiles("turbojpeg.h")
+    add_headerfiles(
+        "$(buildir)/config/jconfig.h",
+        "jerror.h",
+        "jmorecfg.h",
+        "jpegint.h",
+        "jpeglib.h"
+    )
     add_deps("turbojpeg12", "turbojpeg16")
     if SIMD_DIR then
         add_includedirs(SIMD_DIR)

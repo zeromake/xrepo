@@ -2,7 +2,8 @@ local options = {
     "avif",
     "jpeg",
     "png",
-    "webp"
+    "webp",
+    "turbojpeg",
 }
 
 package("sdl2_image")

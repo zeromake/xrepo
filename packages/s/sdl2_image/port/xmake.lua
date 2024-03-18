@@ -15,7 +15,8 @@ local options = {
     "avif",
     "jpeg",
     "png",
-    "webp"
+    "webp",
+    "turbojpeg",
 }
 
 for _, op in ipairs(options) do
@@ -77,7 +78,7 @@ target("sdl2_image")
     if has_config("png") then
         add_defines("LOAD_PNG=1")
     end
-    if has_config("jpeg") then
+    if has_config("jpeg") or has_config("turbojpeg") then
         add_defines("LOAD_JPG=1")
     end
     local backend = get_config("backend")
