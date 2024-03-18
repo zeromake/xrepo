@@ -46,9 +46,13 @@ target("opus")
         "HAVE_LRINTF",
         "OPUS_BUILD",
         "OPUS_HAVE_RTCD",
-        "VAR_ARRAYS",
         "_FORTIFY_SOURCE=2"
     )
+    if is_plat("windows", "mingw") then
+        add_defines("USE_ALLOCA")
+    else
+        add_defines("VAR_ARRAYS")
+    end
     add_vectorexts("all")
     if is_plat("windows", "mingw") and is_kind("shared") then
         add_defines("DLL_EXPORT")
