@@ -235,12 +235,14 @@ else
 end
 
 configvar_check_sizeof("SIZE_T", "size_t", {includes = {"stddef.h"}})
-    configvar_check_cincludes("HAVE_INTRIN_H", "intrin.h")
+configvar_check_cincludes("HAVE_INTRIN_H", "intrin.h")
+if not is_plat("windows") then
     configvar_check_csnippets("HAVE_BUILTIN_CTZL", [[
 int main(int argc, char **argv) {
     unsigned long a = argc;
     return __builtin_ctzl(a);
 }]])
+end
 if is_arch("arm.*") then
     configvar_check_csnippets("RIGHT_SHIFT_IS_UNSIGNED", [[
 #include <stdio.h>
@@ -346,13 +348,23 @@ target("turbojpeg")
     if SIMD_DIR then
         add_includedirs(SIMD_DIR)
     end
-    if is_plat("macosx") then
-        add_defines("MACHO")
-    end
     if get_config("with_simd") then
         set_configvar("WITH_SIMD", 1)
+        if is_plat("macosx") then
+            add_defines("MACHO")
+        elseif is_arch("x86", "x64", "i386", "x86_64") and is_plat("windows", "mingw") then
+            if is_arch("x64", "x86_64") then
+                add_defines("WIN64")
+            else
+                add_defines("WIN32")
+            end
+        end
+        if not is_plat("windows", "mingw") and is_kind("shared") then
+            add_defines("PIC")
+        end
         if is_arch("x86", "x64", "i386", "x86_64") then
-            add_vectorexts("avx2", "avx", "sse", "sse3", "sse2")
+            add_vectorexts("avx", "avx2")
+            add_vectorexts("sse", "sse2")
             set_toolset("as", "nasm")
             add_includedirs("simd/nasm")
             add_defines("__x86_64__")
