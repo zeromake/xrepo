@@ -210,39 +210,38 @@ elseif is_arch("arm.*") then
     })
 end
 
-target("turbojpeg")
-    set_kind("$(kind)")
-    set_configvar("JPEG_LIB_VERSION", 80)
-    set_configvar("COPYRIGHT_YEAR", "1991-2024")
-    set_configvar("VERSION", 80)
-    set_configvar("LIBJPEG_TURBO_VERSION_NUMBER", 3002003)
-    set_configvar("C_ARITH_CODING_SUPPORTED", 1)
-    set_configvar("D_ARITH_CODING_SUPPORTED", 1)
-    -- set_configvar("RIGHT_SHIFT_IS_UNSIGNED", 0)
-    set_configvar("BUILD", os.date("%Y%m%d"))
-    set_configvar("PACKAGE_NAME", "jpegturbo")
-    set_configvar("CMAKE_PROJECT_NAME", "jpegturbo")
-    set_configvar("VERSION", "3.0.2")
-    set_configvar("WITH_SIMD", 1)
+-- check
+set_configvar("JPEG_LIB_VERSION", 80)
+set_configvar("COPYRIGHT_YEAR", "1991-2024")
+set_configvar("VERSION", 80)
+set_configvar("LIBJPEG_TURBO_VERSION_NUMBER", 3002003)
+set_configvar("C_ARITH_CODING_SUPPORTED", 1)
+set_configvar("D_ARITH_CODING_SUPPORTED", 1)
+-- set_configvar("RIGHT_SHIFT_IS_UNSIGNED", 0)
+set_configvar("BUILD", os.date("%Y%m%d"))
+set_configvar("PACKAGE_NAME", "jpegturbo")
+set_configvar("CMAKE_PROJECT_NAME", "jpegturbo")
+set_configvar("VERSION", "3.0.2")
 
-    if is_plat("windows", "mingw") then
-        set_configvar("HIDDEN", "")
-        set_configvar("INLINE", "__forceinline")
-        set_configvar("THREAD_LOCAL", "__declspec(thread)")
-    else
-        set_configvar("HIDDEN", "__attribute__((visibility(\"hidden\")))")
-        set_configvar("INLINE", "inline __attribute__((always_inline))")
-        set_configvar("THREAD_LOCAL", "__thread")
-        add_defines("PIC")
-    end
-    configvar_check_sizeof("SIZE_T", "size_t", {includes = {"stddef.h"}})
+if is_plat("windows", "mingw") then
+    set_configvar("HIDDEN", "")
+    set_configvar("INLINE", "__forceinline")
+    set_configvar("THREAD_LOCAL", "__declspec(thread)")
+else
+    set_configvar("HIDDEN", "__attribute__((visibility(\"hidden\")))")
+    set_configvar("INLINE", "inline __attribute__((always_inline))")
+    set_configvar("THREAD_LOCAL", "__thread")
+    add_defines("PIC")
+end
+
+configvar_check_sizeof("SIZE_T", "size_t", {includes = {"stddef.h"}})
     configvar_check_cincludes("HAVE_INTRIN_H", "intrin.h")
     configvar_check_csnippets("HAVE_BUILTIN_CTZL", [[
 int main(int argc, char **argv) {
     unsigned long a = argc;
     return __builtin_ctzl(a);
 }]])
-    if is_arch("arm.*") then
+if is_arch("arm.*") then
     configvar_check_csnippets("RIGHT_SHIFT_IS_UNSIGNED", [[
 #include <stdio.h>
 #include <stdlib.h>
@@ -310,24 +309,50 @@ int main(int argc, char **argv) {
     vst4q_u8(input, output);
     return (int)input[0];
 }]])
-    end
+end
 
-    set_configdir("$(buildir)/config")
-    add_includedirs("$(buildir)/config")
-    add_includedirs(".")
+if get_config("with_simd") then
+    set_configvar("WITH_SIMD", 1)
+end
+
+set_configdir("$(buildir)/config")
+add_includedirs("$(buildir)/config")
+add_includedirs(".")
+add_configfiles("build/jversion.h.in")
+add_configfiles("build/jconfig.h.in")
+add_configfiles("build/jconfigint.h.in")
+add_configfiles("build/neon-compat.h.in")
+
+
+target("turbojpeg12")
+    set_kind("object")
+    for _, f in ipairs(JPEG12_SOURCES) do
+        add_files(f)
+    end
+    add_defines("BITS_IN_JSAMPLE=12")
+
+target("turbojpeg16")
+    set_kind("object")
+    for _, f in ipairs(JPEG16_SOURCES) do
+        add_files(f)
+    end
+    add_defines("BITS_IN_JSAMPLE=16")
+
+target("turbojpeg")
+    set_kind("$(kind)")
+
+    add_headerfiles("turbojpeg.h")
+    add_deps("turbojpeg12", "turbojpeg16")
     if SIMD_DIR then
         add_includedirs(SIMD_DIR)
     end
-    add_configfiles("jversion.h.in")
-    add_configfiles("jconfig.h.in")
-    add_configfiles("jconfigint.h.in")
-    add_configfiles("simd/arm/neon-compat.h.in")
     if is_plat("macosx") then
         add_defines("MACHO")
     end
     if get_config("with_simd") then
+        set_configvar("WITH_SIMD", 1)
         if is_arch("x86", "x64", "i386", "x86_64") then
-            add_vectorexts("avx2")
+            add_vectorexts("avx2", "avx", "sse", "sse3", "sse2")
             set_toolset("as", "nasm")
             add_includedirs("simd/nasm")
             add_defines("__x86_64__")
@@ -337,10 +362,10 @@ int main(int argc, char **argv) {
         else
             add_vectorexts("all")
         end
+        for _, f in ipairs(SIMD_SOURCES) do
+            add_files(path.join("simd", f))
+        end
     end
     for _, f in ipairs(JPEG_SOURCES) do
         add_files(f)
-    end
-    for _, f in ipairs(SIMD_SOURCES) do
-        add_files(path.join("simd", f))
     end
