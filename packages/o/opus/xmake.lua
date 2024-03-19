@@ -6,6 +6,24 @@ package("opus")
 
     add_versions("1.4", "c9b32b4253be5ae63d1ff16eea06b94b5f0f2951b7a02aceef58e3a3ce49c51f")
     on_install(function (package)
+        local transforme_configfile = function (input, output)
+            local out = io.open(output, 'wb')
+            for line in io.lines(input) do
+                if line:startswith("#undef ") then
+                    local name = line:sub(8)
+                    if name ~= "restrict" or name ~= "inline" or name ~= "const" then
+                        line = "${define "..name.."}"
+                        if name:startswith("OPUS_X86_PRESUME") then
+                            line = "#ifdef OPUS_X86_MAY_HAVE_"..name:sub(17).."\n"..line.."\n#endif"
+                        end
+                    end
+                end
+                out:write(line)
+                out:write("\n")
+            end
+            out:close()
+        end
+        transforme_configfile("config.h.in", "build/config.h.in")
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
         import("package.tools.xmake").install(package, configs)
