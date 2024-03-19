@@ -6,7 +6,7 @@ end
 add_rules("mode.debug", "mode.release")
 
 if is_plat("windows") then
-    add_cxflags("/utf-8")
+    add_cxflags("/utf-8", "/EHsc")
 end
 
 add_requires(
@@ -35,8 +35,10 @@ target("jinja2cpp")
     add_files("src/binding/rapid_json_serializer.cpp")
     add_includedirs("include")
     add_headerfiles("include/jinja2cpp/*.h", {prefixdir = "jinja2cpp"})
+    add_headerfiles("include/jinja2cpp/utils/*.h", {prefixdir = "jinja2cpp/utils"})
+    add_headerfiles("include/jinja2cpp/binding/*.h", {prefixdir = "jinja2cpp/binding"})
     add_defines(
-        "JINJA2CPP_USE_REGEX_BOOST",
+        -- "JINJA2CPP_USE_REGEX_BOOST",
         "BOOST_SYSTEM_NO_DEPRECATED",
         "BOOST_ERROR_CODE_HEADER_ONLY"
     )
