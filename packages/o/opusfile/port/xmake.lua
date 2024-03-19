@@ -9,14 +9,16 @@ if is_plat("windows") then
     add_cxflags("/utf-8")
 end
 
-local sourceFiles = {}
+add_requires("ogg", "opus")
 
 target("opusfile")
     set_kind("$(kind)")
-
-    check_cincludes("HAVE_UNISTD_H", "unistd.h")
-
-    add_headerfiles("todo.h")
-    for _, f in ipairs(sourceFiles) do
-        add_files(f)
-    end
+    add_packages("ogg", "opus")
+    add_includedirs("include")
+    add_headerfiles("include/opusfile.h")
+    add_files(
+        "src/info.c",
+        "src/internal.c",
+        "src/opusfile.c",
+        "src/stream.c"
+    )

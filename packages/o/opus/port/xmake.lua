@@ -145,7 +145,13 @@ int main () {
     return a[0];
 }]])
 configvar_check_csnippets("USE_ALLOCA", [[
+#ifdef _WIN32
+#include <malloc.h>
+#define alloca _alloca
+#else
 #include <alloca.h>
+#endif
+
 int main () {
     int foo = 10;
     int *array = alloca(foo);
@@ -174,5 +180,5 @@ target("opus")
         add_files("celt/x86/*.c")
         add_files("silk/x86/*.c")
     end
-    add_headerfiles("include/*.h|opus_custom.h")
+    add_headerfiles("include/*.h|opus_custom.h", {prefixdir = "opus"})
     add_vectorexts("all")

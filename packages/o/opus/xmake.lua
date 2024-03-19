@@ -5,6 +5,9 @@ package("opus")
     set_urls("https://github.com/xiph/opus/releases/download/v$(version)/opus-$(version).tar.gz")
 
     add_versions("1.4", "c9b32b4253be5ae63d1ff16eea06b94b5f0f2951b7a02aceef58e3a3ce49c51f")
+    
+    -- add_includedirs("include")
+    -- add_includedirs("include/opus")
     on_install(function (package)
         local transforme_configfile = function (input, output)
             local out = io.open(output, 'wb')
@@ -30,5 +33,5 @@ package("opus")
     end)
 
     on_test(function (package)
-        assert(package:has_cfuncs("opus_decoder_create", {includes = {"opus.h"}}))
+        assert(package:has_cfuncs("opus_decoder_create", {includes = {"opus/opus.h"}}))
     end)
