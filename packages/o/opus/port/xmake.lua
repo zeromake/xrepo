@@ -174,5 +174,5 @@ target("opus")
         add_files("celt/x86/*.c")
         add_files("silk/x86/*.c")
     end
-    add_headerfiles("include/*.h")
+    add_headerfiles("include/*.h|opus_custom.h")
     add_vectorexts("all")
