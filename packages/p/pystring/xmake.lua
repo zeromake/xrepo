@@ -2,6 +2,7 @@ local function getVersion(version)
     local versions ={
         ["2020.02.04-alpha"] = "archive/281419de2f91f9e0f2df6acddfea3b06a43436be.tar.gz",
         ["2022.09.27-alpha"] = "archive/7d16bc814ccb4cad03c300dcb77440034caa84f7.tar.gz",
+        ["2023.07.23-alpha"] = "archive/76a2024e132bcc83bec1ecfebeacd5d20d490bfe.tar.gz",
     }
     return versions[tostring(version)]
 end

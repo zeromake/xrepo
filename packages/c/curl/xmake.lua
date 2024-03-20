@@ -13,6 +13,7 @@ package("curl")
 
     add_configs("winrt", {description = "Support winrt", default = false, type = "boolean"})
     add_configs("wolfssl", {description = "use wolfssl", default = false, type = "boolean"})
+    add_configs("libressl", {description = "use libressl", default = false, type = "boolean"})
 
     add_deps("zlib")
     add_includedirs("include")
@@ -29,7 +30,12 @@ package("curl")
             package:add("frameworks", "CoreFoundation", "Security")
         end
 
-        if package:config("wolfssl") then
+        if package:config("libressl") then
+            package:add("deps", "libressl")
+            if package:is_plat("windows", "mingw") then
+                package:add("syslinks", "crypt32")
+            end
+        elseif package:config("wolfssl") then
             package:add("deps", "wolfssl")
         elseif package:is_plat("windows", "mingw") then
             package:add("syslinks", "crypt32", "bcrypt", "advapi32")
@@ -352,6 +358,7 @@ ${define USE_WINDOWS_SSPI}
         local configs = {}
         configs["wolfssl"] = package:config("wolfssl") and "y" or "n"
         configs["winrt"] = package:config("winrt") and "y" or "n"
+        configs["libressl"] = package:config("libressl") and "y" or "n"
         import("package.tools.xmake").install(package, configs)
     end)
 
