@@ -5,6 +5,7 @@ package("nghttp2")
     set_urls("https://github.com/nghttp2/nghttp2/releases/download/v1.60.0/nghttp2-1.60.0.tar.gz")
 
     add_versions("1.60.0", "ca2333c13d1af451af68de3bd13462de7e9a0868f0273dea3da5bc53ad70b379")
+    add_defines("BUILDING_NGHTTP2", "NGHTTP2_STATICLIB")
     on_install(function (package)
         local transforme_configfile = function (input, output) 
             output = output or input
@@ -12,7 +13,11 @@ package("nghttp2")
             local out = io.open(output, 'wb')
             for _, line in ipairs(lines) do
                 if line:startswith("#cmakedefine") then
-                    line = "${define "..line:split("%s+")[2].."}"
+                    local name = line:split("%s+")[2]
+                    line = "${define "..name.."}"
+                    if name == 'ssize_t' then
+                        line = '${define HAVE_SSIZE_T}\n\n#ifndef HAVE_SSIZE_T\n${define ssize_t}\n#endif'
+                    end
                 end
                 out:write(line)
                 out:write("\n")

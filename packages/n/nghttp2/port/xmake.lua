@@ -49,7 +49,9 @@ configvar_check_cincludes("HAVE_SYS_TIME_H", "sys/time.h")
 configvar_check_cincludes("HAVE_SYSLOG_H", "syslog.h")
 configvar_check_cincludes("HAVE_UNISTD_H", "unistd.h")
 configvar_check_cincludes("HAVE_WINDOWS_H", "windows.h")
+configvar_check_ctypes("HAVE_SSIZE_T", "ssize_t", {includes = {"sys/types.h"}})
 set_configvar("ENABLE_HTTP3", 1)
+set_configvar("ssize_t", "int", {quote = false})
 
 -- TODO
 -- HAVE_JANSSON libjansson
@@ -69,7 +71,7 @@ target("nghttp2")
     set_kind("$(kind)")
     add_files("lib/*.c")
     add_includedirs("lib/includes", "$(buildir)")
-    add_defines("HAVE_CONFIG_H")
+    add_defines("HAVE_CONFIG_H", "NGHTTP2_STATICLIB", "BUILDING_NGHTTP2")
     add_configfiles("lib/includes/nghttp2/nghttp2ver.h.in", "config.h.in")
     add_headerfiles("$(buildir)/*.h", {prefixdir = "nghttp2"})
     add_headerfiles("lib/includes/nghttp2/*.h", {prefixdir = "nghttp2"})

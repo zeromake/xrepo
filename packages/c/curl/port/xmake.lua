@@ -28,6 +28,36 @@ option("libressl")
     set_showmenu(true)
 option_end()
 
+option("brotli")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
+option("zstd")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
+option("ssh2")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
+option("ngtcp2")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
+option("nghttp2")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
+option("nghttp3")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
 option("cli")
     set_default(false)
     set_showmenu(true)
@@ -43,16 +73,34 @@ if get_config("libressl") then
     add_requires("libressl")
 end
 
+if get_config("brotli") then
+    add_requires("brotli")
+end
+
+if get_config("zstd") then
+    add_requires("zstd")
+end
+
+if get_config("ssh2") then
+    add_requires("ssh2")
+end
+
+
+if get_config("ngtcp2") then
+    add_requires("ngtcp2")
+end
+
+if get_config("nghttp2") then
+    add_requires("nghttp2")
+end
+
+if get_config("nghttp3") then
+    add_requires("nghttp3")
+end
+
 if is_plat("windows") then
     add_cxflags("/utf-8")
 end
-
-local sourceFiles = {
-    "lib/*.c",
-    "lib/vtls/*.c",
-    "lib/vauth/*.c",
-    "lib/vquic/*.c"
-}
 
 function configvar_check_csymbol_exists(define_name, var_name, opt)
     configvar_check_csnippets(define_name, 'void* a =(void*)'..var_name..';', opt)
@@ -202,7 +250,6 @@ configvar_check_sizeof("SIZEOF_CURL_SOCKET_T", 'curl_socket_t', {
 set_configvar("STDC_HEADERS", 1)
 
 if is_plat("windows", "mingw") then
-    set_configvar("USE_WIN32_LARGE_FILES", 1)
     set_configvar("USE_WINDOWS_SSPI", 1)
     set_configvar("USE_THREADS_WIN32", 1)
     if get_config("winrt") then
@@ -225,9 +272,13 @@ else
     configvar_check_cfuncs("HAVE_SEND", "send", {includes={"sys/socket.h"}})
 end
 
-set_configvar("CURL_WITH_MULTI_SSL", 1)
+if not get_config("nghttp3") then
+    set_configvar("CURL_WITH_MULTI_SSL", 1)
+end
+
 
 set_configvar("HAVE_ATOMIC", 1)
+set_configvar("USE_WEBSOCKETS", 1)
 
 configvar_check_csnippets("ENABLE_IPV6", [[
 #include <sys/types.h>
@@ -280,43 +331,75 @@ target("curl")
     add_defines("HAVE_CONFIG_H=1")
     add_defines("BUILDING_LIBCURL=1")
 
-    add_defines("HAVE_ZLIB_H=1")
-    add_defines("HAVE_LIBZ=1")
+    set_configvar("HAVE_ZLIB_H", 1)
+    set_configvar("HAVE_LIBZ", 1)
 
     if is_plat("windows", "mingw") then
-        add_defines("USE_SCHANNEL=1")
-        add_syslinks("crypt32", "bcrypt", "advapi32", "ws2_32")
+        set_configvar("USE_WIN32_IDN", 1)
+        set_configvar("USE_SCHANNEL", 1)
+        add_syslinks("crypt32", "bcrypt", "advapi32", "ws2_32", "normaliz")
     elseif is_plat("macosx") then
-        add_defines("USE_SECTRANSP=1")
+        set_configvar("USE_SECTRANSP", 1)
         add_frameworks("CoreFoundation", "SystemConfiguration", "Security")
     end
     add_packages("zlib")
     if get_config("libressl") then
         add_packages("libressl")
-        add_defines("USE_OPENSSL=1")
-        add_defines("OPENSSL_EXTRA=1")
-        -- set_configvar("HAVE_OPENSSL_SRP", 1)
-        -- set_configvar("USE_TLS_SRP", 1)
-        -- set_configvar("HAVE_SSL_SET0_WBIO", 1)
+        set_configvar("USE_OPENSSL", 1)
+        set_configvar("OPENSSL_EXTRA", 1)
+        add_defines("HAVE_LIBRESSL", 1)
     elseif get_config("wolfssl") then
         add_packages("wolfssl")
-        add_defines("USE_WOLFSSL=1")
-        add_defines("OPENSSL_EXTRA=1")
-        on_config(function (target) 
-            if target:has_cfuncs("SSL_CTX_set_srp_username", {includes = {"openssl/ssl.h"}}) then
-                target:add("defines", "HAVE_OPENSSL_SRP", "USE_TLS_SRP")
-            end
-        end)
-        -- set_configvar("HAVE_OPENSSL_SRP", 1)
-        -- set_configvar("USE_TLS_SRP", 1)
-        -- set_configvar("HAVE_SSL_SET0_WBIO", 1)
+        set_configvar("USE_OPENSSL", 1)
+        set_configvar("OPENSSL_EXTRA", 1)
     end
+    if get_config("brotli") then
+        add_packages("brotli")
+        set_configvar("HAVE_BROTLI_DECODE_H", 1)
+        set_configvar("HAVE_BROTLI", 1)
+    end
+    if get_config("zstd") then
+        add_packages("zstd")
+        set_configvar("HAVE_ZSTD_H", 1)
+        set_configvar("HAVE_ZSTD", 1)
+    end
+    if get_config("ssh2") then
+        add_packages("ssh2")
+        set_configvar("HAVE_LIBSSH2", 1)
+        set_configvar("USE_LIBSSH2", 1)
+    end
+    if get_config("ngtcp2") then
+        add_packages("ngtcp2", {public = true})
+        set_configvar("USE_NGTCP2", 1)
+    end
+    if get_config("nghttp2") then
+        add_packages("nghttp2", {public = true})
+        set_configvar("USE_NGHTTP2", 1)
+    end
+    if get_config("nghttp3") then
+        add_packages("nghttp3")
+        set_configvar("USE_NGHTTP3", 1)
+        if get_config("ngtcp2") then
+            set_configvar("USE_NGTCP2_H3", 1)
+        end
+        set_configvar("USE_OPENSSL_H3", 1)
+        set_configvar("USE_OPENSSL_QUIC", 1)
+    end
+    on_config(function (target)
+        if target:has_cfuncs("SSL_CTX_set_srp_username", {includes = {"openssl/ssl.h"}}) then
+            target:add("defines", "HAVE_OPENSSL_SRP", "USE_TLS_SRP")
+        end
+    end)
     if get_config("httponly") then
         add_defines("HTTP_ONLY=1")
     end
-    for _, f in ipairs(sourceFiles) do
-        add_files(f)
-    end
+    add_files(
+        "lib/*.c",
+        "lib/vtls/*.c",
+        "lib/vauth/*.c",
+        "lib/vquic/*.c",
+        "lib/vssh/*.c"
+    )
 
 target("curl_cli")
     set_default(get_config("cli") or false)

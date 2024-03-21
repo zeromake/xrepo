@@ -5,6 +5,10 @@ package("ssh2")
     set_urls("https://github.com/libssh2/libssh2/releases/download/libssh2-1.11.0/libssh2-1.11.0.tar.gz")
 
     add_versions("1.11.0", "3736161e41e2693324deb38c26cfdc3efe6209d634ba4258db1cecff6a5ad461")
+    if is_plat("windows", "mingw") then
+        add_syslinks("user32")
+    end
+
     on_install(function (package)
         local transforme_configfile = function (input, output) 
             output = output or input

@@ -60,3 +60,6 @@ target("ssh2")
     add_files("src/*.c")
     add_packages("libressl")
     add_defines("HAVE_CONFIG_H","LIBSSH2_OPENSSL")
+    if is_plat("windows", "mingw") then
+        add_syslinks("user32")
+    end

@@ -14,6 +14,12 @@ package("curl")
     add_configs("winrt", {description = "Support winrt", default = false, type = "boolean"})
     add_configs("wolfssl", {description = "use wolfssl", default = false, type = "boolean"})
     add_configs("libressl", {description = "use libressl", default = false, type = "boolean"})
+    add_configs("brotli", {description = "use brotli", default = false, type = "boolean"})
+    add_configs("zstd", {description = "use zstd", default = false, type = "boolean"})
+    add_configs("ssh2", {description = "use ssh2", default = false, type = "boolean"})
+    add_configs("ngtcp2", {description = "use ngtcp2", default = false, type = "boolean"})
+    add_configs("nghttp2", {description = "use nghttp2", default = false, type = "boolean"})
+    add_configs("nghttp3", {description = "use nghttp3", default = false, type = "boolean"})
     add_configs("cli", {description = "build cli", default = false, type = "boolean"})
 
     add_deps("zlib")
@@ -23,7 +29,7 @@ package("curl")
 
     on_load(function (package)
         if package:is_plat("windows", "mingw") then
-            package:add("syslinks", "ws2_32", "crypt32", "bcrypt", "advapi32")
+            package:add("syslinks", "ws2_32", "crypt32", "bcrypt", "advapi32", "normaliz")
             if not package:config("winrt") then
                 package:add("syslinks", "wldap32")
             end
@@ -32,11 +38,26 @@ package("curl")
         end
         if package:config("libressl") then
             package:add("deps", "libressl")
-            if package:is_plat("windows", "mingw") then
-                package:add("syslinks", "crypt32")
-            end
         elseif package:config("wolfssl") then
             package:add("deps", "wolfssl")
+        end
+        if package:config("brotli") then
+            package:add("deps", "brotli")
+        end
+        if package:config("zstd") then
+            package:add("deps", "zstd")
+        end
+        if package:config("ssh2") then
+            package:add("deps", "ssh2")
+        end
+        if package:config("ngtcp2") then
+            package:add("deps", "ngtcp2")
+        end
+        if package:config("nghttp2") then
+            package:add("deps", "nghttp2")
+        end
+        if package:config("nghttp3") then
+            package:add("deps", "nghttp3")
         end
         if package:config("shared") ~= true then
             package:add("defines", "CURL_STATICLIB")
@@ -128,7 +149,6 @@ ${define CURL_DISABLE_LDAP}
 ${define USE_WIN32_LDAP}
 ${define STDC_HEADERS}
 ${define CURL_WITH_MULTI_SSL}
-${define USE_WIN32_LARGE_FILES}
 ${define NTLM_WB_ENABLED}
 ${define NTLM_WB_FILE}
 ${define USE_THREADS_WIN32}
@@ -241,6 +261,10 @@ ${define SIZEOF_TIME_T}
 ${define HAVE_RECV}
 ${define HAVE_SEND}
 
+// openssl|libressl
+${define USE_OPENSSL}
+${define OPENSSL_EXTRA}
+
 // wolfssl
 ${define USE_WOLFSSL}
 ${define OPENSSL_EXTRA}
@@ -251,6 +275,7 @@ ${define USE_SECTRANSP}
 // windows
 ${define USE_SCHANNEL}
 ${define USE_WINDOWS_SSPI}
+${define USE_WIN32_IDN}
 
 ${define HAVE_OPENSSL_SRP}
 ${define HAVE_SSL_SET0_WBIO}
@@ -371,6 +396,22 @@ ${define HAVE_SOCKADDR_IN6_SIN6_ADDR}
 ${define HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID}
 ${define ENABLE_IPV6}
 
+${define HAVE_BROTLI_DECODE_H}
+${define HAVE_BROTLI}
+
+${define HAVE_ZSTD_H}
+${define HAVE_ZSTD}
+
+${define HAVE_LIBSSH2}
+${define USE_LIBSSH2}
+
+${define USE_WEBSOCKETS}
+${define USE_NGTCP2}
+${define USE_NGHTTP2}
+${define USE_NGHTTP3}
+${define USE_NGTCP2_H3}
+${define USE_OPENSSL_H3}
+${define USE_OPENSSL_QUIC}
 
 #if defined(BUILDING_CURL_CLI) && defined(BUILDING_LIBCURL)
 
@@ -399,8 +440,17 @@ ${define ENABLE_IPV6}
         configs["wolfssl"] = package:config("wolfssl") and "y" or "n"
         configs["winrt"] = package:config("winrt") and "y" or "n"
         configs["libressl"] = package:config("libressl") and "y" or "n"
+        configs["brotli"] = package:config("brotli") and "y" or "n"
+        configs["zstd"] = package:config("zstd") and "y" or "n"
+        configs["ssh2"] = package:config("ssh2") and "y" or "n"
+        configs["ngtcp2"] = package:config("ngtcp2") and "y" or "n"
+        configs["nghttp2"] = package:config("nghttp2") and "y" or "n"
+        configs["nghttp3"] = package:config("nghttp3") and "y" or "n"
         configs["cli"] = package:config("cli") and "y" or "n"
         import("package.tools.xmake").install(package, configs)
+        import("net.http")
+        print("https://curl.se/ca/cacert.pem -> bin/curl-ca-bundle.crt")
+        http.download("https://curl.se/ca/cacert.pem", path.join(package:installdir("bin"), "curl-ca-bundle.crt"))
     end)
 
     on_test(function (package)
