@@ -227,6 +227,8 @@ end
 
 set_configvar("CURL_WITH_MULTI_SSL", 1)
 
+set_configvar("HAVE_ATOMIC", 1)
+
 configvar_check_csnippets("ENABLE_IPV6", [[
 #include <sys/types.h>
 #ifdef _WIN32
@@ -293,10 +295,21 @@ target("curl")
         add_packages("libressl")
         add_defines("USE_OPENSSL=1")
         add_defines("OPENSSL_EXTRA=1")
+        -- set_configvar("HAVE_OPENSSL_SRP", 1)
+        -- set_configvar("USE_TLS_SRP", 1)
+        -- set_configvar("HAVE_SSL_SET0_WBIO", 1)
     elseif get_config("wolfssl") then
         add_packages("wolfssl")
         add_defines("USE_WOLFSSL=1")
         add_defines("OPENSSL_EXTRA=1")
+        on_config(function (target) 
+            if target:has_cfuncs("SSL_CTX_set_srp_username", {includes = {"openssl/ssl.h"}}) then
+                target:add("defines", "HAVE_OPENSSL_SRP", "USE_TLS_SRP")
+            end
+        end)
+        -- set_configvar("HAVE_OPENSSL_SRP", 1)
+        -- set_configvar("USE_TLS_SRP", 1)
+        -- set_configvar("HAVE_SSL_SET0_WBIO", 1)
     end
     if get_config("httponly") then
         add_defines("HTTP_ONLY=1")

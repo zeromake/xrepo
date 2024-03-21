@@ -57,6 +57,8 @@ ${define OS}
 #define USE_UNIX_SOCKETS
 
 #ifdef _WIN32
+#define UNICODE
+#define _UNICODE
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)
 #define _CRT_SECURE_NO_DEPRECATE 1
 #define _CRT_NONSTDC_NO_DEPRECATE 1
@@ -131,6 +133,7 @@ ${define NTLM_WB_ENABLED}
 ${define NTLM_WB_FILE}
 ${define USE_THREADS_WIN32}
 ${define USE_THREADS_POSIX}
+${define HAVE_ATOMIC}
 
 ${define HAVE_ARPA_INET_H}
 ${define HAVE_ARPA_TFTP_H}
@@ -248,6 +251,12 @@ ${define USE_SECTRANSP}
 // windows
 ${define USE_SCHANNEL}
 ${define USE_WINDOWS_SSPI}
+
+${define HAVE_OPENSSL_SRP}
+${define HAVE_SSL_SET0_WBIO}
+
+${define CURL_DISABLE_ALTSVC}
+${define USE_TLS_SRP}
 
 #ifndef _WIN32
 
