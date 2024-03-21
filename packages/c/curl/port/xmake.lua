@@ -28,6 +28,11 @@ option("libressl")
     set_showmenu(true)
 option_end()
 
+option("cli")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
 add_requires("zlib")
 
 if get_config("wolfssl") then
@@ -58,6 +63,14 @@ local configvar_check_sizeof = configvar_check_sizeof or function(define_name, t
     opt.output = true
     opt.number = true
     configvar_check_csnippets(define_name, 'printf("%d", sizeof('..type_name..')); return 0;', opt)
+end
+
+function configvar_check_has_member(define_name, type_name, member, opt)
+    configvar_check_csnippets(define_name, format([[
+void has_member() {
+    %s a;
+    a.%s;
+}]], type_name, member), opt)
 end
 
 set_configdir("$(buildir)/config")
@@ -178,6 +191,9 @@ configvar_check_sizeof("SIZEOF_CURL_OFF_T", 'curl_off_t', {
     includes={"include/curl/system.h"},
     cxflags=cxflags
 })
+configvar_check_sizeof("SIZEOF_OFF_T", 'off_t', {
+    includes={"sys/types.h"},
+})
 configvar_check_sizeof("SIZEOF_CURL_SOCKET_T", 'curl_socket_t', {
     includes={"include/curl/curl.h"},
     cxflags=cxflags
@@ -186,6 +202,8 @@ configvar_check_sizeof("SIZEOF_CURL_SOCKET_T", 'curl_socket_t', {
 set_configvar("STDC_HEADERS", 1)
 
 if is_plat("windows", "mingw") then
+    set_configvar("USE_WIN32_LARGE_FILES", 1)
+    set_configvar("USE_WINDOWS_SSPI", 1)
     if get_config("winrt") then
         set_configvar("CURL_DISABLE_LDAP", 1)
     else
@@ -205,6 +223,48 @@ else
     configvar_check_cfuncs("HAVE_SEND", "send", {includes={"sys/socket.h"}})
 end
 
+set_configvar("CURL_WITH_MULTI_SSL", 1)
+
+configvar_check_csnippets("ENABLE_IPV6", [[
+#include <sys/types.h>
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#else
+#include <sys/socket.h>
+#include <netinet/in.h>
+#if defined (__TANDEM)
+# include <netinet/in6.h>
+#endif
+#endif
+int main(void) {
+    struct sockaddr_in6 s;
+    (void)s;
+    return socket(AF_INET6, SOCK_STREAM, 0) < 0;
+}]])
+local sockaddr_in6_include = {}
+if is_plat("windows", "mingw") then
+    table.join2(sockaddr_in6_include, {
+        "winsock2.h",
+        "ws2tcpip.h",
+    })
+else
+    table.join2(sockaddr_in6_include, {
+        "sys/socket.h",
+        "netinet/in.h",
+    })
+end
+configvar_check_has_member("HAVE_SOCKADDR_IN6_SIN6_ADDR", "struct sockaddr_in6", "sin6_addr", {includes = sockaddr_in6_include})
+configvar_check_has_member("HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID", "struct sockaddr_in6", "sin6_scope_id", {includes = sockaddr_in6_include})
+
+-- TODO
+-- cares
+-- gss by https://github.com/heimdal/heimdal
+
+-- if os.exists("/usr/bin/ntlm_auth") then
+--     set_configvar("NTLM_WB_ENABLED", 1)
+--     set_configvar("NTLM_WB_FILE", "/usr/bin/ntlm_auth")
+-- end
 target("curl")
     set_kind("$(kind)")
     add_includedirs("lib", "include")
@@ -220,27 +280,21 @@ target("curl")
     add_defines("HAVE_LIBZ=1")
 
     if is_plat("windows", "mingw") then
-        add_syslinks("ws2_32")
+        add_defines("USE_SCHANNEL=1")
+        add_syslinks("crypt32", "bcrypt", "advapi32", "ws2_32")
+    elseif is_plat("macosx") then
+        add_defines("USE_SECTRANSP=1")
+        add_frameworks("CoreFoundation", "SystemConfiguration", "Security")
     end
     add_packages("zlib")
     if get_config("libressl") then
         add_packages("libressl")
         add_defines("USE_OPENSSL=1")
         add_defines("OPENSSL_EXTRA=1")
-        if is_plat("windows", "mingw") then
-            add_syslinks("crypt32")
-        end
     elseif get_config("wolfssl") then
         add_packages("wolfssl")
         add_defines("USE_WOLFSSL=1")
         add_defines("OPENSSL_EXTRA=1")
-    elseif is_plat("macosx", "iphoneos") then
-        add_defines("USE_SECTRANSP=1")
-        add_frameworks("CoreFoundation", "Security")
-    elseif is_plat("windows", "mingw") then
-        add_defines("USE_SCHANNEL=1")
-        add_defines("USE_WINDOWS_SSPI=1")
-        add_syslinks("crypt32", "bcrypt", "advapi32")
     end
     if get_config("httponly") then
         add_defines("HTTP_ONLY=1")
@@ -248,3 +302,15 @@ target("curl")
     for _, f in ipairs(sourceFiles) do
         add_files(f)
     end
+
+target("curl_cli")
+    set_default(get_config("cli") or false)
+    set_kind("binary")
+    add_defines(
+        "HAVE_CONFIG_H=1",
+        "BUILDING_LIBCURL",
+        "BUILDING_CURL_CLI"
+    )
+    add_deps("curl")
+    add_includedirs("lib", "include", "$(buildir)/config")
+    add_files("src/*.c")

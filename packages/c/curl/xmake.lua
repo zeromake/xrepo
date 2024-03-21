@@ -14,6 +14,7 @@ package("curl")
     add_configs("winrt", {description = "Support winrt", default = false, type = "boolean"})
     add_configs("wolfssl", {description = "use wolfssl", default = false, type = "boolean"})
     add_configs("libressl", {description = "use libressl", default = false, type = "boolean"})
+    add_configs("cli", {description = "build cli", default = false, type = "boolean"})
 
     add_deps("zlib")
     add_includedirs("include")
@@ -22,14 +23,13 @@ package("curl")
 
     on_load(function (package)
         if package:is_plat("windows", "mingw") then
-            package:add("syslinks", "ws2_32")
+            package:add("syslinks", "ws2_32", "crypt32", "bcrypt", "advapi32")
             if not package:config("winrt") then
                 package:add("syslinks", "wldap32")
             end
         elseif package:is_plat("macosx", "iphoneos") then
-            package:add("frameworks", "CoreFoundation", "Security")
+            package:add("frameworks", "CoreFoundation", "Security", "SystemConfiguration")
         end
-
         if package:config("libressl") then
             package:add("deps", "libressl")
             if package:is_plat("windows", "mingw") then
@@ -37,8 +37,6 @@ package("curl")
             end
         elseif package:config("wolfssl") then
             package:add("deps", "wolfssl")
-        elseif package:is_plat("windows", "mingw") then
-            package:add("syslinks", "crypt32", "bcrypt", "advapi32")
         end
         if package:config("shared") ~= true then
             package:add("defines", "CURL_STATICLIB")
@@ -127,6 +125,10 @@ ${define HAVE_GETADDRINFO}
 ${define CURL_DISABLE_LDAP}
 ${define USE_WIN32_LDAP}
 ${define STDC_HEADERS}
+${define CURL_WITH_MULTI_SSL}
+${define USE_WIN32_LARGE_FILES}
+${define NTLM_WB_ENABLED}
+${define NTLM_WB_FILE}
 
 ${define HAVE_ARPA_INET_H}
 ${define HAVE_ARPA_TFTP_H}
@@ -227,6 +229,7 @@ ${define HAVE_LONGLONG}
 ${define SIZEOF_INT}
 ${define SIZEOF_SIZE_T}
 ${define SIZEOF_CURL_OFF_T}
+${define SIZEOF_OFF_T}
 ${define SIZEOF_TIME_T}
 
 
@@ -353,12 +356,39 @@ ${define USE_WINDOWS_SSPI}
 
 #define PACKAGE "curl"
 
+${define HAVE_SOCKADDR_IN6_SIN6_ADDR}
+${define HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID}
+${define ENABLE_IPV6}
+
+
+#if defined(BUILDING_CURL_CLI) && defined(BUILDING_LIBCURL)
+
+#define curlx_dynbuf dynbuf
+#define curlx_dyn_init Curl_dyn_init
+#define curlx_dyn_add Curl_dyn_add
+#define curlx_dyn_addn Curl_dyn_addn
+#define curlx_dyn_addf Curl_dyn_addf
+#define curlx_dyn_vaddf Curl_dyn_vaddf
+#define curlx_dyn_free Curl_dyn_free
+#define curlx_dyn_ptr Curl_dyn_ptr
+#define curlx_dyn_uptr Curl_dyn_uptr
+#define curlx_dyn_len Curl_dyn_len
+#define curlx_dyn_reset Curl_dyn_reset
+#define curlx_dyn_tail Curl_dyn_tail
+#define curlx_dyn_setlen Curl_dyn_setlen
+#define curlx_base64_encode Curl_base64_encode
+#define curlx_base64url_encode Curl_base64url_encode
+#define curlx_base64_decode Curl_base64_decode
+
+#endif
+
 #endif /* HEADER_CURL_CONFIG_H */
 ]], {encoding = "binary"})
         local configs = {}
         configs["wolfssl"] = package:config("wolfssl") and "y" or "n"
         configs["winrt"] = package:config("winrt") and "y" or "n"
         configs["libressl"] = package:config("libressl") and "y" or "n"
+        configs["cli"] = package:config("cli") and "y" or "n"
         import("package.tools.xmake").install(package, configs)
     end)
 
