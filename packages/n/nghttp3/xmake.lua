@@ -6,6 +6,7 @@ package("nghttp3")
 
     add_versions("1.2.0", "0cc9b943f61a135e08b80bdcc4c1181f695df18fbb5fa93509a58d7d971dca75")
     add_deps("sfparse")
+    add_defines("NGHTTP3_STATICLIB")
     on_install(function (package)
         local transforme_configfile = function (input, output) 
             output = output or input

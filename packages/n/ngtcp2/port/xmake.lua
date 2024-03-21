@@ -23,11 +23,11 @@ target("ngtcp2")
     set_configvar("PACKAGE_VERSION_NUM", 0x010400)
     add_configfiles("lib/includes/ngtcp2/version.h.in")
     add_configfiles("config.h.in")
-    add_defines("HAVE_CONFIG_H", "BUILDING_NGTCP2")
+    add_defines("HAVE_CONFIG_H")
     if is_kind("shared") then
-        add_defines("NGTCP2_STATICLIB")
-    else
         add_defines("BUILDING_NGTCP2")
+    else
+        add_defines("NGTCP2_STATICLIB")
     end
     add_headerfiles("lib/includes/ngtcp2/*.h", {prefixdir = "ngtcp2"})
     add_headerfiles("$(buildir)/*.h", {prefixdir = "ngtcp2"})

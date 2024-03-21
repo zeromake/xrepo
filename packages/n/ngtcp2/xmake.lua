@@ -5,6 +5,7 @@ package("ngtcp2")
     set_urls("https://github.com/ngtcp2/ngtcp2/releases/download/v$(version)/ngtcp2-$(version).tar.gz")
 
     add_versions("1.4.0", "163e26e6e7531b8bbcd7ec53d2c6b4ff3cb7d3654fde37b091e3174d37a8acd7")
+    add_defines("NGTCP2_STATICLIB")
     on_install(function (package)
         local transforme_configfile = function (input, output) 
             output = output or input

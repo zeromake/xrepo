@@ -383,7 +383,6 @@ target("curl")
             set_configvar("USE_NGTCP2_H3", 1)
         end
         set_configvar("USE_OPENSSL_H3", 1)
-        set_configvar("USE_OPENSSL_QUIC", 1)
     end
     on_config(function (target)
         if target:has_cfuncs("SSL_CTX_set_srp_username", {includes = {"openssl/ssl.h"}}) then
