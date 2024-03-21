@@ -129,6 +129,8 @@ ${define CURL_WITH_MULTI_SSL}
 ${define USE_WIN32_LARGE_FILES}
 ${define NTLM_WB_ENABLED}
 ${define NTLM_WB_FILE}
+${define USE_THREADS_WIN32}
+${define USE_THREADS_POSIX}
 
 ${define HAVE_ARPA_INET_H}
 ${define HAVE_ARPA_TFTP_H}

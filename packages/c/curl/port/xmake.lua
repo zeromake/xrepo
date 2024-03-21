@@ -204,6 +204,7 @@ set_configvar("STDC_HEADERS", 1)
 if is_plat("windows", "mingw") then
     set_configvar("USE_WIN32_LARGE_FILES", 1)
     set_configvar("USE_WINDOWS_SSPI", 1)
+    set_configvar("USE_THREADS_WIN32", 1)
     if get_config("winrt") then
         set_configvar("CURL_DISABLE_LDAP", 1)
     else
@@ -217,6 +218,7 @@ if is_plat("windows", "mingw") then
     set_configvar("USE_WIN32_CRYPTO", 1)
 else
     set_configvar("CURL_DISABLE_LDAP", 1)
+    set_configvar("USE_THREADS_POSIX", 1)
     configvar_check_cfuncs("HAVE_SOCKET", "socket", {includes={"sys/socket.h"}})
     configvar_check_cfuncs("HAVE_SELECT", "select", {includes={"sys/select.h"}})
     configvar_check_cfuncs("HAVE_RECV", "recv", {includes={"sys/socket.h"}})
