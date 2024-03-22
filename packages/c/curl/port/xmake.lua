@@ -125,6 +125,13 @@ set_configdir("$(buildir)/config")
 add_includedirs("$(buildir)/config")
 add_configfiles("curl_config.h.in")
 
+local cxflags = {}
+if is_plat("windows") then
+    table.insert(cxflags, "/I "..path.absolute(os.scriptdir()))
+else
+    table.insert(cxflags, "-I "..path.absolute(os.scriptdir()))
+end
+
 configvar_check_cincludes("HAVE_ARPA_INET_H", "arpa/inet.h")
 configvar_check_cincludes("HAVE_ARPA_TFTP_H", "arpa/tftp.h")
 configvar_check_cincludes("HAVE_ASSERT_H", "assert.h")
@@ -150,6 +157,7 @@ configvar_check_cincludes("HAVE_NETINET_IN_H", "netinet/in.h")
 configvar_check_cincludes("HAVE_NETINET_TCP_H", "netinet/tcp.h")
 configvar_check_cincludes("HAVE_LINUX_TCP_H", "linux/tcp.h")
 configvar_check_cincludes("HAVE_NET_IF_H", "net/if.h")
+configvar_check_cincludes("HAVE_NETINET_UDP_H", "netinet/udp.h")
 configvar_check_cincludes("HAVE_POLL_H", "poll.h")
 configvar_check_cincludes("HAVE_PTHREAD_H", "pthread.h")
 configvar_check_cincludes("HAVE_PWD_H", "pwd.h")
@@ -164,6 +172,7 @@ configvar_check_cincludes("HAVE_STRINGS_H", "strings.h")
 configvar_check_cincludes("HAVE_STRING_H", "string.h")
 configvar_check_cincludes("HAVE_STROPTS_H", "stropts.h")
 configvar_check_cincludes("HAVE_SYS_FILIO_H", "sys/filio.h")
+configvar_check_cincludes("HAVE_SYS_WAIT_H", "sys/wait.h")
 configvar_check_cincludes("HAVE_SYS_IOCTL_H", "sys/ioctl.h")
 configvar_check_cincludes("HAVE_SYS_PARAM_H", "sys/param.h")
 configvar_check_cincludes("HAVE_SYS_POLL_H", "sys/poll.h")
@@ -182,31 +191,98 @@ configvar_check_cincludes("HAVE_TIME_H", "time.h")
 configvar_check_cincludes("HAVE_UNISTD_H", "unistd.h")
 configvar_check_cincludes("HAVE_UTIME_H", "utime.h")
 configvar_check_cincludes("HAVE_PROCESS_H", "process.h")
-configvar_check_cincludes("TIME_WITH_SYS_TIME", {"sys/time.h", "time.h"})
+-- configvar_check_cincludes("TIME_WITH_SYS_TIME", {"sys/time.h", "time.h"})
 
 configvar_check_cfuncs("HAVE_ALARM", "alarm", {includes={"unistd.h"}})
 configvar_check_cfuncs("HAVE_FTRUNCATE", "ftruncate", {includes={"unistd.h"}})
 configvar_check_cfuncs("HAVE_UTIME", "utime", {includes={"utime.h"}})
-configvar_check_cfuncs("HAVE_UTIMES", "utimes", {includes={"utime.h"}})
+configvar_check_cfuncs("HAVE_UTIMES", "utimes", {includes={"sys/time.h"}})
 configvar_check_cfuncs("HAVE_SIGACTION", "sigaction", {includes={"signal.h"}})
 configvar_check_cfuncs("HAVE_SIGACTION", "sigaction", {includes={"signal.h"}})
 configvar_check_cfuncs("HAVE_RAND_EGD", "RAND_egd", {includes={"openssl/rand.h"}})
 configvar_check_cfuncs("HAVE_SNPRINTF", "snprintf", {includes={"stdio.h"}})
 configvar_check_cfuncs("HAVE_SIGNAL", "signal", {includes={"signal.h"}})
+configvar_check_cfuncs("HAVE_SIGINTERRUPT", "siginterrupt", {includes={"signal.h"}})
 configvar_check_cfuncs("HAVE_STRTOLL", "strtoll", {includes={"stdlib.h"}})
 configvar_check_cfuncs("HAVE_STRICMP", "stricmp", {includes={"string.h"}})
 configvar_check_cfuncs("HAVE_STRDUP", "strdup", {includes={"string.h"}})
 configvar_check_cfuncs("HAVE_STRCASECMP", "strcasecmp", {includes={"strings.h"}})
-configvar_check_cfuncs("HAVE_SETMODE", "setmode", {includes={"io.h"}})
+configvar_check_cfuncs("HAVE_SETMODE", "setmode", {includes={"bsd/unistd.h"}})
 configvar_check_cfuncs("HAVE_SETLOCALE", "setlocale", {includes={"locale.h"}})
 configvar_check_cfuncs("HAVE_GETTIMEOFDAY", "gettimeofday", {includes={"sys/time.h"}})
 configvar_check_cfuncs("HAVE_FTRUNCATE", "ftruncate", {includes={"unistd.h"}})
+configvar_check_cfuncs("HAVE_ARC4RANDOM", "arc4random", {includes={"stdlib.h"}})
+configvar_check_cfuncs("HAVE_FNMATCH", "fnmatch", {includes={"fnmatch.h"}})
+configvar_check_cfuncs("HAVE_BASENAME", "basename", {includes={"string.h"}})
+configvar_check_cfuncs("HAVE_SCHED_YIELD", "sched_yield", {includes={"sched.h"}})
+configvar_check_cfuncs("HAVE_SOCKETPAIR", "socketpair", {includes={"sys/socket.h"}})
+configvar_check_cfuncs("HAVE_MEMRCHR", "memrchr", {includes={"string.h"}})
+configvar_check_cfuncs("HAVE_STRCMPI", "strcmpi", {includes={"string.h"}})
+configvar_check_cfuncs("HAVE_STRTOK_R", "strtok_r", {includes={"string.h"}})
+configvar_check_cfuncs("HAVE_STRERROR_R", "strerror_r", {includes={"string.h"}})
+configvar_check_cfuncs("HAVE_FCNTL", "fcntl", {includes={"fcntl.h"}})
+configvar_check_cfuncs("HAVE_GETPPID", "getppid", {includes={"unistd.h"}})
+configvar_check_cfuncs("HAVE_SIGSETJMP", "sigsetjmp", {includes={"setjmp.h"}})
+configvar_check_cfuncs("HAVE_SETRLIMIT", "setrlimit", {includes={"sys/time.h", "sys/resource.h"}})
+configvar_check_cfuncs("HAVE_MACH_ABSOLUTE_TIME", "mach_absolute_time", {includes={"mach/mach_time.h"}})
+configvar_check_cfuncs("HAVE_FSETXATTR", "fsetxattr", {includes={"sys/xattr.h"}})
+configvar_check_cfuncs("HAVE_PIPE", "pipe", {includes={"unistd.h"}})
+configvar_check_cfuncs("HAVE_BASENAME", "basename", {includes={"string.h"}})
+configvar_check_cfuncs("HAVE_BUILTIN_AVAILABLE", "__builtin_available", {includes={"stdlib.h"}})
+configvar_check_cfuncs("HAVE_FSEEKO", "fseeko", {includes={"stdio.h"}})
+configvar_check_cfuncs("HAVE__FSEEKI64", "_fseeki64", {includes={"stdio.h"}})
+configvar_check_csymbol_exists("HAVE_CLOCK_GETTIME_MONOTONIC", "CLOCK_MONOTONIC", {includes={"time.h"}})
+configvar_check_csymbol_exists("HAVE_CLOCK_GETTIME_MONOTONIC_RAW", "CLOCK_MONOTONIC_RAW", {includes={"time.h"}})
+
+configvar_check_csnippets("HAVE_FSETXATTR_6", [[
+#include <sys/types.h>
+#include <sys/xattr.h>
+
+int main(void) {
+    if(0 != fsetxattr(0, 0, 0, 0, 0, 0))
+    return 1;
+}]])
+
+configvar_check_csnippets("HAVE_FSETXATTR_5", [[
+#include <sys/types.h>
+#include <sys/xattr.h>
+
+int main(void) {
+    if(0 != fsetxattr(0, 0, 0, 0, 0))
+    return 1;
+}]])
+
+configvar_check_csnippets("HAVE_MSG_NOSIGNAL", [[
+#ifdef _WIN32
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <winsock2.h>
+#else
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+#endif
+
+int main(void) {
+    int flag=MSG_NOSIGNAL;
+    return 0;
+}]])
+
+if os.exists("/dev/urandom") then
+    set_configvar("RANDOM_FILE", "/dev/urandom")
+end
+
 configvar_check_csymbol_exists("HAVE_FCNTL_O_NONBLOCK", "O_NONBLOCK", {includes={"fcntl.h"}})
 if is_plat("windows", "mingw") then
     configvar_check_cincludes("HAVE_WINDOWS_H", "windows.h")
     configvar_check_cincludes("HAVE_WINLDAP_H", {"windows.h", "winldap.h"})
     configvar_check_cincludes("HAVE_WINSOCK2_H", "winsock2.h")
     configvar_check_cincludes("HAVE_WS2TCPIP_H", "ws2tcpip.h")
+    configvar_check_csymbol_exists("HAVE_SETSOCKOPT_SO_NONBLOCK", "SO_NONBLOCK", {includes={"winsock2.h"}})
     configvar_check_cfuncs("HAVE_IOCTLSOCKET", "ioctlsocket", {includes={"winsock2.h", "ws2tcpip.h"}})
     configvar_check_cfuncs("HAVE_FREEADDRINFO", "freeaddrinfo", {includes={"winsock2.h", "ws2tcpip.h"}})
     configvar_check_cfuncs("HAVE_GETADDRINFO", "getaddrinfo", {includes={"winsock2.h", "ws2tcpip.h"}})
@@ -215,26 +291,36 @@ if is_plat("windows", "mingw") then
     configvar_check_cfuncs("HAVE_GETHOSTNAME", "gethostname", {includes={"winsock2.h", "ws2tcpip.h"}})
     configvar_check_cfuncs("HAVE_CLOSESOCKET", "closesocket", {includes={"winsock2.h", "ws2tcpip.h"}})
     configvar_check_csymbol_exists("HAVE_IOCTLSOCKET_FIONBIO", "FIONBIO", {includes={"winsock2.h", "ws2tcpip.h"}})
+    configvar_check_csymbol_exists("HAVE_IOCTL_FIONBIO", "FIONBIO", {includes={"winsock2.h", "ws2tcpip.h"}})
+    configvar_check_csymbol_exists("HAVE_IOCTL_SIOCGIFADDR", "SIOCGIFADDR", {includes={"winsock2.h", "ws2tcpip.h"}})
     configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes={"windows.h"}})
+    configvar_check_cfuncs("HAVE_FREEADDRINFO", "freeaddrinfo", {includes={"ws2tcpip.h"}})
 else
     configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes={"time.h"}})
+    configvar_check_csymbol_exists("HAVE_SETSOCKOPT_SO_NONBLOCK", "SO_NONBLOCK", {includes={"sys/socket.h"}})
+    configvar_check_csymbol_exists("HAVE_IOCTL_FIONBIO", "FIONBIO", {includes={"sys/ioctl.h"}})
+    configvar_check_csymbol_exists("HAVE_IOCTL_SIOCGIFADDR", "SIOCGIFADDR", {includes={"sys/ioctl.h"}})
+    configvar_check_cfuncs("HAVE_GETSOCKNAME", "getsockname", {includes={"sys/socket.h"}})
+    configvar_check_cfuncs("HAVE_GETPEERNAME", "getpeername", {includes={"sys/socket.h"}})
+    configvar_check_cfuncs("HAVE_GETHOSTNAME", "gethostname", {includes={"sys/socket.h"}})
+    configvar_check_cfuncs("HAVE_FREEADDRINFO", "freeaddrinfo", {includes={"sys/socket.h"}})
+    set_configvar("CURL_EXTERN_SYMBOL", "__attribute__ ((__visibility__ (\"default\")))", {quote = false})
+    set_configvar("CURL_CA_BUNDLE", "/etc/ssl/cert.pem")
+    set_configvar("CURL_CA_PATH", "/etc/ssl/certs")
+
 end
+configvar_check_cfuncs("HAVE_SENDMSG", "sendmsg", {includes={"sys/socket.h"}})
 configvar_check_ctypes("HAVE_LONGLONG", "long long")
 configvar_check_ctypes("HAVE_BOOL_T", "bool")
 configvar_check_ctypes("HAVE_BOOL_T", "bool", {includes={"stdbool.h"}})
+configvar_check_ctypes("HAVE_STRUCT_SOCKADDR_STORAGE", "struct sockaddr_storage", {includes={"sys/socket.h"}})
+configvar_check_ctypes("HAVE_SA_FAMILY_T", "sa_family_t", {includes={"sys/socket.h"}})
 
 configvar_check_sizeof("SIZEOF_INT", "int")
 configvar_check_sizeof("SIZEOF_LONG", "long")
 configvar_check_sizeof("SIZEOF_LONG_LONG", "long long")
-configvar_check_sizeof("SIZEOF_SIZE_T", "size_t")
+configvar_check_sizeof("SIZEOF_SIZE_T", "size_t", {includes={"stddef.h"}})
 configvar_check_sizeof("SIZEOF_TIME_T", "time_t", {includes={"time.h"}})
-
-local cxflags = {}
-if is_plat("windows") then
-    table.insert(cxflags, "/I "..path.absolute(os.scriptdir()))
-else
-    table.insert(cxflags, "-I "..path.absolute(os.scriptdir()))
-end
 configvar_check_sizeof("SIZEOF_CURL_OFF_T", 'curl_off_t', {
     includes={"include/curl/system.h"},
     cxflags=cxflags
@@ -248,6 +334,10 @@ configvar_check_sizeof("SIZEOF_CURL_SOCKET_T", 'curl_socket_t', {
 })
 
 set_configvar("STDC_HEADERS", 1)
+set_configvar("HAVE_SUSECONDS_T", 1)
+set_configvar("HAVE_INET_NTOP", 1)
+set_configvar("HAVE_INET_PTON", 1)
+set_configvar("_FILE_OFFSET_BITS", 64)
 
 if is_plat("windows", "mingw") then
     set_configvar("USE_WINDOWS_SSPI", 1)
@@ -266,19 +356,22 @@ if is_plat("windows", "mingw") then
 else
     set_configvar("CURL_DISABLE_LDAP", 1)
     set_configvar("USE_THREADS_POSIX", 1)
+    set_configvar("USE_UNIX_SOCKETS", 1)
     configvar_check_cfuncs("HAVE_SOCKET", "socket", {includes={"sys/socket.h"}})
     configvar_check_cfuncs("HAVE_SELECT", "select", {includes={"sys/select.h"}})
     configvar_check_cfuncs("HAVE_RECV", "recv", {includes={"sys/socket.h"}})
     configvar_check_cfuncs("HAVE_SEND", "send", {includes={"sys/socket.h"}})
+    set_configvar("HAVE_POSIX_STRERROR_R", 1)
 end
 
-if not get_config("nghttp3") then
+if not get_config("nghttp3") and not get_config("nghttp2") then
     set_configvar("CURL_WITH_MULTI_SSL", 1)
 end
 
 
 set_configvar("HAVE_ATOMIC", 1)
 set_configvar("USE_WEBSOCKETS", 1)
+set_configvar("HAVE_WRITABLE_ARGV", 1)
 
 configvar_check_csnippets("ENABLE_IPV6", [[
 #include <sys/types.h>
@@ -309,7 +402,7 @@ else
         "netinet/in.h",
     })
 end
-configvar_check_has_member("HAVE_SOCKADDR_IN6_SIN6_ADDR", "struct sockaddr_in6", "sin6_addr", {includes = sockaddr_in6_include})
+-- configvar_check_has_member("HAVE_SOCKADDR_IN6_SIN6_ADDR", "struct sockaddr_in6", "sin6_addr", {includes = sockaddr_in6_include})
 configvar_check_has_member("HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID", "struct sockaddr_in6", "sin6_scope_id", {includes = sockaddr_in6_include})
 
 -- TODO
@@ -325,11 +418,12 @@ target("curl")
     add_includedirs("lib", "include")
     add_headerfiles("$(buildir)/config/curl_config.h", {prefixdir = "curl"})
     add_headerfiles("include/curl/*.h", {prefixdir = "curl"})
-    if not is_kind("shared") then
-        add_defines("CURL_STATICLIB")
+    if is_kind("shared") then
+        add_defines("BUILDING_LIBCURL")
+    else
+        add_defines("BUILDING_LIBCURL", "CURL_STATICLIB")
     end
     add_defines("HAVE_CONFIG_H=1")
-    add_defines("BUILDING_LIBCURL=1")
 
     set_configvar("HAVE_ZLIB_H", 1)
     set_configvar("HAVE_LIBZ", 1)
@@ -347,7 +441,7 @@ target("curl")
         add_packages("libressl")
         set_configvar("USE_OPENSSL", 1)
         set_configvar("OPENSSL_EXTRA", 1)
-        add_defines("HAVE_LIBRESSL", 1)
+        set_configvar("HAVE_LIBRESSL", 1)
     elseif get_config("wolfssl") then
         add_packages("wolfssl")
         set_configvar("USE_OPENSSL", 1)
@@ -384,11 +478,6 @@ target("curl")
         end
         set_configvar("USE_OPENSSL_H3", 1)
     end
-    on_config(function (target)
-        if target:has_cfuncs("SSL_CTX_set_srp_username", {includes = {"openssl/ssl.h"}}) then
-            target:add("defines", "HAVE_OPENSSL_SRP", "USE_TLS_SRP")
-        end
-    end)
     if get_config("httponly") then
         add_defines("HTTP_ONLY=1")
     end
@@ -405,6 +494,7 @@ target("curl_cli")
     set_kind("binary")
     add_defines(
         "HAVE_CONFIG_H=1",
+        "CURL_STATICLIB",
         "BUILDING_LIBCURL",
         "BUILDING_CURL_CLI"
     )

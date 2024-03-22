@@ -5,7 +5,13 @@ package("ngtcp2")
     set_urls("https://github.com/ngtcp2/ngtcp2/releases/download/v$(version)/ngtcp2-$(version).tar.gz")
 
     add_versions("1.4.0", "163e26e6e7531b8bbcd7ec53d2c6b4ff3cb7d3654fde37b091e3174d37a8acd7")
-    add_defines("NGTCP2_STATICLIB")
+    on_load(function (package)
+        if package:config("shared") ~= true then
+            package:add("defines", "NGTCP2_STATICLIB")
+        else
+            package:add("defines", "BUILDING_NGTCP2")
+        end
+    end)
     on_install(function (package)
         local transforme_configfile = function (input, output) 
             output = output or input
@@ -13,7 +19,11 @@ package("ngtcp2")
             local out = io.open(output, 'wb')
             for _, line in ipairs(lines) do
                 if line:startswith("#cmakedefine") then
-                    line = "${define "..line:split("%s+")[2].."}"
+                    local name = line:split("%s+")[2]
+                    line = "${define "..name.."}"
+                    if name == 'ssize_t' then
+                        line = '${define HAVE_SSIZE_T}\n\n#ifndef HAVE_SSIZE_T\n${define ssize_t}\n#endif'
+                    end
                 end
                 out:write(line)
                 out:write("\n")
