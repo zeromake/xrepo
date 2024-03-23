@@ -5,7 +5,13 @@ package("nghttp2")
     set_urls("https://github.com/nghttp2/nghttp2/releases/download/v1.60.0/nghttp2-1.60.0.tar.gz")
 
     add_versions("1.60.0", "ca2333c13d1af451af68de3bd13462de7e9a0868f0273dea3da5bc53ad70b379")
-    add_defines("BUILDING_NGHTTP2", "NGHTTP2_STATICLIB")
+    on_load(function (package)
+        if package:config("shared") ~= true then
+            package:add("defines", "NGHTTP2_STATICLIB")
+        else
+            package:add("defines", "BUILDING_NGHTTP2")
+        end
+    end)
     on_install(function (package)
         local transforme_configfile = function (input, output) 
             output = output or input

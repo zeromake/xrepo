@@ -50,16 +50,8 @@ configvar_check_cincludes("HAVE_SYSLOG_H", "syslog.h")
 configvar_check_cincludes("HAVE_UNISTD_H", "unistd.h")
 configvar_check_cincludes("HAVE_WINDOWS_H", "windows.h")
 configvar_check_ctypes("HAVE_SSIZE_T", "ssize_t", {includes = {"sys/types.h"}})
+set_configvar("ssize_t", "long long", {quote = false})
 set_configvar("ENABLE_HTTP3", 1)
-set_configvar("ssize_t", "int", {quote = false})
-
--- TODO
--- HAVE_JANSSON libjansson
--- HAVE_LIBXML2 libxml2
--- HAVE_MRUBY mruby
--- HAVE_NEVERBLEED neverbleed
--- HAVE_LIBEV libev
--- HAVE_LIBBROTLI brotli
 
 if not is_plat("windows", "mingw") then
     set_configvar("HINT_NORETURN", "__attribute__((noreturn))")
@@ -71,7 +63,12 @@ target("nghttp2")
     set_kind("$(kind)")
     add_files("lib/*.c")
     add_includedirs("lib/includes", "$(buildir)")
-    add_defines("HAVE_CONFIG_H", "NGHTTP2_STATICLIB", "BUILDING_NGHTTP2")
+    add_defines("HAVE_CONFIG_H")
+    if is_kind("shared") then
+        add_defines("BUILDING_NGHTTP2=1")
+    else
+        add_defines("NGHTTP2_STATICLIB=1")
+    end
     add_configfiles("lib/includes/nghttp2/nghttp2ver.h.in", "config.h.in")
     add_headerfiles("$(buildir)/*.h", {prefixdir = "nghttp2"})
     add_headerfiles("lib/includes/nghttp2/*.h", {prefixdir = "nghttp2"})
