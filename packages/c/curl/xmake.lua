@@ -90,6 +90,17 @@ package("curl")
         transforme_configfile("lib/curl_config.h.in", "curl_config.h.in", [[
 ${define HAVE_SA_FAMILY_T}
 
+${define HAVE_SSIZE_T}
+${define USE_WIN32_LARGE_FILES}
+
+#ifndef HAVE_SSIZE_T
+#ifdef HAVE_LONGLONG
+#define ssize_t long long
+#else
+#define ssize_t size_t
+#endif
+#endif
+
 #if defined(BUILDING_CURL_CLI) && defined(BUILDING_LIBCURL)
 #define curlx_dynbuf dynbuf
 #define curlx_dyn_init Curl_dyn_init

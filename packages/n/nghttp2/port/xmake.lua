@@ -50,7 +50,7 @@ configvar_check_cincludes("HAVE_SYSLOG_H", "syslog.h")
 configvar_check_cincludes("HAVE_UNISTD_H", "unistd.h")
 configvar_check_cincludes("HAVE_WINDOWS_H", "windows.h")
 configvar_check_ctypes("HAVE_SSIZE_T", "ssize_t", {includes = {"sys/types.h"}})
-set_configvar("ssize_t", "int", {quote = false})
+set_configvar("ssize_t", "long long", {quote = false})
 set_configvar("ENABLE_HTTP3", 1)
 
 -- TODO

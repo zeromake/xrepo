@@ -17,7 +17,7 @@ configvar_check_cincludes("HAVE_ENDIAN_H", "endian.h")
 configvar_check_cincludes("HAVE_BYTESWAP_H", "byteswap.h")
 configvar_check_cfuncs("HAVE_BE64TOH", "be64toh", {includes = {"byteswap.h"}})
 configvar_check_ctypes("HAVE_SSIZE_T", "ssize_t", {includes = {"sys/types.h"}})
-set_configvar("ssize_t", "int", {quote = false})
+set_configvar("ssize_t", "long long", {quote = false})
 set_configvar("PACKAGE_VERSION", "1.2.0")
 set_configvar("PACKAGE_VERSION_NUM", 0x010200)
 

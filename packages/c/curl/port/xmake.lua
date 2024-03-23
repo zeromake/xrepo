@@ -291,6 +291,8 @@ end
 
 configvar_check_csymbol_exists("HAVE_FCNTL_O_NONBLOCK", "O_NONBLOCK", {includes={"fcntl.h"}})
 if is_plat("windows", "mingw") then
+    set_configvar("USE_WIN32_LARGE_FILES", 1)
+    set_configvar("USE_UNIX_SOCKETS", 1)
     configvar_check_cincludes("HAVE_WINDOWS_H", "windows.h")
     configvar_check_cincludes("HAVE_WINLDAP_H", {"windows.h", "winldap.h"})
     configvar_check_cincludes("HAVE_WINSOCK2_H", "winsock2.h")
@@ -302,18 +304,50 @@ if is_plat("windows", "mingw") then
     configvar_check_cfuncs("HAVE_GETSOCKNAME", "getsockname", {includes={"winsock2.h", "ws2tcpip.h"}})
     configvar_check_cfuncs("HAVE_GETHOSTNAME", "gethostname", {includes={"winsock2.h", "ws2tcpip.h"}})
     configvar_check_cfuncs("HAVE_CLOSESOCKET", "closesocket", {includes={"winsock2.h", "ws2tcpip.h"}})
-    configvar_check_csymbol_exists("HAVE_IOCTLSOCKET_FIONBIO", "FIONBIO", {includes={"winsock2.h", "ws2tcpip.h"}})
-    configvar_check_csymbol_exists("HAVE_IOCTL_FIONBIO", "FIONBIO", {includes={"winsock2.h", "ws2tcpip.h"}})
-    configvar_check_csymbol_exists("HAVE_IOCTL_SIOCGIFADDR", "SIOCGIFADDR", {includes={"winsock2.h", "ws2tcpip.h"}})
+    configvar_check_csnippets("HAVE_IOCTLSOCKET_FIONBIO", [[
+#include <winsock2.h>
+#include <ws2tcpip.h>
+int main() {
+    ioctlsocket(0, FIONBIO, 0);
+    return 0;
+}]])
+--     configvar_check_csnippets("HAVE_IOCTL_FIONBIO", [[
+-- #include <winsock2.h>
+-- #include <ws2tcpip.h>
+-- int main() {
+--     ioctl(0, FIONBIO, 0);
+--     return 0;
+-- }]])
+--     configvar_check_csnippets("HAVE_IOCTL_SIOCGIFADDR", [[
+-- #include <winsock2.h>
+-- #include <ws2tcpip.h>
+-- int main() {
+--     ioctl(0, SIOCGIFADDR, 0);
+--     return 0;
+-- }]])
     configvar_check_csymbol_exists("HAVE_MSG_NOSIGNAL", "MSG_NOSIGNAL", {includes={"winsock2.h"}})
     configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes={"windows.h"}})
     configvar_check_cfuncs("HAVE_FREEADDRINFO", "freeaddrinfo", {includes={"ws2tcpip.h"}})
     configvar_check_cfuncs("HAVE_IF_NAMETOINDEX", "if_nametoindex", {includes = {"netioapi.h"}})
 else
     configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes={"time.h"}})
+    configvar_check_ctypes("USE_UNIX_SOCKETS", "struct sockaddr_un", {includes={"sys/un.h"}})
     configvar_check_csymbol_exists("HAVE_SETSOCKOPT_SO_NONBLOCK", "SO_NONBLOCK", {includes={"sys/socket.h"}})
-    configvar_check_csymbol_exists("HAVE_IOCTL_FIONBIO", "FIONBIO", {includes={"sys/ioctl.h"}})
-    configvar_check_csymbol_exists("HAVE_IOCTL_SIOCGIFADDR", "SIOCGIFADDR", {includes={"sys/ioctl.h", "net/if.h"}})
+    configvar_check_csnippets("HAVE_IOCTL_FIONBIO", [[
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+int main() {
+    ioctl(0, FIONBIO, 0);
+    return 0;
+}]])
+    configvar_check_csnippets("HAVE_IOCTL_SIOCGIFADDR", [[
+#include <sys/socket.h>
+#include <net/if.h>
+#include <sys/ioctl.h>
+int main() {
+    ioctl(0, SIOCGIFADDR, 0);
+    return 0;
+}]])
     configvar_check_csymbol_exists("HAVE_MSG_NOSIGNAL", "MSG_NOSIGNAL", {includes={"sys/socket.h"}})
     configvar_check_cfuncs("HAVE_GETSOCKNAME", "getsockname", {includes={"sys/socket.h"}})
     configvar_check_cfuncs("HAVE_GETPEERNAME", "getpeername", {includes={"sys/socket.h"}})
@@ -351,7 +385,7 @@ configvar_check_sizeof("SIZEOF_CURL_SOCKET_T", 'curl_socket_t', {
 })
 
 set_configvar("STDC_HEADERS", 1)
-set_configvar("HAVE_SUSECONDS_T", 1)
+configvar_check_ctypes("HAVE_SUSECONDS_T", "suseconds_t", {includes = {"sys/time.h"}})
 set_configvar("HAVE_INET_NTOP", 1)
 set_configvar("HAVE_INET_PTON", 1)
 set_configvar("_FILE_OFFSET_BITS", 64)
