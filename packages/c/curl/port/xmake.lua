@@ -422,7 +422,7 @@ end
 
 
 set_configvar("HAVE_ATOMIC", 1)
--- set_configvar("USE_WEBSOCKETS", 1)
+set_configvar("USE_WEBSOCKETS", 1)
 set_configvar("HAVE_WRITABLE_ARGV", 1)
 set_configvar("HAVE_DECL_FSEEKO", 1)
 
