@@ -237,6 +237,8 @@ configvar_check_cfuncs("HAVE_GETPWUID", "getpwuid", {includes={"pwd.h"}})
 configvar_check_cfuncs("HAVE_GETPWUID_R", "getpwuid_r", {includes={"pwd.h"}})
 configvar_check_cfuncs("HAVE_GETRLIMIT", "getrlimit", {includes={"sys/resource.h"}})
 configvar_check_cfuncs("HAVE_GMTIME_R", "gmtime_r", {includes={"time.h"}})
+configvar_check_cfuncs("HAVE_LDAP_URL_PARSE", "ldap_url_parse", {includes={"ldap.h"}})
+configvar_check_cfuncs("HAVE_LDAP_INIT_FD", "ldap_init_fd", {includes={"ldap.h"}})
 configvar_check_csymbol_exists("HAVE_CLOCK_GETTIME_MONOTONIC", "CLOCK_MONOTONIC", {includes={"time.h"}})
 configvar_check_csymbol_exists("HAVE_CLOCK_GETTIME_MONOTONIC_RAW", "CLOCK_MONOTONIC_RAW", {includes={"time.h"}})
 
@@ -361,8 +363,8 @@ int main() {
 
 end
 configvar_check_cfuncs("HAVE_SENDMSG", "sendmsg", {includes={"sys/socket.h"}})
+configvar_check_ctypes("HAVE_SSIZE_T", "ssize_t", {includes={"sys/types.h"}})
 configvar_check_ctypes("HAVE_LONGLONG", "long long")
-configvar_check_ctypes("HAVE_BOOL_T", "bool")
 configvar_check_ctypes("HAVE_BOOL_T", "bool", {includes={"stdbool.h"}})
 configvar_check_ctypes("HAVE_STRUCT_SOCKADDR_STORAGE", "struct sockaddr_storage", {includes={"sys/socket.h"}})
 configvar_check_ctypes("HAVE_SA_FAMILY_T", "sa_family_t", {includes={"sys/socket.h"}})
@@ -398,6 +400,7 @@ if is_plat("windows", "mingw") then
         set_configvar("CURL_DISABLE_LDAP", 1)
     else
         set_configvar("USE_WIN32_LDAP", 1)
+        set_configvar("HAVE_LDAP_SSL", 1)
         add_syslinks("wldap32")
     end
     configvar_check_cfuncs("HAVE_SOCKET", "socket", {includes={"winsock2.h"}})
@@ -406,7 +409,7 @@ if is_plat("windows", "mingw") then
     configvar_check_cfuncs("HAVE_SEND", "send", {includes={"winsock2.h"}})
     set_configvar("USE_WIN32_CRYPTO", 1)
 else
-    set_configvar("CURL_DISABLE_LDAP", 1)
+    set_configvar("HAVE_LDAP_SSL", 1)
     set_configvar("USE_THREADS_POSIX", 1)
     set_configvar("USE_UNIX_SOCKETS", 1)
     configvar_check_cfuncs("HAVE_SOCKET", "socket", {includes={"sys/socket.h"}})
@@ -491,6 +494,7 @@ target("curl")
             set_configvar("USE_SECTRANSP", 1)
         end
         add_frameworks("CoreFoundation", "SystemConfiguration", "Security")
+        add_syslinks("ldap")
     end
     add_packages("zlib")
     if get_config("libressl") then

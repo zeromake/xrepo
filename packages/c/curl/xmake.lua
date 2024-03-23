@@ -30,6 +30,7 @@ package("curl")
                 package:add("syslinks", "wldap32")
             end
         elseif package:is_plat("macosx", "iphoneos") then
+            package:add("syslinks", "ldap")
             package:add("frameworks", "CoreFoundation", "Security", "SystemConfiguration")
         end
         if package:config("libressl") then
