@@ -213,7 +213,7 @@ configvar_check_cfuncs("HAVE_GETTIMEOFDAY", "gettimeofday", {includes={"sys/time
 configvar_check_cfuncs("HAVE_FTRUNCATE", "ftruncate", {includes={"unistd.h"}})
 configvar_check_cfuncs("HAVE_ARC4RANDOM", "arc4random", {includes={"stdlib.h"}})
 configvar_check_cfuncs("HAVE_FNMATCH", "fnmatch", {includes={"fnmatch.h"}})
-configvar_check_cfuncs("HAVE_BASENAME", "basename", {includes={"string.h"}})
+configvar_check_cfuncs("HAVE_BASENAME", "basename", {includes={"libgen.h"}})
 configvar_check_cfuncs("HAVE_SCHED_YIELD", "sched_yield", {includes={"sched.h"}})
 configvar_check_cfuncs("HAVE_SOCKETPAIR", "socketpair", {includes={"sys/socket.h"}})
 configvar_check_cfuncs("HAVE_MEMRCHR", "memrchr", {includes={"string.h"}})
@@ -228,17 +228,26 @@ configvar_check_cfuncs("HAVE_MACH_ABSOLUTE_TIME", "mach_absolute_time", {include
 configvar_check_cfuncs("HAVE_FSETXATTR", "fsetxattr", {includes={"sys/xattr.h"}})
 configvar_check_cfuncs("HAVE_PIPE", "pipe", {includes={"unistd.h"}})
 configvar_check_cfuncs("HAVE_BASENAME", "basename", {includes={"string.h"}})
-configvar_check_cfuncs("HAVE_BUILTIN_AVAILABLE", "__builtin_available", {includes={"stdlib.h"}})
 configvar_check_cfuncs("HAVE_FSEEKO", "fseeko", {includes={"stdio.h"}})
 configvar_check_cfuncs("HAVE__FSEEKI64", "_fseeki64", {includes={"stdio.h"}})
+configvar_check_cfuncs("HAVE_GETEUID", "geteuid", {includes={"unistd.h"}})
+configvar_check_cfuncs("HAVE_GETPPID", "getppid", {includes={"unistd.h"}})
+configvar_check_cfuncs("HAVE_GETIFADDRS", "getifaddrs", {includes={"ifaddrs.h"}})
 configvar_check_csymbol_exists("HAVE_CLOCK_GETTIME_MONOTONIC", "CLOCK_MONOTONIC", {includes={"time.h"}})
 configvar_check_csymbol_exists("HAVE_CLOCK_GETTIME_MONOTONIC_RAW", "CLOCK_MONOTONIC_RAW", {includes={"time.h"}})
+
+configvar_check_csnippets("HAVE_BUILTIN_AVAILABLE", [[
+#include <stdlib.h>
+int main() {
+  if(__builtin_available(macOS 10.12, *)) {}
+  return 0;
+}]])
 
 configvar_check_csnippets("HAVE_FSETXATTR_6", [[
 #include <sys/types.h>
 #include <sys/xattr.h>
 
-int main(void) {
+int main() {
     if(0 != fsetxattr(0, 0, 0, 0, 0, 0))
     return 1;
 }]])
@@ -247,7 +256,7 @@ configvar_check_csnippets("HAVE_FSETXATTR_5", [[
 #include <sys/types.h>
 #include <sys/xattr.h>
 
-int main(void) {
+int main() {
     if(0 != fsetxattr(0, 0, 0, 0, 0))
     return 1;
 }]])
@@ -284,7 +293,6 @@ if is_plat("windows", "mingw") then
     configvar_check_cincludes("HAVE_WS2TCPIP_H", "ws2tcpip.h")
     configvar_check_csymbol_exists("HAVE_SETSOCKOPT_SO_NONBLOCK", "SO_NONBLOCK", {includes={"winsock2.h"}})
     configvar_check_cfuncs("HAVE_IOCTLSOCKET", "ioctlsocket", {includes={"winsock2.h", "ws2tcpip.h"}})
-    configvar_check_cfuncs("HAVE_FREEADDRINFO", "freeaddrinfo", {includes={"winsock2.h", "ws2tcpip.h"}})
     configvar_check_cfuncs("HAVE_GETADDRINFO", "getaddrinfo", {includes={"winsock2.h", "ws2tcpip.h"}})
     configvar_check_cfuncs("HAVE_GETPEERNAME", "getpeername", {includes={"winsock2.h", "ws2tcpip.h"}})
     configvar_check_cfuncs("HAVE_GETSOCKNAME", "getsockname", {includes={"winsock2.h", "ws2tcpip.h"}})
@@ -302,8 +310,9 @@ else
     configvar_check_csymbol_exists("HAVE_IOCTL_SIOCGIFADDR", "SIOCGIFADDR", {includes={"sys/ioctl.h"}})
     configvar_check_cfuncs("HAVE_GETSOCKNAME", "getsockname", {includes={"sys/socket.h"}})
     configvar_check_cfuncs("HAVE_GETPEERNAME", "getpeername", {includes={"sys/socket.h"}})
-    configvar_check_cfuncs("HAVE_GETHOSTNAME", "gethostname", {includes={"sys/socket.h"}})
-    configvar_check_cfuncs("HAVE_FREEADDRINFO", "freeaddrinfo", {includes={"sys/socket.h"}})
+    configvar_check_cfuncs("HAVE_GETHOSTNAME", "gethostname", {includes={"unistd.h"}})
+    configvar_check_cfuncs("HAVE_FREEADDRINFO", "freeaddrinfo", {includes={"netdb.h"}})
+    configvar_check_cfuncs("HAVE_GETADDRINFO", "getaddrinfo", {includes={"netdb.h"}})
     set_configvar("CURL_EXTERN_SYMBOL", "__attribute__ ((__visibility__ (\"default\")))", {quote = false})
     set_configvar("CURL_CA_BUNDLE", "/etc/ssl/cert.pem")
     set_configvar("CURL_CA_PATH", "/etc/ssl/certs")
@@ -338,6 +347,7 @@ set_configvar("HAVE_SUSECONDS_T", 1)
 set_configvar("HAVE_INET_NTOP", 1)
 set_configvar("HAVE_INET_PTON", 1)
 set_configvar("_FILE_OFFSET_BITS", 64)
+set_configvar("HAVE_GETADDRINFO_THREADSAFE", 1)
 
 if is_plat("windows", "mingw") then
     set_configvar("USE_WINDOWS_SSPI", 1)
