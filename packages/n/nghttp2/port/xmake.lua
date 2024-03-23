@@ -53,21 +53,11 @@ configvar_check_ctypes("HAVE_SSIZE_T", "ssize_t", {includes = {"sys/types.h"}})
 set_configvar("ssize_t", "long long", {quote = false})
 set_configvar("ENABLE_HTTP3", 1)
 
--- TODO
--- HAVE_JANSSON libjansson
--- HAVE_LIBXML2 libxml2
--- HAVE_MRUBY mruby
--- HAVE_NEVERBLEED neverbleed
-
 if not is_plat("windows", "mingw") then
     set_configvar("HINT_NORETURN", "__attribute__((noreturn))")
 else
     set_configvar("HINT_NORETURN", "")
 end
-
-add_requires("ev", "brotli")
-set_configvar("HAVE_LIBEV", 1)
-set_configvar("HAVE_LIBBROTLI", 1)
 
 target("nghttp2")
     set_kind("$(kind)")
