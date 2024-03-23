@@ -103,7 +103,7 @@ if is_plat("windows") then
 end
 
 function configvar_check_csymbol_exists(define_name, var_name, opt)
-    configvar_check_csnippets(define_name, 'void* a =(void*)'..var_name..';', opt)
+    configvar_check_csnippets(define_name, 'void* a =(void*)('..var_name..');', opt)
 end
 
 local configvar_check_sizeof = configvar_check_sizeof or function(define_name, type_name, opt)
@@ -207,7 +207,7 @@ configvar_check_cfuncs("HAVE_STRTOLL", "strtoll", {includes={"stdlib.h"}})
 configvar_check_cfuncs("HAVE_STRICMP", "stricmp", {includes={"string.h"}})
 configvar_check_cfuncs("HAVE_STRDUP", "strdup", {includes={"string.h"}})
 configvar_check_cfuncs("HAVE_STRCASECMP", "strcasecmp", {includes={"strings.h"}})
-configvar_check_cfuncs("HAVE_SETMODE", "setmode", {includes={"bsd/unistd.h"}})
+configvar_check_cfuncs("HAVE_SETMODE", "setmode", {includes={"unistd.h"}})
 configvar_check_cfuncs("HAVE_SETLOCALE", "setlocale", {includes={"locale.h"}})
 configvar_check_cfuncs("HAVE_GETTIMEOFDAY", "gettimeofday", {includes={"sys/time.h"}})
 configvar_check_cfuncs("HAVE_FTRUNCATE", "ftruncate", {includes={"unistd.h"}})
@@ -233,6 +233,10 @@ configvar_check_cfuncs("HAVE__FSEEKI64", "_fseeki64", {includes={"stdio.h"}})
 configvar_check_cfuncs("HAVE_GETEUID", "geteuid", {includes={"unistd.h"}})
 configvar_check_cfuncs("HAVE_GETPPID", "getppid", {includes={"unistd.h"}})
 configvar_check_cfuncs("HAVE_GETIFADDRS", "getifaddrs", {includes={"ifaddrs.h"}})
+configvar_check_cfuncs("HAVE_GETPWUID", "getpwuid", {includes={"pwd.h"}})
+configvar_check_cfuncs("HAVE_GETPWUID_R", "getpwuid_r", {includes={"pwd.h"}})
+configvar_check_cfuncs("HAVE_GETRLIMIT", "getrlimit", {includes={"sys/resource.h"}})
+configvar_check_cfuncs("HAVE_GMTIME_R", "gmtime_r", {includes={"time.h"}})
 configvar_check_csymbol_exists("HAVE_CLOCK_GETTIME_MONOTONIC", "CLOCK_MONOTONIC", {includes={"time.h"}})
 configvar_check_csymbol_exists("HAVE_CLOCK_GETTIME_MONOTONIC_RAW", "CLOCK_MONOTONIC_RAW", {includes={"time.h"}})
 
@@ -301,13 +305,16 @@ if is_plat("windows", "mingw") then
     configvar_check_csymbol_exists("HAVE_IOCTLSOCKET_FIONBIO", "FIONBIO", {includes={"winsock2.h", "ws2tcpip.h"}})
     configvar_check_csymbol_exists("HAVE_IOCTL_FIONBIO", "FIONBIO", {includes={"winsock2.h", "ws2tcpip.h"}})
     configvar_check_csymbol_exists("HAVE_IOCTL_SIOCGIFADDR", "SIOCGIFADDR", {includes={"winsock2.h", "ws2tcpip.h"}})
+    configvar_check_csymbol_exists("HAVE_MSG_NOSIGNAL", "MSG_NOSIGNAL", {includes={"winsock2.h"}})
     configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes={"windows.h"}})
     configvar_check_cfuncs("HAVE_FREEADDRINFO", "freeaddrinfo", {includes={"ws2tcpip.h"}})
+    configvar_check_cfuncs("HAVE_IF_NAMETOINDEX", "if_nametoindex", {includes = {"netioapi.h"}})
 else
     configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes={"time.h"}})
     configvar_check_csymbol_exists("HAVE_SETSOCKOPT_SO_NONBLOCK", "SO_NONBLOCK", {includes={"sys/socket.h"}})
     configvar_check_csymbol_exists("HAVE_IOCTL_FIONBIO", "FIONBIO", {includes={"sys/ioctl.h"}})
-    configvar_check_csymbol_exists("HAVE_IOCTL_SIOCGIFADDR", "SIOCGIFADDR", {includes={"sys/ioctl.h"}})
+    configvar_check_csymbol_exists("HAVE_IOCTL_SIOCGIFADDR", "SIOCGIFADDR", {includes={"sys/ioctl.h", "net/if.h"}})
+    configvar_check_csymbol_exists("HAVE_MSG_NOSIGNAL", "MSG_NOSIGNAL", {includes={"sys/socket.h"}})
     configvar_check_cfuncs("HAVE_GETSOCKNAME", "getsockname", {includes={"sys/socket.h"}})
     configvar_check_cfuncs("HAVE_GETPEERNAME", "getpeername", {includes={"sys/socket.h"}})
     configvar_check_cfuncs("HAVE_GETHOSTNAME", "gethostname", {includes={"unistd.h"}})
@@ -316,6 +323,7 @@ else
     set_configvar("CURL_EXTERN_SYMBOL", "__attribute__ ((__visibility__ (\"default\")))", {quote = false})
     set_configvar("CURL_CA_BUNDLE", "/etc/ssl/cert.pem")
     set_configvar("CURL_CA_PATH", "/etc/ssl/certs")
+    configvar_check_cfuncs("HAVE_IF_NAMETOINDEX", "if_nametoindex", {includes = {"net/if.h"}})
 
 end
 configvar_check_cfuncs("HAVE_SENDMSG", "sendmsg", {includes={"sys/socket.h"}})
@@ -380,8 +388,9 @@ end
 
 
 set_configvar("HAVE_ATOMIC", 1)
-set_configvar("USE_WEBSOCKETS", 1)
+-- set_configvar("USE_WEBSOCKETS", 1)
 set_configvar("HAVE_WRITABLE_ARGV", 1)
+set_configvar("HAVE_DECL_FSEEKO", 1)
 
 configvar_check_csnippets("ENABLE_IPV6", [[
 #include <sys/types.h>
@@ -443,7 +452,10 @@ target("curl")
         set_configvar("USE_SCHANNEL", 1)
         add_syslinks("crypt32", "bcrypt", "advapi32", "ws2_32", "normaliz")
     elseif is_plat("macosx") then
-        set_configvar("USE_SECTRANSP", 1)
+        -- http3 不支持多 tls 后端
+        if not get_config("nghttp3") then
+            set_configvar("USE_SECTRANSP", 1)
+        end
         add_frameworks("CoreFoundation", "SystemConfiguration", "Security")
     end
     add_packages("zlib")
