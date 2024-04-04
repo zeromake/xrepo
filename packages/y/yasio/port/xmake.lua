@@ -15,7 +15,8 @@ if is_plat("windows") then
     add_defines("_CRT_SECURE_NO_WARNINGS")
     add_defines("UNICODE")
     add_defines("_UNICODE")
-    add_cxflags("/utf-8")
+    add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
+    add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
 elseif is_plat("mingw") then
     add_defines("__STDC_FORMAT_MACROS")
 end

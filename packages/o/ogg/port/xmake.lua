@@ -6,7 +6,8 @@ end
 add_rules("mode.debug", "mode.release")
 
 if is_plat("windows") then
-    add_cxflags("/utf-8")
+    add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
+    add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
 end
 
 

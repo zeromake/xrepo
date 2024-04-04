@@ -32,7 +32,8 @@ option_end()
 set_installdir(get_config('installdir'))
 
 if is_plat("windows") then
-    add_cxflags("/utf-8")
+    add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
+    add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
     add_defines(
         "_CRT_SECURE_NO_WARNINGS",
         "_CRT_DEPRECATED_NO_WARNINGS",

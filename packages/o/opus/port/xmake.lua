@@ -6,7 +6,7 @@ end
 add_rules("mode.debug", "mode.release")
 
 if is_plat("windows") then
-    add_cxflags("/utf-8")
+    add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
 end
 if is_arch("x86", "i386", "x86_64", "x64") then
 configvar_check_csnippets("OPUS_X86_MAY_HAVE_AVX", [[

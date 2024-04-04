@@ -92,8 +92,10 @@ end
 ]])
     end
     out:writef([[
-if is_plat("windows") then
-    add_cxflags("/utf-8")
+if is_plat("windows", "mingw") then
+    add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
+    add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
+    add_defines("UNICODE", "_UNICODE")
 end
 
 local sourceFiles = {}
