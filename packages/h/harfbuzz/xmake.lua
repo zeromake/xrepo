@@ -5,6 +5,7 @@ package("harfbuzz")
     set_license("MIT")
     set_urls("https://github.com/harfbuzz/harfbuzz/releases/download/$(version)/harfbuzz-$(version).tar.xz")
 
+    add_versions("8.4.0", "af4ea73e25ab748c8c063b78c2f88e48833db9b2ac369e29bd115702e789755e")
     add_versions("8.3.0", "109501eaeb8bde3eadb25fab4164e993fbace29c3d775bcaa1c1e58e2f15f847")
     add_versions("8.1.1", "0305ad702e11906a5fc0c1ba11c270b7f64a8f5390d676aacfd71db129d6565f")
     add_versions("5.3.1", "4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d")

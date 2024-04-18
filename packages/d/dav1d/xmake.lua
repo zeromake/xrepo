@@ -3,6 +3,7 @@ local function getVersion(version)
     local versions = {
         ['2023.10.19-alpha'] = 'archive/fd4ecc2fd870fa267e1995600dddf212c6e49300.tar.gz',
         ["2024.02.29-alpha"] = "archive/85a10359cdfe904af58499716cfb5dbcbf5f14c7.tar.gz",
+        ["2024.04.15-alpha"] = "archive/37d52435d1e839546e725b7b4116334d3b3a5bac.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -15,6 +16,7 @@ package("dav1d")
     set_urls("https://github.com/videolan/dav1d/$(version)", {
         version = getVersion
     })
+    add_versions("2024.04.15-alpha", "a9a7df1ecc3f133ac48ce122e0da91c8cdc8007ad8a9aadc6bd3c38c9437fbf9")
     add_versions("2024.02.29-alpha", "ae3768efe4699423960f9d20c3efcd0cfd7f76e21fd0321d01b31f1645d0746d")
     add_versions("2023.10.19-alpha", "ca076dbca6683076011ebdd5d791342bb58575cc5a226caee05643096d4a7af9")
     on_install(function (package)

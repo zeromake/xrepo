@@ -6,7 +6,7 @@ local sourceFiles = {
 
 target("yoga")
     set_kind("$(kind)")
-    set_languages("c++17")
+    set_languages("c++20")
     add_includedirs(".")
     add_headerfiles("yoga/*.h", {prefixdir = "yoga"})
     add_headerfiles("yoga/event/*.h", {prefixdir = "yoga/event"})

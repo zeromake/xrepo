@@ -2,8 +2,9 @@ package("nghttp2")
     set_homepage("https://nghttp2.org")
     set_description("nghttp2 - HTTP/2 C Library and tools")
     set_license("MIT")
-    set_urls("https://github.com/nghttp2/nghttp2/releases/download/v1.60.0/nghttp2-1.60.0.tar.gz")
+    set_urls("https://github.com/nghttp2/nghttp2/releases/download/v$(version)/nghttp2-$(version).tar.gz")
 
+    add_versions("1.61.0", "aa7594c846e56a22fbf3d6e260e472268808d3b49d5e0ed339f589e9cc9d484c")
     add_versions("1.60.0", "ca2333c13d1af451af68de3bd13462de7e9a0868f0273dea3da5bc53ad70b379")
     on_load(function (package)
         if package:config("shared") ~= true then

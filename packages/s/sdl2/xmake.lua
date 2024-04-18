@@ -4,6 +4,7 @@ package("sdl2")
     set_license("zlib")
     set_urls("https://github.com/libsdl-org/SDL/releases/download/release-$(version)/SDL2-$(version).tar.gz")
 
+    add_versions("2.30.2", "891d66ac8cae51361d3229e3336ebec1c407a8a2a063b61df14f5fdf3ab5ac31")
     add_versions("2.30.0", "36e2e41557e0fa4a1519315c0f5958a87ccb27e25c51776beb6f1239526447b0")
     add_versions("2.28.4", "888b8c39f36ae2035d023d1b14ab0191eb1d26403c3cf4d4d5ede30e66a4942c")
     add_versions("2.28.1", "4977ceba5c0054dbe6c2f114641aced43ce3bf2b41ea64b6a372d6ba129cb15d")
@@ -106,6 +107,9 @@ package("sdl2")
             configs["winrt"] = package:config("winrt") and "y" or "n"
             configs["bmp_compat"] = package:config("bmp_compat") and "y" or "n"
             import("package.tools.xmake").install(package, configs)
+            if package:is_plat("android") then
+                os.cp("android-project/app/src/main/java/org/libsdl/app/*.java", package:installdir("lib/org.libsdl.app"))
+            end
         end
     end)
 

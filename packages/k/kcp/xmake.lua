@@ -2,6 +2,7 @@
 local function getVersion(version)
     local versions ={
         ["2023.05.07-alpha"] = "archive/f2aa30ea21a63c9ceeb6393e7d5d0c85a05a52a7.tar.gz",
+        ["2024.04.09-alpha"] = "archive/7a878bf3587bcdaa358c43e5bccb372006011d25.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -42,6 +43,7 @@ package("kcp")
         version = getVersion
     })
 
+    add_versions("2024.04.09-alpha", "6c17ca320d793a7f639cf8e95e4d41aadf2061958474cad73efc6e23ca9e658d")
     add_versions("2023.05.07-alpha", "5bfa9fb6de27f23e263be5398dddc443348008a94fd287ece80a5b98207b2e37")
     on_install(function (package)
         io.writefile(
