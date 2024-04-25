@@ -4,6 +4,9 @@ rule("shader")
         import("lib.detect.find_tool")
         local sokolshdc = find_tool("sokol-shdc", {check = "--help"})
         local targetfile = path.relative(sourcefile, "$(projectdir)")
+        if targetfile:startswith("..") then
+            targetfile = targetfile:sub(3)
+        end
         if targetfile:startswith("src") then
             targetfile = targetfile:sub(4)
         end
