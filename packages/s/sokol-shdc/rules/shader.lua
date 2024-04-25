@@ -3,7 +3,10 @@ rule("shader")
     on_buildcmd_file(function (target, batchcmds, sourcefile, opt)
         import("lib.detect.find_tool")
         local sokolshdc = find_tool("sokol-shdc", {check = "--help"})
-        local targetfile = path.relative(sourcefile, "src")
+        local targetfile = path.relative(sourcefile, "$(projectdir)")
+        if targetfile:startswith("src") then
+            targetfile = targetfile:sub(4)
+        end
         batchcmds:mkdir(path.join("$(buildir)/sokol_shader", path.directory(targetfile)))
         local targetfile = vformat(path.join("$(buildir)/sokol_shader", targetfile..".h"))
         batchcmds:vrunv(sokolshdc.program, {
