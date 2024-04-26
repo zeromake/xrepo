@@ -6,13 +6,15 @@ package("glad")
 
     add_urls("https://github.com/Dav1dde/glad/archive/v$(version).tar.gz")
     add_versions("2.0.5", "850351f1960f3fed775f0b696d7f17615f306beb56be38a20423284627626df1")
-    add_configs("api", {description = "gl:core", default = "gl:core", type = "string"})
+    add_versions("0.1.36", "8470ed1b0e9fbe88e10c34770505c8a1dc8ccb78cadcf673331aaf5224f963d2")
+    add_configs("api", {description = "gl:core", default = "", type = "string"})
 
     if is_plat("linux") then
         add_syslinks("dl")
     end
 
     on_install(function (package)
+        local is2version = package:version():ge("2.0.0")
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
 if is_plat("windows") then
@@ -31,12 +33,25 @@ target("glad")
         import("lib.detect.find_tool")
         local python = assert(find_tool("python3"), "python3 not found!")
         local api = package:config("api")
-        os.vrunv(python.program, {"-m", "glad", "--out-path=gen", "--api="..api, "--merge"})
+        if api == "" and is2version then
+            api = "gl:core"
+        end
+        if is2version then
+            os.vrunv(python.program, {"-m", "glad", "--out-path=gen", "--api="..api, "--merge"})
+        else
+            local args = {"-m", "glad", "--out-path=gen", "--generator=c"}
+            if api ~= "" then
+                table.insert(args, "--api="..api)
+            end
+            os.vrunv(python.program, args)
+        end
         local configs = {}
         import("package.tools.xmake").install(package, configs)
-        local old_dir = os.cd(package:installdir("include/glad"))
-        os.ln("gl.h", "glad.h")
-        os.cd(old_dir)
+        if os.exists(path.join(package:installdir("include/glad"), "gl.h")) then
+            local old_dir = os.cd(package:installdir("include/glad"))
+            os.ln("gl.h", "glad.h")
+            os.cd(old_dir)
+        end
     end)
 
     on_test(function (package)

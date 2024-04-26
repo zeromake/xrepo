@@ -28,6 +28,7 @@ option_end()
 if is_plat("windows") then
     set_languages("c++20")
     add_cxflags("/utf-8")
+    add_defines("NOMINMAX", "WIN32_LEAN_AND_MEAN")
     add_includedirs("library/include/compat")
     if is_mode("release") then
         set_optimize("faster")
@@ -53,7 +54,7 @@ add_defines(
 )
 
 if get_config("driver") == "opengl" then
-    add_requires("glad")
+    add_requires("glad =0.1.36")
 end
 
 if get_config("window") == "sdl" then

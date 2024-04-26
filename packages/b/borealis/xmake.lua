@@ -42,7 +42,7 @@ package("borealis")
             package:add("deps", "sdl2")
         end
         if driver == "opengl" then
-            package:add("deps", "glad")
+            package:add("deps", "glad =0.1.36")
         elseif driver == "d3d11" then
             package:add("syslinks", "d3d11")
         end
