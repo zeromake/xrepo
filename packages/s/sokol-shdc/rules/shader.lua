@@ -5,10 +5,10 @@ rule("shader")
         local sokolshdc = find_tool("sokol-shdc", {check = "--help"})
         local targetfile = path.relative(sourcefile, "$(projectdir)")
         if targetfile:startswith("..") then
-            targetfile = targetfile:sub(3)
+            targetfile = targetfile:sub(4)
         end
         if targetfile:startswith("src") then
-            targetfile = targetfile:sub(4)
+            targetfile = targetfile:sub(5)
         end
         batchcmds:mkdir(path.join("$(buildir)/sokol_shader", path.directory(targetfile)))
         local targetfile = vformat(path.join("$(buildir)/sokol_shader", targetfile..".h"))
