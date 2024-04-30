@@ -2,7 +2,6 @@ local function getVersion(version)
     return tostring(version):gsub('-release', '')
 end
 
-
 package("cppwinrt")
     set_homepage("https://github.com/microsoft/cppwinrt")
     set_description("C++/WinRT is an entirely standard C++ language projection for Windows Runtime (WinRT) APIs")
