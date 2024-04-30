@@ -3,6 +3,7 @@ local function getVersion(version)
 end
 
 package("cppwinrt")
+    set_kind("binary")
     set_homepage("https://github.com/microsoft/cppwinrt")
     set_description("C++/WinRT is an entirely standard C++ language projection for Windows Runtime (WinRT) APIs")
     set_license("MIT")
@@ -32,6 +33,7 @@ package("cppwinrt")
                 table.insert(winmds, winmd)
             end
         end
-        os.execv("bin/cppwinrt", {"-in", "local", "-out", package:installdir("include")})
-        os.execv("bin/cppwinrt", table.join(winmds, {"-out", package:installdir("include")}))
+        os.vexecv("bin/cppwinrt", {"-in", "local", "-out", package:installdir("include")})
+        os.vexecv("bin/cppwinrt", table.join(winmds, {"-out", package:installdir("include")}))
+        os.cp("bin/cppwinrt.exe", package:installdir("bin"))
     end)

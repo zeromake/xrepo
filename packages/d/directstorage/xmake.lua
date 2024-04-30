@@ -5,7 +5,7 @@ package("directstorage")
     set_urls("https://globalcdn.nuget.org/packages/microsoft.direct3d.directstorage.$(version).nupkg")
 
     add_versions("1.2.2", "25cab8bce31d6a044caaa255b416b22d91e47fe98916a631d9f7cb7017fc011d")
-    on_install(function (package)
+    on_install("windows", "mingw", function (package)
         import("lib.detect.find_tool")
         local p7z = find_tool("7z")
         os.execv(p7z.program, {"x", package:originfile()})
@@ -18,6 +18,8 @@ package("directstorage")
         os.cp("native/lib/"..p.."/*.lib", package:installdir("lib"))
         os.cp("native/bin/"..p.."/*.dll", package:installdir("bin"))
         os.cp("native/include/*.h", package:installdir("include"))
+        -- local cppwinrt = find_tool("cppwinrt", {check = "-help"})
+        -- os.vexecv(cppwinrt.program, {"-in", "./native/winmd/Microsoft.Direct3D.DirectStorage.winmd", "-out", package:installdir("include")})
         -- Todo cppwinrt generate 
     end)
 
