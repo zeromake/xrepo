@@ -1,0 +1,48 @@
+${define HAVE_STDINT_H}
+${define HAVE_INTTYPES_H}
+${define HAVE_SYS_TYPES_H}
+${define HAVE_SYS_STAT_H}
+${define HAVE_MEMORY_H}
+${define HAVE_FCNTL_H}
+${define HAVE_SYS_UTIME_H}
+${define HAVE_UNISTD_H}
+
+${define HAVE_OFF_T}
+
+${define SIZEOF_INT}
+${define SIZEOF_LONG}
+${define SIZEOF_LONG_LONG}
+${define SIZEOF___INT64}
+${define SIZEOF_OFF_T}
+${define SIZEOF_VOIDP}
+${define SIZEOF_FLOAT}
+${define SIZEOF_DOUBLE}
+${define SIZEOF_SIZE_T}
+
+${define HAVE_ALLOCA}
+
+#ifdef _WIN32
+#define uid_t int
+#define gid_t int
+#define GETGROUPS_T int
+#define SETPGRP_VOID 1
+#define inline __inline
+#define HAVE_DECL_SYS_NERR 1
+#define NEED_IO_SEEK_BETWEEN_RW 1
+#endif
+
+#define FILE_COUNT _cnt
+#define FILE_READPTR _ptr
+#define DEFAULT_KCODE KCODE_NONE
+#define DLEXT ".so"
+#define DLEXT2 ".dll"
+
+#define RSHIFT(x,y) ((x)>>(int)y)
+#define TOKEN_PASTE(x,y) x##y
+#ifndef NORETURN
+#if _MSC_VER > 1100
+#define NORETURN(x) __declspec(noreturn) x
+#else
+#define NORETURN(x) x
+#endif
+#endif

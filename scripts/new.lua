@@ -16,11 +16,19 @@ local options = {}
 ]])
     end
     out:writef([[
+local function getVersion(version)
+    local versions ={
+        ["2023.12.25-alpha"] = "archive/f45d73db67eaadc3df98971872add86f660a3ee5.tar.gz",
+    }
+    return versions[tostring(version)]
+end
 package("%s")
     set_homepage("Todo")
     set_description("Todo")
     set_license("MIT")
-    set_urls("Todo")
+    set_urls("https://github.com/zeromake/nanovg/$(version)", {
+        version = getVersion
+    })
 
     add_versions("0.0.0", "sha256")
 ]], opt.package)
@@ -68,11 +76,7 @@ end
 function package_target_script(opt)
     local out = io.open(opt.out, "wb")
     out:write([[
-if xmake.version():gt("2.8.3") then
-    includes("@builtin/check")
-else
-    includes("check_cincludes.lua")
-end
+includes("@builtin/check")
 add_rules("mode.debug", "mode.release")
 
 ]])
@@ -98,8 +102,6 @@ if is_plat("windows", "mingw") then
     add_defines("UNICODE", "_UNICODE")
 end
 
-local sourceFiles = {}
-
 target("%s")
     set_kind("$(kind)")
 
@@ -117,9 +119,7 @@ target("%s")
 ]])
     end
     out:write([[
-    for _, f in ipairs(sourceFiles) do
-        add_files(f)
-    end
+    add_files(f)
 ]])
 end
 -- the main entry
