@@ -332,14 +332,28 @@ target("turbojpeg12")
     for _, f in ipairs(JPEG12_SOURCES) do
         add_files(f)
     end
-    add_defines("BITS_IN_JSAMPLE=12")
+    add_files(
+       "rdppm.c",
+       "wrppm.c" 
+    )
+    add_defines(
+        "BITS_IN_JSAMPLE=12",
+        "PPM_SUPPORTED"
+    )
 
 target("turbojpeg16")
     set_kind("object")
     for _, f in ipairs(JPEG16_SOURCES) do
         add_files(f)
     end
-    add_defines("BITS_IN_JSAMPLE=16")
+    add_files(
+       "rdppm.c",
+       "wrppm.c" 
+    )
+    add_defines(
+        "BITS_IN_JSAMPLE=16",
+        "PPM_SUPPORTED"
+    )
 
 target("turbojpeg")
     set_kind("$(kind)")
@@ -391,3 +405,17 @@ target("turbojpeg")
     for _, f in ipairs(JPEG_SOURCES) do
         add_files(f)
     end
+    add_defines(
+        "BMP_SUPPORTED",
+        "PPM_SUPPORTED"
+    )
+    add_files(
+        "turbojpeg.c",
+        "transupp.c",
+        "jdatadst-tj.c",
+        "jdatasrc-tj.c",
+        "rdbmp.c",
+        "rdppm.c",
+        "wrbmp.c",
+        "wrppm.c"
+    )
