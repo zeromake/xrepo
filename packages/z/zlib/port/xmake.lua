@@ -28,7 +28,7 @@ target("zlib")
     }) do
         add_files(path.join(zlibPath, f))
     end
-    add_headerfiles("zlib.h", "zconf.h")
+    add_headerfiles("zlib.h", "zconf.h", {prefixdir = "zlib"})
     check_cincludes("Z_HAVE_UNISTD_H", "unistd.h")
     check_cincludes("HAVE_SYS_TYPES_H", "sys/types.h")
     check_cincludes("HAVE_STDINT_H", "stdint.h")

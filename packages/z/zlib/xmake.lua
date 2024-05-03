@@ -9,6 +9,7 @@ package("zlib")
     add_versions("1.2.13", "b3a24de97a8fdbc835b9833169501030b8977031bcb54b3b3ac13740f846ab30")
 
     add_includedirs("include")
+    add_includedirs("include/zlib")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
@@ -16,5 +17,5 @@ package("zlib")
     end)
 
     on_test(function (package)
-        assert(package:has_cfuncs("gzopen(NULL, NULL)", {includes = "zlib.h"}))
+        assert(package:has_cfuncs("gzopen(NULL, NULL)", {includes = "zlib/zlib.h"}))
     end)
