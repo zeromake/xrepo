@@ -12,7 +12,7 @@ target("faudio")
     add_headerfiles("include/*.h")
     add_files("src/*.c")
     add_includedirs("include", "src")
-    if is_plat("windows") then
+    if is_plat("windows", "mingw") then
         add_defines(
             "FAUDIO_WIN32_PLATFORM",
             "HAVE_WMADEC",
