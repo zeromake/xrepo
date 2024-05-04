@@ -8,6 +8,11 @@ add_rules("mode.debug", "mode.release")
 if is_plat("windows") then
     add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
 end
+local intrin_cflags = {'-march=native'}
+if is_plat('windows') then
+    intrin_cflags = {"-arch:SSE", "-arch:SSE2", "/d2archSSE42", "-arch:AVX", "-arch:AVX2", "-arch:AVX512"}
+end
+
 if is_arch("x86", "i386", "x86_64", "x64") then
 configvar_check_csnippets("OPUS_X86_MAY_HAVE_AVX", [[
 #include <immintrin.h>
@@ -18,7 +23,7 @@ int main () {
     mtest = _mm256_addsub_ps(mtest, mtest);
     return _mm_cvtss_si32(_mm256_extractf128_ps(mtest, 0));
     return 0;
-}]])
+}]], {cflags = intrin_cflags})
 configvar_check_csnippets("OPUS_X86_MAY_HAVE_SSE", [[
 #include <immintrin.h>
 #include <time.h>
@@ -27,7 +32,7 @@ int main () {
     mtest = _mm_set1_ps((float)time(NULL));
     mtest = _mm_mul_ps(mtest, mtest);
     return _mm_cvtss_si32(mtest);
-}]])
+}]], {cflags = intrin_cflags})
 configvar_check_csnippets("OPUS_X86_MAY_HAVE_SSE2", [[
 #include <immintrin.h>
 #include <time.h>
@@ -36,7 +41,7 @@ int main () {
     mtest = _mm_set1_epi32((int)time(NULL));
     mtest = _mm_mul_epu32(mtest, mtest);
     return _mm_cvtsi128_si32(mtest);
-}]])
+}]], {cflags = intrin_cflags})
 configvar_check_csnippets("OPUS_X86_MAY_HAVE_SSE4_1", [[
 #include <immintrin.h>
 #include <time.h>
@@ -45,7 +50,7 @@ int main () {
     mtest = _mm_set1_epi32((int)time(NULL));
     mtest = _mm_mul_epi32(mtest, mtest);
     return _mm_cvtsi128_si32(mtest);
-}]])
+}]], {cflags = intrin_cflags})
 end
 
 configvar_check_cincludes("HAVE_ALLOCA_H", "alloca.h")
