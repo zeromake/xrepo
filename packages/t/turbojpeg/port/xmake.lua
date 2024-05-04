@@ -224,7 +224,7 @@ set_configvar("PACKAGE_NAME", "jpegturbo")
 set_configvar("CMAKE_PROJECT_NAME", "jpegturbo")
 set_configvar("VERSION", "3.0.2")
 
-if is_plat("windows", "mingw") then
+if is_plat("windows") then
     set_configvar("HIDDEN", "")
     set_configvar("INLINE", "__forceinline")
     set_configvar("THREAD_LOCAL", "__declspec(thread)")
