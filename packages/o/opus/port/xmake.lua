@@ -182,8 +182,41 @@ target("opus")
         add_files("celt/arm/*.c|celt_fft_ne10.c")
         add_files("silk/arm/*.c|arm_silk_map.c")
     elseif is_arch("x86", "i386", "x86_64", "x64") then
-        add_files("celt/x86/*.c")
-        add_files("silk/x86/*.c")
+        add_files("celt/x86/*.c|pitch_sse.c|pitch_sse2.c|vq_sse2.c|celt_lpc_sse4_1.c|pitch_sse4_1.c")
+        add_files("silk/x86/*.c|NSQ_sse4_1.c|NSQ_del_dec_sse4_1.c|VAD_sse4_1.c|VQ_WMat_EC_sse4_1.c")
     end
     add_headerfiles("include/*.h|opus_custom.h", {prefixdir = "opus"})
     add_vectorexts("all")
+    on_config(function (target)
+        local configvar = target:get("configvar")
+        for i, opt in ipairs(target:orderopts()) do
+            for name, value in pairs(opt:get("configvar")) do
+                configvar[name] = value
+            end
+        end
+        -- 必须 check 通过才编译
+        if configvar['OPUS_X86_MAY_HAVE_SSE'] then
+            target:add(
+                "files",
+                "celt/x86/pitch_sse.c"
+            )
+        end
+        if configvar['OPUS_X86_MAY_HAVE_SSE2'] then
+            target:add(
+                "files",
+                "celt/x86/pitch_sse2.c",
+                "celt/x86/vq_sse2.c"
+            )
+        end
+        if configvar['OPUS_X86_MAY_HAVE_SSE4_1'] then
+            target:add(
+                "files",
+                "celt/x86/celt_lpc_sse4_1.c",
+                "celt/x86/pitch_sse4_1.c",
+                "silk/x86/NSQ_sse4_1.c",
+                "silk/x86/NSQ_del_dec_sse4_1.c",
+                "silk/x86/VAD_sse4_1.c",
+                "silk/x86/VQ_WMat_EC_sse4_1.c"
+            )
+        end
+    end)
