@@ -23,6 +23,8 @@ package("faudio")
                 "mfuuid",
                 "propsys"
             )
+        else
+            package:add("deps", "sdl2")
         end
     end)
     on_install(function (package)

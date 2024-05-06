@@ -5,6 +5,8 @@ if is_plat("windows", "mingw") then
     add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
     add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
     add_defines("UNICODE", "_UNICODE")
+else
+    add_requires("sdl2")
 end
 
 target("faudio")
@@ -27,4 +29,6 @@ target("faudio")
             "mfuuid",
             "propsys"
         )
+    else
+        add_packages("sdl2")
     end
