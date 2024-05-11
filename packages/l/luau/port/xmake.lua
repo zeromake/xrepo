@@ -1,6 +1,12 @@
 includes("@builtin/check")
 add_rules("mode.debug", "mode.release")
 
+option("cli")
+    set_default(false)
+    set_description("cli")
+    set_showmenu(true)
+option_end()
+
 option("extern_c")
     set_default(false)
     set_description("extern C functions")
@@ -65,6 +71,7 @@ target("luau")
         "VM/src/**.cpp"
     )
 
+if get_config("cli") then
 target("luau.cli")
     set_kind("object")
     add_files("CLI/FileUtils.cpp", "CLI/Flags.cpp")
@@ -97,3 +104,4 @@ target("luau.ast")
     add_files(
         "CLI/Ast.cpp"
     )
+end
