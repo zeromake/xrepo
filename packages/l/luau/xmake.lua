@@ -25,8 +25,8 @@ package("luau")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {
-            extern_c = (package:config("extern_c") and "y" or "n")
-            cli = (package:config("cli") and "y" or "n")
+            extern_c = package:config("extern_c") and "y" or "n",
+            cli = package:config("cli") and "y" or "n"
         }
         import("package.tools.xmake").install(package, configs)
     end)
