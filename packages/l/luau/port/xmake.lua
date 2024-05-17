@@ -12,20 +12,12 @@ option("extern_c")
     set_description("extern C functions")
     set_showmenu(true)
     add_defines("LUA_USE_LONGJMP=1")
-    if is_plat("windows", "mingw") then
-        if is_kind("shared") then
-            add_defines(
-                "LUA_API=extern \"C\" __declspec(dllexport)",
-                "LUACODE_API=extern \"C\" __declspec(dllexport)",
-                "LUACODEGEN_API=extern \"C\" __declspec(dllexport)"
-            )
-        else
-            add_defines(
-                "LUA_API=extern \"C\" __declspec(dllimport)",
-                "LUACODE_API=extern \"C\" __declspec(dllimport)",
-                "LUACODEGEN_API=extern \"C\" __declspec(dllimport)"
-            )
-        end
+    if is_kind("shared") and is_plat("windows", "mingw") then
+        add_defines(
+            "LUA_API=extern \"C\" __declspec(dllexport)",
+            "LUACODE_API=extern \"C\" __declspec(dllexport)",
+            "LUACODEGEN_API=extern \"C\" __declspec(dllexport)"
+        )
     else
         add_defines(
             "LUA_API=extern \"C\"",
@@ -58,9 +50,9 @@ target("luau")
     set_kind("$(kind)")
     add_options("extern_c")
     add_headerfiles(
-        "src/lua.h",
-        "src/lualib.h",
-        "src/luaconf.h"
+        "VM/include/lua.h",
+        "VM/include/lualib.h",
+        "VM/include/luaconf.h"
     )
     add_files(
         "Ast/src/**.cpp",
