@@ -9,6 +9,7 @@ package("faudio")
         end
     })
     add_versions("24.05.0", "9c5eb554a83325cb7b99bcffc02662c681b681679a11b78c66c21f1e1044beeb")
+    add_versions("24.04", "a132b6c6162a5e110210c678ac0524dc3f0b0da9e845e64e68edd1a9a5da88e3")
 
     on_load(function (package)
         if package:is_plat("windows", "mingw") then

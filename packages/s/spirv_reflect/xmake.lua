@@ -10,6 +10,7 @@ package("spirv_reflect")
         version = getVersion
     })
 
+    add_versions("1.3.283-release.0", "ae8cf36d155e5c62536ec6a2b215d479ef5677e447802ec69250efb4ee5ca447")
     add_versions("1.3.280-release.0", "23934b12e528096d678a318f6590a48f5e0e97d4a89d8146b4fddf48f4ff689a")
     add_versions("1.3.275-release.0", "0fe4430cd3a594772a88ba5ed96bb35992c0674cc2461a68d0d6e6586d9f10ba")
     add_versions("1.3.250-release.1", "aa0f202227d6e6f3f78c0e181ca57184c4491069588b284809c5ea99ef6f0440")

@@ -9,6 +9,12 @@ package("flecs")
     on_install(function (package)
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
+
+if is_plat("windows") then
+    add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
+    add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
+end
+
 target("flecs")
     set_kind("$(kind)")
     add_includedirs("include")

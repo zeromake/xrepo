@@ -32,6 +32,7 @@ package("archive")
     set_license("MIT")
     set_urls("https://github.com/libarchive/libarchive/releases/download/v$(version)/libarchive-$(version).tar.xz")
 
+    add_versions("3.7.4", "7875d49596286055b52439ed42f044bd8ad426aa4cc5aabd96bfe7abb971d5e8")
     add_versions("3.7.3", "baa99e2bf584e088429faae17f9472942dba9158bbda288790b549560f9935a2")
     add_versions("3.7.2", "04357661e6717b6941682cde02ad741ae4819c67a260593dfb2431861b251acb")
     add_versions("3.6.1", "5a411aceb978f43e626f0c2d1812ddd8807b645ed892453acabd532376c148e6")

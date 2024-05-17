@@ -4,6 +4,7 @@ import("core.base.bytes")
 local options = {
     {'d', "download",  "k",  nil, "是否写入"}
 ,   {'w', "write",  "k",  nil, "是否写入"}
+,   {'s', 'secret', "kv", nil, "github 认证"}
 ,   {nil, "packages", "vs", nil, "筛选包"}
 }
 
@@ -102,9 +103,11 @@ function string.split(input, delimiter)
     return arr
 end
 
-function get_release_latest(repo)
+function get_release_latest(repo, secret)
     local outdata, errdata = os.iorunv('curl', {
         '-i',
+        "-u",
+        "my_client_id:"..secret,
         'https://github.com/'..repo..'/releases/latest'
     })
     local _start = string.find(outdata, 'location:')
@@ -116,18 +119,26 @@ function get_release_latest(repo)
     else
         local outdata, errdata = os.iorunv('curl', {
             '-L',
+            "-u",
+            "my_client_id:"..secret,
             'https://github.com/'..repo..'/tags'
         })
         _start = string.find(outdata, '/releases/tag/')
+        if _start == nil then
+            return nil
+        end
         _start = _start + 14
         local _end = string.find(outdata, '"', _start)
         return outdata:sub(_start, _end-1)
     end
 end
 
-function get_alpha_latest(repo)
+function get_alpha_latest(repo, secret)
+    local url = 'https://api.github.com/repos/'..repo..'/commits?per_page=1'
     local outdata, errdata = os.iorunv('curl', {
-        'https://api.github.com/repos/'..repo..'/commits?per_page=1'
+        "-u",
+        "my_client_id:"..secret,
+        url
     })
     local _sha_start = string.find(outdata, '"sha":')
     local _sha_start = string.find(outdata, '"', _sha_start+6)
@@ -230,38 +241,40 @@ function main(...)
         -- print('check', repo, string.serialize(versions))
         if has_release then
             -- print("fetch "..repo.." latest version")
-            local latest_version = get_release_latest(repo)
-            local latest_tag = latest_version
-            if latest_version:startswith('v') then
-                latest_version = latest_version:sub(2)
-            end
-            if version_transform[packageName] then
-                latest_version = version_transform[packageName](latest_version)
-            end
-            if versions[latest_version] == nil then
-                local filename = latest_tag..'.tar.gz'
-                local option = {
-                    repo = repo,
-                    release = true,
-                    tag = latest_tag,
-                    version = latest_version,
-                    download = argv.download
-                }
-                if download_transform[packageName] ~= nil then
-                    option.url = download_transform[packageName](option)
+            local latest_version = get_release_latest(repo, argv.secret)
+            if latest_version ~= nil then
+                local latest_tag = latest_version
+                if latest_version:startswith('v') then
+                    latest_version = latest_version:sub(2)
                 end
-                local download_path = download_file(repo, option)
-                local download_sha256 = nil
-                if os.exists(download_path) then
-                    download_sha256 = hash.sha256('./'..download_path)
+                if version_transform[packageName] then
+                    latest_version = version_transform[packageName](latest_version)
                 end
-                print('\n', packageDir, '-------------release new-------------')
-                print('add_versions("'..latest_version..'", "'..(download_sha256 or 'nil')..'")')
+                if versions[latest_version] == nil then
+                    local filename = latest_tag..'.tar.gz'
+                    local option = {
+                        repo = repo,
+                        release = true,
+                        tag = latest_tag,
+                        version = latest_version,
+                        download = argv.download
+                    }
+                    if download_transform[packageName] ~= nil then
+                        option.url = download_transform[packageName](option)
+                    end
+                    local download_path = download_file(repo, option)
+                    local download_sha256 = nil
+                    if os.exists(download_path) then
+                        download_sha256 = hash.sha256('./'..download_path)
+                    end
+                    print('\n', packageDir, '-------------release new-------------')
+                    print('add_versions("'..latest_version..'", "'..(download_sha256 or 'nil')..'")')
+                end
             end
         end
         if has_alpha then
             -- print("fetch "..repo.." alpha version")
-            local alpha_sha, alpha_date = get_alpha_latest(repo)
+            local alpha_sha, alpha_date = get_alpha_latest(repo, argv.secret)
             local alpha_version = alpha_date.."-alpha"
             if versions[alpha_version] == nil then
                 local option = {

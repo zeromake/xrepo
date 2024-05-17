@@ -5,6 +5,7 @@ package("harfbuzz")
     set_license("MIT")
     set_urls("https://github.com/harfbuzz/harfbuzz/releases/download/$(version)/harfbuzz-$(version).tar.xz")
 
+    add_versions("8.5.0", "77e4f7f98f3d86bf8788b53e6832fb96279956e1c3961988ea3d4b7ca41ddc27")
     add_versions("8.4.0", "af4ea73e25ab748c8c063b78c2f88e48833db9b2ac369e29bd115702e789755e")
     add_versions("8.3.0", "109501eaeb8bde3eadb25fab4164e993fbace29c3d775bcaa1c1e58e2f15f847")
     add_versions("8.1.1", "0305ad702e11906a5fc0c1ba11c270b7f64a8f5390d676aacfd71db129d6565f")
@@ -22,6 +23,11 @@ package("harfbuzz")
     on_install(function (package)
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
+
+if is_plat("windows") then
+    add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
+    add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
+end
 
 set_languages("c++14")
 option("freetype")

@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2024.04.23-alpha"] = "archive/2c76f6bf1cd0b0d375d617de62ba9ada93e09457.tar.gz",
+        ["2024.05.09-alpha"] = "archive/1e96a73727a688e2d68c6a0dd9cd7b1fd3ac461c.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -13,6 +14,7 @@ package("borealis")
     set_urls("https://github.com/xfangfang/borealis/$(version)", {
         version = getVersion
     })
+    add_versions("2024.05.09-alpha", "b007734e31ecda924809081e92e77ee6d4155a1c2232ebb05e49d143557964fc")
     add_versions("2024.04.23-alpha", "e9a7b2e7b90871b76f5b2133f90052032bda4002eae424706d083c9d40a02772")
 
     add_configs("window", {description = "use window lib", default = "glfw", type = "string"})

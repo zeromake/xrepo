@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2024.04.03-alpha"] = "archive/2d08822f07847039b696ec4fb3d594e4c7b20847.tar.gz",
+        ["2024.05.03-alpha"] = "archive/becc5b3e93b6e5d3a6bbf3f6efe56ad828928d27.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -13,6 +14,7 @@ package("oniguruma")
         version = getVersion
     })
 
+    add_versions("2024.05.03-alpha", "1752624e4901fbed30b8b78c1dc6f568ce0a716ce00588115af1c30f003f61db")
     add_versions("2024.04.03-alpha", "608cfd73dc6c787d03a0394bc4dd7877b1e4be3dc3b5b3f857d09f32d89c2fe8")
     on_load(function (package) 
         if package:config("shared") ~= true then

@@ -4,6 +4,7 @@ package("mimalloc")
     set_license("MIT")
     set_urls("https://github.com/microsoft/mimalloc/archive/refs/tags/v$(version).tar.gz")
 
+    add_versions("2.1.6", "0ec960b656f8623de35012edacb988f8edcc4c90d2ce6c19f1d290fbb4872ccc")
     add_versions("2.1.2", "2b1bff6f717f9725c70bf8d79e4786da13de8a270059e4ba0bdd262ae7be46eb")
 
     on_load(function (package)
@@ -17,9 +18,14 @@ package("mimalloc")
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
 
+if is_plat("windows") then
+    add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
+    add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
+end
+
 target("mimalloc")
     set_kind("$(kind)")
-    add_files("src/*.c|alloc-override.c|static.c|page-queue.c")
+    add_files("src/*.c|alloc-override.c|static.c|page-queue.c|free.c")
     add_files("src/prim/*.c")
     add_includedirs("include")
     add_headerfiles("include/*.h")

@@ -5,6 +5,7 @@ package("microsoft_proxy")
     set_license("MIT")
     set_urls("https://github.com/microsoft/proxy/archive/refs/tags/$(version).tar.gz")
 
+    add_versions("2.4.0", "7eed973655938d681a90dcc0c200e6cc1330ea8611a9c1a9e1b30439514443cb")
     add_versions("2.3.1", "bfec45ada9cd3dc576df34bbe877c5d03a81906a00759970c0197c3fa041c5c7")
     add_versions("2.2.0", "a18ecc395e5f962c79e3231ad7492a267b61463a595220be118ceb00009c86cf")
     on_install(function (package)

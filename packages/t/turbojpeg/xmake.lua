@@ -4,6 +4,7 @@ package("turbojpeg")
     set_license("ZLIB")
     set_urls("https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/$(version).tar.gz")
 
+    add_versions("3.0.3", "a649205a90e39a548863a3614a9576a3fb4465f8e8e66d54999f127957c25b21")
     add_versions("3.0.2", "29f2197345aafe1dcaadc8b055e4cbec9f35aad2a318d61ea081f835af2eebe9")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
