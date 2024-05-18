@@ -79,8 +79,7 @@ elseif get_config("window") == "nanovg" and is_plat("switch") then
 end
 
 target("borealis")
-    set_kind("static")
-    -- set_kind("shared")
+    set_kind("$(kind)")
     add_includedirs("library/include")
     add_includedirs("library/include/borealis/extern")
     add_files("library/lib/core/**.cpp")
@@ -120,7 +119,6 @@ target("borealis")
             add_includedirs("library/include/borealis/extern/glad")
         end 
         add_packages("libnx")
-    end 
     elseif is_plat("windows") or is_plat("linux") or is_plat("macosx") then
         if window == "glfw" then
             add_files("library/lib/platforms/glfw/*.cpp")
