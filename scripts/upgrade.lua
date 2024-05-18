@@ -34,7 +34,6 @@ local version_transform = {
     sdl12_compat = sdl_version_transform,
     sdl2_ttf = sdl_version_transform,
     sdl2_mixer = sdl_version_transform,
-    spirv_reflect = function (version) return version:sub(11) end,
     cppwinrt = function (version)
         local index = string.rfind(version, '.', true)
         return version:sub(1, index-1).."-release"..version:sub(index)
@@ -47,6 +46,12 @@ local version_transform = {
     curl = function (version) return version:sub(6):gsub('_', '.') end,
     pcre2 = function (version) return version:sub(7) end,
     wolfssl = function (version) return version:sub(1, version:find('-')-1) end,
+    ssh2 = function (version) return version:sub(9) end,
+    libressl = function (version)
+        local start = 2
+        local index = string.rfind(version, '.', true) - 1
+        return version:sub(start, index)
+    end,
 }
 
 local function default_transform(opt, prefix, suffix)
@@ -68,7 +73,6 @@ local download_transform = {
     pugixml = function (opt) return default_transform(opt, 'pugixml-') end,
     raqm = function (opt) return default_transform(opt, 'raqm-', '.tar.xz') end,
     sdl2 = function (opt) return default_transform(opt, 'SDL2-') end,
-    sdl2_image = function (opt) return default_transform(opt, 'SDL2_image-') end,
     sdl2_mixer = function (opt) return default_transform(opt, 'SDL2_mixer-') end,
     sdl2_ttf = function (opt) return default_transform(opt, 'SDL2_ttf-') end,
     sdl2_image = function (opt) return default_transform(opt, 'SDL2_image-') end,
@@ -76,6 +80,9 @@ local download_transform = {
     unibreak = function (opt) return default_transform(opt, 'libunibreak-') end,
     zlib = function (opt) return default_transform(opt, 'zlib-') end,
     zstd = function (opt) return default_transform(opt, 'zstd-') end,
+    nghttp2 = function (opt) return default_transform(opt, 'nghttp2-') end,
+    nghttp3 = function (opt) return default_transform(opt, 'nghttp3-') end,
+    ngtcp2 = function (opt) return default_transform(opt, 'ngtcp2-') end,
 }
 
 
