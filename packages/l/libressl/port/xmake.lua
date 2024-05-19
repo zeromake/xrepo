@@ -23,6 +23,12 @@ option("installdir")
     set_showmenu(true)
 option_end()
 
+option("export_prefix")
+    set_default("")
+    set_description("export prefix")
+    set_showmenu(true)
+option_end()
+
 option("merge_archive")
     set_default(false)
     set_description("merge static to tls")
@@ -149,6 +155,12 @@ target("crypto")
     add_files(table.unpack(CRYPTO_FILES))
     local CRYPTO_UNEXPORT = {}
     local CRYPTO_EXTRA_EXPORT = {}
+    local export_prefix = get_config('export_prefix') or ""
+    local function extra_join(arr)
+        for _, v in ipairs(arr) do
+            table.insert(CRYPTO_EXTRA_EXPORT, export_prefix..v)
+        end
+    end
     if is_plat("windows", "mingw") then
         add_files(
             "crypto/compat/posix_win.c",
@@ -157,7 +169,7 @@ target("crypto")
             "crypto/ui/ui_openssl_win.c"
         )
         table.insert(CRYPTO_UNEXPORT, 'BIO_s_log')
-        table.join2(CRYPTO_EXTRA_EXPORT, {
+        extra_join({
             'gettimeofday',
             'getuid',
             'posix_perror',
@@ -184,20 +196,20 @@ target("crypto")
         local check = import("check")(target)
         if not check.HAVE_ASPRINTF then
             target:add("files", "crypto/compat/bsd-asprintf.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'asprintf',
                 'vasprintf',
             })
         end
         if not check.HAVE_FREEZERO then
             target:add("files", "crypto/compat/freezero.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'freezero',
             })
         end
         if not check.HAVE_GETOPT then
             target:add("files", "crypto/compat/getopt_long.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'getopt',
                 'optarg',
                 'optind',
@@ -217,55 +229,55 @@ target("crypto")
         end
         if not check.HAVE_REALLOCARRAY then
             target:add("files", "crypto/compat/reallocarray.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'reallocarray',
             })
         end
         if not check.HAVE_RECALLOCARRAY then
             target:add("files", "crypto/compat/recallocarray.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'recallocarray',
             })
         end
         if not check.HAVE_STRCASECMP then
             target:add("files", "crypto/compat/strcasecmp.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'strcasecmp',
             })
         end
         if not check.HAVE_STRLCAT then
             target:add("files", "crypto/compat/strlcat.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'strlcat',
             })
         end
         if not check.HAVE_STRLCPY then
             target:add("files", "crypto/compat/strlcpy.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'strlcpy',
             })
         end
         if not check.HAVE_STRNDUP then
             target:add("files", "crypto/compat/strndup.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'strndup',
             })
         end
         if not check.HAVE_STRNLEN then
             target:add("files", "crypto/compat/strnlen.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'strnlen',
             })
         end
         if not check.HAVE_STRSEP then
             target:add("files", "crypto/compat/strsep.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'strsep',
             })
         end
         if not check.HAVE_STRTONUM then
             target:add("files", "crypto/compat/strtonum.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'strtonum',
             })
         end
@@ -274,7 +286,7 @@ target("crypto")
         end
         if not check.HAVE_TIMEGM then
             target:add("files", "crypto/compat/timegm.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'timegm',
             })
         end
@@ -284,14 +296,14 @@ target("crypto")
             else
                 target:add("files", "crypto/compat/explicit_bzero.c")
             end
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'explicit_bzero',
             })
         end
         if not check.HAVE_ARC4RANDOM_BUF then
             target:add("files", "crypto/compat/arc4random.c")
             target:add("files", "crypto/compat/arc4random_uniform.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'arc4random',
                 'arc4random_buf',
                 'arc4random_uniform',
@@ -307,19 +319,19 @@ target("crypto")
             else
                 target:add("files", "crypto/compat/getentropy_osx.c")
             end
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'getentropy',
             })
         end
         if not check.HAVE_TIMINGSAFE_BCMP then
             target:add("files", "crypto/compat/timingsafe_bcmp.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'timingsafe_bcmp',
             })
         end
         if not check.HAVE_TIMINGSAFE_MEMCMP then
             target:add("files", "crypto/compat/timingsafe_memcmp.c")
-            table.join2(CRYPTO_EXTRA_EXPORT, {
+            extra_join({
                 'timingsafe_memcmp',
             })
         end

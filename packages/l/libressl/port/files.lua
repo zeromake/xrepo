@@ -19,6 +19,8 @@ CRYPTO_INCLUDE_DIRS = {
     "crypto/rsa",
     "crypto/sha",
     "crypto/x509",
+    "crypto/lhash",
+    "crypto/stack",
     "include/compat",
     "include",
 }
@@ -242,4 +244,6 @@ CRYPTO_FILES = {
     "crypto/poly1305/*.c|poly1305-donna.c",
     "crypto/ui/*.c|ui_openssl.c|ui_openssl_win.c",
     "crypto/whrlpool/*.c|wp_block.c",
+    "crypto/lhash/*.c",
+    "crypto/stack/*.c",
 }

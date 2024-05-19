@@ -2,9 +2,11 @@ package("libressl")
     set_homepage("https://www.libressl.org")
     set_description("LibreSSL is a version of the TLS/crypto stack forked from OpenSSL in 2014, with goals of modernizing the codebase, improving security, and applying best practice development processes.")
     set_license("MIT")
-    set_urls("https://github.com/PowerShell/LibreSSL/archive/refs/tags/V$(version).0.tar.gz")
 
-    add_versions("3.8.2", "fe4019a388804f7e08135ffb115d5feaca94844f4ef4d7e3dbf36c4fe338ceb5")
+    add_urls("https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-$(version).tar.gz")
+
+    add_versions("3.9.2", "7b031dac64a59eb6ee3304f7ffb75dad33ab8c9d279c847f92c89fb846068f97")
+    add_versions("3.8.2", "6d4b8d5bbb25a1f8336639e56ec5088052d43a95256697a85c4ce91323c25954")
     add_configs("asm", {description = "use asm", default = true, type = "boolean"})
     add_configs("openssldir", {description = "openssldir set", default = nil, type = "string"})
     if is_plat("windows", "mingw") then
@@ -13,8 +15,11 @@ package("libressl")
         add_syslinks("pthread")
     end
     on_install(function (package)
+        local export_prefix = package:version():ge("3.9.0") and "libressl_" or ""
         os.cp(path.join(os.scriptdir(), "port", "*.lua"), "./")
-        local configs = {}
+        local configs = {
+            "--export_prefix="..export_prefix,
+        }
         table.insert(configs, "--asm="..(package:config("asm") and 'y' or 'n'))
         if package:config('openssldir') then
             table.insert(configs, "--openssldir="..package:config('openssldir'))
