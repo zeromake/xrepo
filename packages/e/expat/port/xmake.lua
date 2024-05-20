@@ -30,7 +30,7 @@ local sourceFiles = {
     "lib/xmltok.c",
 }
 
-function configvar_check_bigendian(define_name) 
+local configvar_check_bigendian = configvar_check_bigendian or function(define_name) 
     configvar_check_csnippets(define_name, [[
 union{long int l;char c[sizeof (long int)];} u;
 u.l = 1;

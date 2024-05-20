@@ -28,7 +28,7 @@ if is_plat("windows") then
     add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
 end
 
-function configvar_check_bigendian(define_name) 
+local configvar_check_bigendian = configvar_check_bigendian or function(define_name) 
     configvar_check_csnippets(define_name, [[
 union{long int l;char c[sizeof (long int)];} u;
 u.l = 1;

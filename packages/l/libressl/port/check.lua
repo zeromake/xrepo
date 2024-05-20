@@ -87,6 +87,12 @@ function main(target)
                 global_check[define_name] = tonumber(size)
             end
         end
+        local check_bigendian = target:check_bigendian()
+        if check_bigendian then
+            global_check["HAVE_BIG_ENDIAN"] = 1
+        else
+            global_check["HAVE_LITTLE_ENDIAN"] = 1
+        end
         io.writefile(global_check_path, string.serialize(global_check))
     end
     for define_name, v in pairs(global_check) do
