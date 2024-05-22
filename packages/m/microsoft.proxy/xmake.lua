@@ -1,4 +1,4 @@
-package("microsoft_proxy")
+package("microsoft.proxy")
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/microsoft/proxy")
     set_description("Proxy: Easy Polymorphism in C++")
