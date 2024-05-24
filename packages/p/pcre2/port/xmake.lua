@@ -29,6 +29,8 @@ end
 
 local sourceFiles = {
     "src/pcre2_auto_possess.c",
+    "src/pcre2_chartables.c",
+    "src/pcre2_chkdint.c",
     "src/pcre2_compile.c",
     "src/pcre2_config.c",
     "src/pcre2_context.c",
@@ -54,7 +56,8 @@ local sourceFiles = {
     "src/pcre2_ucd.c",
     "src/pcre2_valid_utf.c",
     "src/pcre2_xclass.c",
-    "src/pcre2_chartables.c",
+
+    "src/pcre2posix.c",
 }
 
 local checkHeaders = {

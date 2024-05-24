@@ -18,7 +18,7 @@ package("pcre2")
         elseif package:config("PCRE2_32") then
             package:add("defines", "PCRE2_CODE_UNIT_WIDTH=32")
         end
-        if package:is_arch("windows", "mingw") then
+        if package:is_plat("windows", "mingw") then
             if package:config("shared") then
                 package:add("defines", "PCRE2_EXP_DECL=extern __declspec(dllexport)")
             else
