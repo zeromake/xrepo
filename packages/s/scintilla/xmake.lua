@@ -12,6 +12,20 @@ package("scintilla")
     add_versions("5.5.0", "e553e95509f01f92aa157fa02d06a712642e13d69a11ec1a02a7ddf22c406231")
 
     add_configs("module", {default = nil, type = "string"})
+    
+    on_load(function (package)
+        if package:config("module") == "win32" then
+            package:add(
+                "syslinks",
+                "ole32",
+                "gdi32",
+                "oleaut32",
+                "user32",
+                "advapi32",
+                "imm32"
+            )
+        end
+    end)
     on_install(function (package)
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
@@ -29,12 +43,22 @@ end
 
 target("scintilla")
     set_kind("$(kind)")
-    add_files("src/*.cxx")
+    add_files("src/*.cxx", "call/*.cxx")
     add_includedirs("include", "src")
     add_headerfiles("include/*.h")
     set_languages("c++17")
     local module = get_config("module")
-    if module == "qt" then
+    if module == "win32" then
+        add_files("win32/*.cxx")
+        add_syslinks(
+            "ole32",
+            "gdi32",
+            "oleaut32",
+            "user32",
+            "advapi32",
+            "imm32"
+        )
+    elseif module == "qt" then
         add_files("qt/ScintillaEdit/*.cpp")
         add_files("qt/ScintillaEditBase/*.cpp")
     elseif module == "gtk" then
@@ -49,7 +73,3 @@ target("scintilla")
         end
         import("package.tools.xmake").install(package, configs)
     end)
-
-    -- on_test(function (package)
-    --     assert(package:has_cfuncs("xxx", {includes = {"xx.h"}}))
-    -- end)
