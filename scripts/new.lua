@@ -47,11 +47,23 @@ package("%s")
     end)
 ]])
     end
-    out:write([[
+    out:writef([==[
     on_install(function (package)
-        os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
+        io.writefile("xmake.lua", [[
+add_rules("mode.debug", "mode.release")
+if is_plat("windows") then
+    add_cflags("/TC", {tools = {"clang_cl", "cl"}})
+    add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
+    add_defines("UNICODE", "_UNICODE")
+end
+set_encodings("utf-8")
+target("%s")
+    set_kind("$(kind)")
+    add_files("xx.c")
+    add_headerfiles("xx.h")
+]], {encoding = "binary"})
         local configs = {}
-]])
+]==], opt.package)
     if opt.options then
         out:write([[
         for _, op in ipairs(options) do
@@ -97,10 +109,12 @@ end
     end
     out:writef([[
 if is_plat("windows", "mingw") then
-    add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
+    add_cflags("/TC", {tools = {"clang_cl", "cl"}})
     add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
     add_defines("UNICODE", "_UNICODE")
 end
+
+set_encodings("utf-8")
 
 target("%s")
     set_kind("$(kind)")
