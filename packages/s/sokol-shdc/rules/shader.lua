@@ -15,7 +15,7 @@ rule("shader")
         batchcmds:vrunv(sokolshdc.program, {
             "--ifdef",
             "-l",
-            "hlsl5:glsl410:glsl300es:metal_macos:metal_ios:metal_sim:wgsl",
+            "hlsl5:glsl410:glsl300es:metal_macos:metal_ios:metal_sim",
             "--input",
             sourcefile,
             "--output",
