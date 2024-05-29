@@ -1,26 +1,33 @@
+local function getVersion(version)
+    local versions ={
+        ["2024.05.17-alpha"] = "3162485457dbe6c7ca8d145bb26db172aed3e44e",
+    }
+    return versions[tostring(version)]
+end
+
 
 package("sokol-shdc")
     set_kind("binary")
     set_license("MIT")
     set_homepage("https://github.com/floooh/sokol-tools")
-    local hash = "74c6bb111d51121fa288f1787c9df5a56545bbfd"
-    local url_prefix = "https://github.com/floooh/sokol-tools-bin/raw/"..hash.."/bin/"
+    local version = "2024.05.17-alpha"
+    local url_prefix = "https://github.com/floooh/sokol-tools-bin/raw/$(version)/bin/"
     local url_suffix = "win32/sokol-shdc.exe"
     if is_host("macosx") then
         if os.arch() == "arm64" then
             url_suffix = "osx_arm64/sokol-shdc"
-            add_versions("latest", "ae4064824ea079d10cdc5e0aef8e3a11308ef4acc0b64add651194620f5f7037")
+            add_versions(version, "6633f4edf6427001b6a52c01e9d1a364ce0912e393c40a5179657da6da2ffbed")
         else
             url_suffix = "osx/sokol-shdc"
-            add_versions("latest", "b8f263b9e08f6e62bd6f0c061922243c8b00cc2a02770f47185d65bf8f2eddfc")
+            add_versions(version, "59d13000d5aa94a4337ae88794b6c672b9ee654023b549de93e738685c0dda84")
         end
     elseif is_host("linux") then
         url_suffix = "linux/sokol-shdc"
-        add_versions("latest", "fffc93a057ae27fbdf98822a87a7419cdcda3163a3842b65da2a14b886cc15a5")
+        add_versions(version, "0331c07b47617a76af9ea8bd87fc103af1f09ea0ce82c991925e47b3887e0618")
     else
-        add_versions("latest", "ff0faf3547996078b037816387b3c84874b447b29f0f1a09088b1c06822c91bd")
+        add_versions(version, "ccf08bc0d7cd96b83273340104728204ed2673ff1c47d782494313354eba2635")
     end
-    set_urls(url_prefix..url_suffix)
+    set_urls(url_prefix..url_suffix, {version = getVersion})
     on_install(function (package)
         local bin = package:installdir("bin")
         if is_host("windows") then
