@@ -160,6 +160,7 @@ local function getVersion(version)
         ["2024.02.04-alpha"] = "archive/0d313b243194a0b8d2399d8b549ca5a0ff234db5.tar.gz",
         ["2024.03.10-alpha"] = "archive/d06beb0480c5d1eb53b3343e78063950275aa281.tar.gz",
         ["2024.04.22-alpha"] = "archive/5790d253972c9d78a0c2aece527eda5b134bbbf7.tar.gz",
+        ["2024.05.25-alpha"] = "archive/93e87998b24021b94de8d1c8db244444c46fb6e9.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -173,6 +174,7 @@ package("luajit")
             version = getVersion
         }
     )
+    add_versions("2024.05.25-alpha", "026eb4531cddff20acc72ec97378ccfc30326173c491d6c01834b48b42a80518")
     add_versions("2024.04.22-alpha", "a299cd389c4568cff4c900e9e86fb56b1f422bf38497a695f6a96e37607a6645")
     add_versions("2024.03.10-alpha", "6abd146a1dfa240a965748f63221633446affa2a715e3eb03879136e3efb95f4")
     add_versions("2024.02.04-alpha", "53731880dbc4adbbf82ba69a85b5dbe15266032b8b94a077c0835bc10ec75f12")
