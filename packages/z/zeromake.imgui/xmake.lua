@@ -1,6 +1,6 @@
 function getVersion(version)
     local versions = {
-        ["2024.06.11-alpha"] = "archive/cef0bd3934feb93b5a7488218b947c511d5f810d.tar.gz",
+        ["2024.06.11-alpha"] = "archive/451b54c6db90298ae8def06d46c55dc2abc317ae.tar.gz",
     }
     local url = versions[tostring(version)]
     return url ~= nil and url or "archive/refs/tags/v"..tostring(version)..".tar.gz"
@@ -14,7 +14,7 @@ package("zeromake.imgui")
         version=getVersion
     })
 
-    add_versions("2024.06.11-alpha", "3135426ebca9688dc686bd83655a6e80764cb6e0828bcdab914f509036a3ac88")
+    add_versions("2024.06.11-alpha", "0109698bd03c884441fa32ce977f5d0bb0b8fcee9366d574a65e7835c4d4478e")
     
     add_configs("backend", {description = "Select backend", default = "", type = "string"})
     add_configs("freetype", {description = "Use freetype", default = false, type = "boolean"})
