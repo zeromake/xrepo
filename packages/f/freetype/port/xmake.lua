@@ -61,7 +61,7 @@ elseif is_plat("macosx") then
         "builds/mac/ftmac.c",
         "builds/unix/ftsystem.c",
     })
-elseif is_plat("linux", "android", "iphoneos") then
+elseif is_plat("linux", "android", "iphoneos", "wasm") then
     table.join2(freetypeFiles, {
         "src/base/ftdebug.c",
         "builds/unix/ftsystem.c",
