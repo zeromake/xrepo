@@ -58,14 +58,10 @@ if is_plat("windows", "mingw") then
 elseif is_plat("macosx") then
     table.join2(freetypeFiles, {
         "src/base/ftdebug.c",
+        "builds/mac/ftmac.c",
         "builds/unix/ftsystem.c",
     })
-elseif is_plat("android") then
-    table.join2(freetypeFiles, {
-        "src/base/ftdebug.c",
-        "builds/unix/ftsystem.c",
-    })
-elseif is_plat("iphoneos") then
+elseif is_plat("linux", "android", "iphoneos") then
     table.join2(freetypeFiles, {
         "src/base/ftdebug.c",
         "builds/unix/ftsystem.c",
