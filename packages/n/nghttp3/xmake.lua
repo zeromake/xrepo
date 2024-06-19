@@ -4,6 +4,7 @@ package("nghttp3")
     set_license("MIT")
     set_urls("https://github.com/ngtcp2/nghttp3/releases/download/v$(version)/nghttp3-$(version).tar.gz")
 
+    add_versions("1.4.0", "43a78073b103acd4668c8d3314eb98e5d002095c1e49014e48ca20bd3094408f")
     add_versions("1.3.0", "2c1a40f770bee2ca2b0c7afc58f763f09f73715238a68d4f8e3c81d1dc1f277d")
     add_versions("1.2.0", "0cc9b943f61a135e08b80bdcc4c1181f695df18fbb5fa93509a58d7d971dca75")
     add_deps("sfparse")

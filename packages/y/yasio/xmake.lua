@@ -4,6 +4,7 @@ package("yasio")
     set_license("MIT")
     set_urls("https://github.com/yasio/yasio/archive/refs/tags/v$(version).tar.gz")
 
+    add_versions("4.2.3", "928db2156fc8534d4a046e1b48cb2b678aadb29958428fa9bef950e8060475e9")
     add_versions("4.2.2", "bc743089ba54f59e1368a97638fe354eaba2c4f916a337df81f49926ccec4d5e")
     add_versions("4.2.1", "1d833351ae0a36f6f7a94acc8460c26f64962eb3e8df47bb5d88d8f9396ebb9b")
     add_versions("4.1.0", "522738587a0e928346221a41fd169a8e5dabb580ac1b4af2fbba66a5db8e71d4")

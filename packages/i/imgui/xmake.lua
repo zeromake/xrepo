@@ -17,6 +17,7 @@ package("imgui")
 
     add_versions("2024.04.16-alpha", "46caf78365f70acb24cb8c4693c732245e813f58640bf5ecc417a152e6417156")
     add_versions("2024.02.29-alpha", "a42ba44824b29de233c8554e03eb65a6d0850e05354ccb6d16e1d91c1dc576aa")
+    add_versions("1.90.8", "f606b4fb406aa0f8dad36d4a9dd3d6f0fd39f5f0693e7468abc02d545fb505ae")
     add_versions("1.90.7", "872574217643d4ad7e9e6df420bb8d9e0d468fb90641c2bf50fd61745e05de99")
     add_versions("1.90.6", "70b4b05ac0938e82b4d5b8d59480d3e2ca63ca570dfb88c55023831f387237ad")
     add_versions("1.90.5", "e94b48dba7311c85ba8e3e6fe7c734d76a0eed21b2b42c5180fd5706d1562241")

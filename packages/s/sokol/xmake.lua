@@ -8,6 +8,7 @@ local function getVersion(version)
         ["2024.04.13-alpha"] = "archive/c2bb83f0b35e09d97a354b5f4cf4c3df783c4193.tar.gz",
         ["2024.05.17-alpha"] = "archive/c2d01bc25c58be460787d5f027eed73d1c036e6f.tar.gz",
         ["2024.06.03-alpha"] = "archive/c54523c078e481d3084fa0b4630d2ce3d3e1e74f.tar.gz",
+        ["2024.06.17-alpha"] = "archive/c970b0bb0768724f5be2ee7ee36bc07b01fc6a62.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -21,7 +22,8 @@ package("sokol")
     set_urls("https://github.com/floooh/sokol/$(version)", {
         version = getVersion
     })
-    
+
+    add_versions("2024.06.17-alpha", "de9c9c1263521927db4d2463dc1ff5ff0100b4a6e8fe60ce32a726a4af5d14f1")
     add_versions("2024.06.03-alpha", "6f61d4168d6a3638e67b775fc363f3fcf586685ce47d95c7e7934eaee1891612")
     add_versions("2024.05.17-alpha", "4b8bb91b10db96be5c91b84bcd02a0c91c2435238474f19f1a055d3309e81c29")
     add_versions("2024.04.13-alpha", "ad79d55052df7c57e98ee504cd67e7e1421f21f93ef904f43da3b30faf08a12a")
