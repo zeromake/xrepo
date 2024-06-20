@@ -28,8 +28,9 @@ local modules = {
     "status",
     "strings",
     "synchronization",
-    "type",
+    "types",
     "utility",
+    "time",
 }
 
 add_includedirs(".")
@@ -59,10 +60,18 @@ target("abseil_cpp")
     add_files(path.join("absl/synchronization", files))
     add_files(path.join("absl/synchronization/internal", files))
     add_files(path.join("absl/time", files))
-    add_files(path.join("absl/time/internal", "get_current_time_*.inc"), {rule = "c++"})
     add_files(path.join("absl/time/internal/cctz/src", files))
     add_files(path.join("absl/container/internal", files))
     add_files(path.join("absl/hash/internal", files.."|print_hash_of.cc"))
+
+    add_headerfiles("absl/base/internal/*.inc", {prefixdir = "absl/base/internal"})
+    add_headerfiles("absl/debugging/internal/*.inc", {prefixdir = "absl/debugging/internal"})
+    add_headerfiles("absl/debugging/*.inc", {prefixdir = "absl/debugging"})
+    add_headerfiles("absl/numeric/*.inc", {prefixdir = "absl/numeric"})
+    add_headerfiles("absl/time/internal/*.inc", {prefixdir = "absl/time/internal"})
+
+    add_headerfiles("absl/time/internal/cctz/include/cctz/*.h", {prefixdir = "absl/time/internal/cctz/include/cctz"})
+    add_headerfiles("absl/strings/internal/str_format/*.h", {prefixdir = "absl/strings/internal/str_format"})
     for _, module in ipairs(modules) do
         add_headerfiles(path.join("absl", module, "*.h"), {prefixdir = "absl/"..module})
         if os.exists(path.join("absl", module, "internal")) then
