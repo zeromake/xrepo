@@ -9,11 +9,11 @@ end
 
 set_encodings("utf-8")
 
-add_requires("spirv_headers")
+add_requires("spirv_headers", "protobuf-cpp")
 
 target("spirv_tools")
     set_kind("$(kind)")
-    add_packages("spirv_headers")
+    add_packages("spirv_headers", "protobuf-cpp")
     set_languages("c++17")
     add_files("source/*.cpp")
     add_files("source/util/*.cpp")

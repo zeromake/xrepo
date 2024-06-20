@@ -1,7 +1,7 @@
 local function getVersion(version)
     return tostring(version):gsub("%.", ""):gsub("-", ".")
 end
-package("abseil_cpp")
+package("abseil")
     set_homepage("https://github.com/abseil/abseil-cpp")
     set_description("Abseil Common Libraries (C++)")
     set_license("MIT")

@@ -37,7 +37,7 @@ add_includedirs(".")
 set_languages("c++17")
 
 local files = "*.cc|*test*.cc|*benchmark*.cc|*mock*.cc"
-target("abseil_cpp")
+target("abseil")
     set_kind("$(kind)")
     add_files(path.join("absl/base", files))
     add_files(path.join("absl/base/internal", files))
