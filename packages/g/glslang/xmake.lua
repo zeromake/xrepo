@@ -5,6 +5,8 @@ package("glslang")
     set_urls("https://github.com/KhronosGroup/glslang/archive/refs/tags/$(version).tar.gz")
 
     add_versions("14.2.0", "14a2edbb509cb3e51a9a53e3f5e435dbf5971604b4b833e63e6076e8c0a997b5")
+    add_includedirs("include", "include/glslang")
+    add_defines("ENABLE_HLSL=1")
     on_install(function (package)
         io.writefile("glslang/build_info.h.in", [[
 #ifndef GLSLANG_BUILD_INFO

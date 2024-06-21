@@ -9,11 +9,11 @@ end
 
 set_encodings("utf-8")
 
-add_requires("spirv_headers", "protobuf-cpp")
+add_requires("spirv_headers", "protobuf-cpp", "protoc")
 
 target("spirv_tools")
     set_kind("$(kind)")
-    add_packages("spirv_headers", "protobuf-cpp")
+    add_packages("spirv_headers", "protobuf-cpp", "protoc")
     set_languages("c++17")
     add_files("source/*.cpp")
     add_files("source/util/*.cpp")
@@ -28,3 +28,5 @@ target("spirv_tools")
     add_files("source/diff/*.cpp")
     add_includedirs(".", "include", "$(buildir)")
     on_config("generate")
+    add_headerfiles("include/spirv-tools/*.hpp", {prefixdir = "spirv-tools"})
+    add_headerfiles("include/spirv-tools/*.h", {prefixdir = "spirv-tools"})

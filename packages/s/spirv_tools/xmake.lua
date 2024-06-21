@@ -6,7 +6,7 @@ package("spirv_tools")
 
     add_versions("2024.1", "137780e2a8b5c722888f9ec0fb553e6e92f38a0a5c7fcdad9b715152448b9d82")
 
-    -- add_deps("spirv_headers")
+    add_deps("spirv_headers", "protobuf-cpp")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "*.lua"), "./")
         local configs = {}

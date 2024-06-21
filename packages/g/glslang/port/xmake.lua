@@ -28,16 +28,17 @@ target("glslang")
     add_files("glslang/ResourceLimits/*.cpp")
     set_pcheader("glslang/MachineIndependent/pch.h")
 
+
+    add_headerfiles("${buildir}/glslang/*.h")
+    add_headerfiles("glslang/Public/*.h", {prefixdir = "glslang/Public"})
     add_headerfiles(
-        "${buildir}/glslang/*.h",
-        "glslang/Public/*.h",
         "glslang/Include/glslang_c_interface.h",
         "glslang/Include/glslang_c_shader_types.h",
         "glslang/Include/ResourceLimits.h",
         "glslang/Include/glslang_c_shader_types.h",
-        "glslang/MachineIndependent/Versions.h",
-        {prefixdir = "glslang"}
+        {prefixdir = "glslang/Include"}
     )
+    add_headerfiles("glslang/MachineIndependent/Versions.h", {prefixdir = "glslang/MachineIndependent"})
     set_configvar("major", 14)
     set_configvar("minor", 2)
     set_configvar("patch", 0)
@@ -54,11 +55,11 @@ target("spirv")
     add_files("SPIRV/CInterface/*.cpp")
     add_includedirs("${buildir}", ".")
     add_headerfiles(
-        "GlslangToSpv.h",
-        "disassemble.h",
-        "Logger.h",
-        "spirv.hpp",
-        "SPVRemapper.h",
+        "SPIRV/GlslangToSpv.h",
+        "SPIRV/disassemble.h",
+        "SPIRV/Logger.h",
+        "SPIRV/spirv.hpp",
+        "SPIRV/SPVRemapper.h",
         {prefixdir = "glslang/SPIRV"}
     )
     add_deps("glslang")

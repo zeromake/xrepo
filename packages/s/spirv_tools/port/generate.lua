@@ -6,6 +6,7 @@ local LANG_HEADER_PROCESSING_SCRIPT = "./utils/generate_language_headers.py"
 local DEBUGINFO_GRAMMAR_JSON_FILE = "spirv/unified1/extinst.debuginfo.grammar.json"
 local CLDEBUGINFO100_GRAMMAR_JSON_FILE = "spirv/unified1/extinst.opencl.debuginfo.100.grammar.json"
 local VKDEBUGINFO100_GRAMMAR_JSON_FILE = "spirv/unified1/extinst.nonsemantic.shader.debuginfo.100.grammar.json"
+import("lib.detect.find_tool")
 
 
 local function spvtools_core_tables(config, version)
@@ -22,7 +23,7 @@ local function spvtools_core_tables(config, version)
         "--output-language=c++",
     }
     if not os.exists(core_path) then
-        os.vexecv("python3", argv)
+        os.vexecv(config.python.program, argv)
     end
 end
 
@@ -40,7 +41,7 @@ local function spvtools_enum_string_mapping(config, version)
         "--output-language=c++",
     }
     if not os.exists(extension_enum_path) then
-        os.vexecv("python3", argv)
+        os.vexecv(config.python.program, argv)
     end
 end
 
@@ -55,7 +56,7 @@ local function spvtools_opencl_tables(config, version)
         "--opencl-insts-output="..GRAMMAR_INC_FILE,
     }
     if not os.exists(GRAMMAR_INC_FILE) then
-        os.vexecv("python3", argv)
+        os.vexecv(config.python.program, argv)
     end
 end
 
@@ -71,7 +72,7 @@ local function spvtools_glsl_tables(config, version)
         "--output-language=c++",
     }
     if not os.exists(GRAMMAR_INC_FILE) then
-        os.vexecv("python3", argv)
+        os.vexecv(config.python.program, argv)
     end
 end
 
@@ -88,7 +89,7 @@ local function spvtools_vendor_tables(config, vendov_table, short_name, operand_
         "--vendor-operand-kind-prefix="..operand_kind_prefix,
     }
     if not os.exists(INSTS_FILE) then
-        os.vexecv("python3", argv)
+        os.vexecv(config.python.program, argv)
     end
 end
 
@@ -102,7 +103,7 @@ local function spvtools_extinst_lang_headers(config, name, grammar_file)
         "--extinst-output-path="..OUT_H,
     }
     if not os.exists(OUT_H) then
-        os.vexecv("python3", argv)
+        os.vexecv(config.python.program, argv)
     end
 end
 
@@ -121,7 +122,7 @@ local function spvtools_vimsyntax(config, config_version)
         "--extinst-opencl-grammar="..OPENCL_GRAMMAR_JSON_FILE,
     }
     if not os.exists(VIMSYNTAX_FILE) then
-        local outdata, _ = os.iorunv("python3", argv)
+        local outdata, _ = os.iorunv(config.python.program, argv)
         io.writefile(VIMSYNTAX_FILE, outdata, {encoding = "binary"})
     end
 end
@@ -137,7 +138,7 @@ local function spvtools_registry_generators(config)
         "--generator-output="..GENERATOR_INC_FILE,
     }
     if not os.exists(GENERATOR_INC_FILE) then
-        os.vexecv("python3", argv)
+        os.vexecv(config.python.program, argv)
     end
 end
 
@@ -150,28 +151,30 @@ local function generate_build_version(config)
         build_version_path,
     }
     if not os.exists(build_version_path) then
-        os.vexecv("python3", argv)
+        os.vexecv(config.python.program, argv)
     end
 end
 
 local function generate_protobuf(config)
-    local buildir = config.buildir
     local PROTOBUF_SOURCE = "source/fuzz/protobufs/spvtoolsfuzz.proto"
     local argv = {
         "-I=source/fuzz/protobufs",
         "--cpp_out=source/fuzz/protobufs",
         PROTOBUF_SOURCE,
     }
-    os.vexecv("protoc", argv)
+    os.vexecv(config.protoc.program, argv)
 end
 
 function main(target)
     local pkgs = target:pkgs()
     local spirv_headers = pkgs["spirv_headers"]
     local buildir = vformat("$(buildir)")
+
     local config = {
         buildir = buildir,
-        spirv_header_includedir = spirv_headers:get("sysincludedirs")
+        spirv_header_includedir = spirv_headers:get("sysincludedirs"),
+        python = find_tool("python3"),
+        protoc = find_tool("protoc"),
     }
     spvtools_core_tables(config, "unified1")
     spvtools_enum_string_mapping(config, "unified1")
@@ -194,4 +197,5 @@ function main(target)
     spvtools_registry_generators(config)
     generate_build_version(config)
     generate_protobuf(config)
+    target:add("files", "source/fuzz/protobufs/*.cc")
 end
