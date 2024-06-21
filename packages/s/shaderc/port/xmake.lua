@@ -19,7 +19,7 @@ target("shaderc")
     add_files("libshaderc_util/src/*.cc|*_test.cc")
     add_files("libshaderc/src/*.cc|*_test.cc")
     add_includedirs("libshaderc_util/include", "libshaderc/include")
-    add_headerfiles("libshaderc/include/*.h", {prefixdir = "shaderc"})
+    add_headerfiles("libshaderc/include/*.hpp", {prefixdir = "shaderc"})
 
 target("glslc")
     set_default(get_config("cli") or false)
