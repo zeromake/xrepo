@@ -1,5 +1,5 @@
 package("shaderc")
-    set_kind("binary")
+    -- set_kind("binary")
     set_license("Apache-2.0")
     set_homepage("https://github.com/google/shaderc")
     set_description("A collection of tools, libraries, and tests for Vulkan shader compilation.")
