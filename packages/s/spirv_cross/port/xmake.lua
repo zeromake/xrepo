@@ -43,7 +43,8 @@ target("spirv_cross")
 
     add_headerfiles("include/spirv_cross/*.hpp", {prefixdir = "spirv_cross"})
     add_headerfiles("include/spirv_cross/*.h", {prefixdir = "spirv_cross"})
-    add_headerfiles("*.hpp", {prefixdir = "spirv_cross"})
+    add_headerfiles("*.hpp")
+    add_headerfiles("*.h")
 
 target("spirv_cross_cli")
     set_default(get_config("cli") or false)
