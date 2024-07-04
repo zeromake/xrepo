@@ -11,6 +11,7 @@ package("toml-c")
     set_urls("https://github.com/arp242/toml-c/$(version)", {
         version = getVersion
     })
+    add_versions("2024.06.20-alpha", "d7ee1ef3a4cd9c98a234f19b4fe9a6985f713de5aeedaeecf0c589a613d29f90")
     add_versions("2023.12.07-alpha", "3ed7a1c5fb4f9f5e921aa8590277fc0985d79d64b7456cb40d7399317de9d1fc")
     on_install(function (package)
         io.writefile("xmake.lua", [[

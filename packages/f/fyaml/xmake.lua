@@ -1,6 +1,8 @@
 local function getVersion(version)
     local versions ={
         ["2024.04.22-alpha"] = "archive/8d7712ca34b9b6542bd7bdca5a82663a3d87021f.tar.gz",
+        ["2024.06.26-alpha"] = "archive/13fc5ac6e4f0362cdd982875dbfd2e51091126b2.tar.gz",
+        ["2024.07.02-alpha"] = "archive/bad6eb7c7c7573d63f35892d5f9c749710bb6f41.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -12,6 +14,8 @@ package("fyaml")
         version = getVersion
     })
 
+    add_versions("2024.07.02-alpha", "af8d17fff7b6eb61f4828f709a0ebfb8ab59d0531bb5e31f2f0ef00f363702c2")
+    add_versions("2024.06.26-alpha", "35a0673cada9ccde7c303dc24dc06c662931a9d03073b28dc449990f85fbb404")
     add_versions("2024.04.22-alpha", "1fff345a7763e0cac8d3949f5685d94c32f0867a09d856d5b500ac88eed5a433")
     on_install(function (package)
         io.writefile("xmake.lua", [[

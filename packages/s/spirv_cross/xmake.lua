@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2024.06.18-alpha"] = "archive/5d127b917f080c6f052553c47170ec0ba702e54f.tar.gz",
+        ["2024.06.19-alpha"] = "archive/6fd1f75636b1c424b809ad8a84804654cf5ae48b.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -12,6 +13,7 @@ package("spirv_cross")
         version = getVersion
     })
 
+    add_versions("2024.06.19-alpha", "0633c4e8dbd2cff0c0d90fe16b0ab68d94a796dad9f84a90bf84830c0f2aeec2")
     add_versions("2024.06.18-alpha", "499f3cf3534b882b99614cf855eb92976d15a1cee20f03a234520d10d1f92fb3")
     add_configs("cli", {description = "build cli", default = false, type = "boolean"})
     add_includedirs("include", "include/spirv_cross")

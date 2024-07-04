@@ -52,6 +52,11 @@ local version_transform = {
         local index = string.rfind(version, '.', true) - 1
         return version:sub(start, index)
     end,
+    spirv_headers = function (version)
+        version = version:sub(11)
+        local index = string.rfind(version, '.', true)
+        return version:sub(1, index-1).."-release"..version:sub(index)
+    end
 }
 
 local function default_transform(opt, prefix, suffix)
@@ -221,6 +226,7 @@ function main(...)
         local versions = {}
         _prev = 0
         local has_release = false
+        local has_alpha = false
         while true do
             local _start = string.find(xmakeContext, 'add_versions%("', _prev)
             if _start == nil then break end
@@ -228,21 +234,16 @@ function main(...)
             local _end = string.find(xmakeContext, '"', _start)
             if _end == nil then break end
             local version_string = xmakeContext:sub(_start, _end-1)
-            if not (version_string:startswith('2020.') or
-                version_string:startswith('2021.') or
-                version_string:startswith('2022.') or
-                version_string:startswith('2023.') or
-                version_string:startswith('2024.') or
-                version_string:startswith('2025.') or
-                version_string:startswith('2026.') or
-                version_string:startswith('2027.')) then
+            if not version_string:match('20%d%d%.') then
                 has_release = true
+            else
+                has_alpha = true
             end
             versions[version_string] = true
             _prev = _end
         end
         local url = string.split(urls[1], "/")
-        local has_alpha = #url == 3
+        has_alpha = #url == 3 and has_alpha
         -- 先获取版本
         local repo = url[1].."/"..url[2]
         -- print('check', repo, string.serialize(versions))

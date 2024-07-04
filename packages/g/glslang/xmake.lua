@@ -4,6 +4,7 @@ package("glslang")
     set_license("BSD-3-Clause")
     set_urls("https://github.com/KhronosGroup/glslang/archive/refs/tags/$(version).tar.gz")
 
+    add_versions("14.3.0", "be6339048e20280938d9cb399fcdd06e04f8654d43e170e8cce5a56c9a754284")
     add_versions("14.2.0", "14a2edbb509cb3e51a9a53e3f5e435dbf5971604b4b833e63e6076e8c0a997b5")
     add_includedirs("include", "include/glslang")
     add_defines("ENABLE_HLSL=1")

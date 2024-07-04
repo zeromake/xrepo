@@ -4,6 +4,7 @@ package("yoga")
     set_license("MIT")
     set_urls("https://github.com/facebook/yoga/archive/v$(version).tar.gz")
 
+    add_versions("3.1.0", "06ff9e6df9b2388a0c6ef8db55ba9bc2ae75e716e967cd12cf18785f6379159e")
     add_versions("3.0.4", "ef3ce5106eed03ab2e40dcfe5b868936a647c5f02b7ffd89ffaa5882dca3ef7f")
     add_versions("3.0.3", "0ae44f7d30f8130cdf63e91293e11e34803afbfd12482fe4ef786435fc7fa8e7")
     add_versions("2.0.1", "4c80663b557027cdaa6a836cc087d735bb149b8ff27cbe8442fc5e09cec5ed92")
