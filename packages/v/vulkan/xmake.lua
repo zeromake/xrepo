@@ -1,17 +1,23 @@
+local function getVersion(version)
+    return tostring(version):gsub('-release', '')
+end
 
 package("vulkan")
     set_homepage("Todo")
     set_description("Todo")
     set_license("MIT")
-    set_urls("https://sdk.lunarg.com/sdk/download/1.3.250.1/windows/VulkanSDK-1.3.250.1-Installer.exe")
+    set_urls("https://sdk.lunarg.com/sdk/download/$(version)/windows/VulkanSDK-$(version)-Installer.exe", {
+        version = getVersion
+    })
 
-    add_versions("1.3.250", "fab945cdae8ab5d8f983ff9cda39d80cfe7ab644660e577e977566dd73380785")
+    add_versions("1.3.250-release.1", "fab945cdae8ab5d8f983ff9cda39d80cfe7ab644660e577e977566dd73380785")
     add_links("vulkan-1")
     on_install("windows", "mingw", function (package)
         import("lib.detect.find_tool")
         import("net.http")
+        local version = tostring(package:version()):gsub('-release', '')
         if not os.isfile("../vulkan-r.zip") then 
-            http.download("https://sdk.lunarg.com/sdk/download/1.3.250.1/windows/VulkanRT-1.3.250.1-Components.zip", "../vulkan-r.zip")
+            http.download("https://sdk.lunarg.com/sdk/download/"..version.."/windows/VulkanRT-"..version.."-Components.zip", "../vulkan-r.zip")
         end
         local p7z = find_tool("7z")
         os.execv(p7z.program, {"x", "../vulkan-r.zip"})
@@ -30,9 +36,9 @@ package("vulkan")
         }) do
             os.cp(path.join("Lib", f), package:installdir("lib").."/")
         end
-        os.cp("VulkanRT-1.3.250.1-Components/x64/vulkan-1.dll", package:installdir("bin").."/")
+        os.cp("VulkanRT-"..version.."-Components/x64/vulkan-1.dll", package:installdir("bin").."/")
         if package:is_plat("mingw") then
-            os.cp("VulkanRT-1.3.250.1-Components/x64/vulkan-1.dll", "./")
+            os.cp("VulkanRT-"..version.."-Components/x64/vulkan-1.dll", "./")
             local outdata, errdata = os.iorunv("pexports", {"vulkan-1.dll"})
             if not errdata or errdata == "" then
                 io.writefile(
