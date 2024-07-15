@@ -6,6 +6,7 @@ package("wolfssl")
     set_license("GPLv2")
     set_urls("https://github.com/wolfSSL/wolfssl/archive/refs/tags/v$(version)-stable.tar.gz")
 
+    add_versions("5.7.2", "0f2ed82e345b833242705bbc4b08a2a2037a33f7bf9c610efae6464f6b10e305")
     add_versions("5.7.0", "2de93e8af588ee856fe67a6d7fce23fc1b226b74d710b0e3946bc8061f6aa18f")
     add_versions("5.6.6", "3d2ca672d41c2c2fa667885a80d6fa03c3e91f0f4f72f87aef2bc947e8c87237")
     add_versions("5.6.4", "031691906794ff45e1e792561cf31759f5d29ac74936bc8dffb8b14f16d820b4")

@@ -1,8 +1,8 @@
 local function getVersion(version)
     local versions ={
-        ["2024.06.14-alpha"] = "archive/5adc2ce2cb15bf081ea7b37ce3e1484db88d3e94.tar.gz",
         ["2024.06.18-alpha"] = "archive/efd164d64ee4aab463e00f69e0de7f53ca91865d.tar.gz",
         ["2024.07.02-alpha"] = "archive/611806a1559b92c97961f51c78805d8d9d528c08.tar.gz",
+        ["2024.07.11-alpha"] = "archive/ec9a8781c7d63cd3d3b5442d88fb5f5271c4cefe.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -16,9 +16,9 @@ package("yuv")
             version = getVersion
         }
     )
+    add_versions("2024.07.11-alpha", "d7f803efbc63cc6f12456b420e7b01924103031c4541b269713325dfecb7f168")
     add_versions("2024.07.02-alpha", "a8dddc6f45d6987cd3c08e00824792f3c72651fde29f475f572ee2292c03761f")
     add_versions("2024.06.18-alpha", "61581bd62f0269a67ee4305f2ac3c69dd2488b9a9eb40558fae8e41f12f616f7")
-    add_versions("2024.06.14-alpha", "4509f9d5d3df25bc1b94f4275f4622f0352e4e1c10eda99c262fe322f9b1453a")
     on_install(function (package)
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
