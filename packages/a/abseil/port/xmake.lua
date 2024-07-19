@@ -80,4 +80,6 @@ target("abseil")
     end
     if is_plat("macosx", "iphoneos") then
         add_frameworks("CoreFoundation")
+    elseif is_plat("windows") then
+        add_defines("NOMINMAX")
     end
