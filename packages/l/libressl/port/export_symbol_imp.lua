@@ -73,7 +73,10 @@ function main(target, opt)
     end
     if #syms > 0 then
         local out = vformat('$(buildir)/.gens/$(host)-$(arch)/'..target:name())
-        if is_plat("windows", "mingw") then
+        if is_plat("windows") then
+            generateWindowsExportSymbol(out, syms)
+            target:add('shflags', '/DEF:'..out..'.def', {force = true})
+        elseif is_plat("mingw") then
             generateWindowsExportSymbol(out, syms)
             target:add('files', out..'.def')
         elseif is_plat("macosx") then

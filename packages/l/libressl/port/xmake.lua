@@ -73,7 +73,8 @@ elseif is_plat("windows", "mingw") then
         "_GNU_SOURCE",
         "_POSIX",
         "_POSIX_SOURCE",
-        "__USE_MINGW_ANSI_STDIO"
+        "__USE_MINGW_ANSI_STDIO",
+        "WIN32_LEAN_AND_MEAN"
     )
 end
 
@@ -108,7 +109,7 @@ target("crypto")
         add_defines('OPENSSLDIR=$(openssldir)')
     else
         if is_plat("windows", "mingw") then
-            add_defines('OPENSSLDIR="C:/Windows/libressl/ssl"')
+            add_defines('OPENSSLDIR="$(installdir)"')
         else
             add_defines('OPENSSLDIR="$(installdir)/etc/ssl"')
         end
@@ -136,13 +137,15 @@ target("crypto")
     if not host_asm_check.HOST_ASM_ELF_X86_64 and 
         not host_asm_check.HOST_ASM_MACOSX_X86_64 and
         not host_asm_check.HOST_ASM_MASM_X86_64 and
-        not host_asm_check.HOST_ASM_ELF_ARMV4 then
+        not host_asm_check.HOST_ASM_ELF_ARMV4 and
+        not host_asm_check.HOST_ASM_MINGW64_X86_64 then
         add_files("crypto/aes/aes_core.c")
     end
 
     if not host_asm_check.HOST_ASM_ELF_X86_64 and 
         not host_asm_check.HOST_ASM_MACOSX_X86_64 and
-        not host_asm_check.HOST_ASM_MASM_X86_64 then
+        not host_asm_check.HOST_ASM_MASM_X86_64 and
+        not host_asm_check.HOST_ASM_MINGW64_X86_64 then
         add_files(
             "crypto/aes/aes_cbc.c",
             "crypto/camellia/camellia.c",
@@ -184,6 +187,7 @@ target("crypto")
             'posix_getsockopt',
             'posix_setsockopt',
         })
+        add_syslinks("ws2_32", "bcrypt")
     else
         add_files(
             "crypto/crypto_lock.c",
@@ -366,6 +370,9 @@ target("ssl")
     on_config(function (target)
         local check = import("check")(target)
     end)
+    if is_plat("windows", "mingw") then
+        add_syslinks("ws2_32", "bcrypt")
+    end
 
 
 target("tls")
@@ -403,3 +410,6 @@ target("tls")
     add_headerfiles("include/openssl/*.h", {prefixdir = "openssl"})
     add_headerfiles("include/tls.h")
     set_policy("build.merge_archive", get_config("merge_archive"))
+    if is_plat("windows", "mingw") then
+        add_syslinks("ws2_32", "bcrypt")
+    end

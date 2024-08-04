@@ -129,6 +129,23 @@ CRYPTO_ASM_FILE = {
         "crypto/sha/sha512-masm-x86_64.S",
         "crypto/whrlpool/wp-masm-x86_64.S",
         "crypto/cpuid-masm-x86_64.S",
+    },
+    MINGW64_X86_64 = {
+        "crypto/aes/aes-mingw64-x86_64.S",
+		"crypto/aes/bsaes-mingw64-x86_64.S",
+		"crypto/aes/vpaes-mingw64-x86_64.S",
+		"crypto/aes/aesni-mingw64-x86_64.S",
+		"crypto/aes/aesni-sha1-mingw64-x86_64.S",
+		"crypto/camellia/cmll-mingw64-x86_64.S",
+		"crypto/md5/md5-mingw64-x86_64.S",
+		"crypto/modes/ghash-mingw64-x86_64.S",
+		"crypto/rc4/rc4-mingw64-x86_64.S",
+		"crypto/rc4/rc4-md5-mingw64-x86_64.S",
+		"crypto/sha/sha1-mingw64-x86_64.S",
+		"crypto/sha/sha256-mingw64-x86_64.S",
+		"crypto/sha/sha512-mingw64-x86_64.S",
+		"crypto/whrlpool/wp-mingw64-x86_64.S",
+		"crypto/cpuid-mingw64-x86_64.S",
     }
 }
 
@@ -177,7 +194,18 @@ CRYPTO_ASM_DEFINE = {
         "GHASH_ASM",
         "RSA_ASM",
         "WHIRLPOOL_ASM",
-    }, CRYPTO_COMMON_DEFINE)
+    }, CRYPTO_COMMON_DEFINE),
+    MINGW64_X86_64 = table.join({
+        "endbr32=",
+        "endbr64=",
+        "BSAES_ASM",
+        "VPAES_ASM",
+        "OPENSSL_IA32_SSE2",
+        "MD5_ASM",
+        "GHASH_ASM",
+        "RSA_ASM",
+        "WHIRLPOOL_ASM",
+    }, CRYPTO_COMMON_DEFINE),
 }
 
 CRYPTO_FILES = {
