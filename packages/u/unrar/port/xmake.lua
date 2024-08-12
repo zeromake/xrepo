@@ -9,6 +9,11 @@ end
 set_encodings("utf-8")
 
 includes("export_symbol.lua")
+if is_plat("windows") then
+    set_languages("c++14")
+else 
+    set_languages("c++11")
+end
 
 local commons = {
     "archive.cpp",
