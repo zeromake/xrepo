@@ -1,0 +1,13 @@
+rule("embed-js")
+    add_imports("lib.detect.find_tool", "core.tool.compiler")
+    set_extensions(".js")
+    on_build_file(function (target, sourcefile, opt)
+        local qjsc = assert(find_tool("qjsc", {norun = true}), "qjsc not found!")
+        local sourcefile_c = path.join(target:autogendir(), path.basename(sourcefile)..".c")
+        local argv = target:extraconf("rules", "embed-js", "argv") or {}
+        argv = table.join(argv, {"-o", sourcefile_c, sourcefile})
+        os:vrunv(qjsc.program, argv)
+        local objectfile_o = target:objectfile(sourcefile_c)
+        compiler.compile(sourcefile_c, objectfile_o)
+        table.insert(target:objectfiles(), objectfile_o)
+    end)
