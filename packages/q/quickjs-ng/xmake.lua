@@ -18,9 +18,17 @@ package("quickjs-ng")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "*"), "./")
         os.cp(path.join(os.scriptdir(), "rules"), "./")
+        if package:config("cli") then
+            os.cp("xmake-qjsc.lua", "xmake.lua")
+            import("package.tools.xmake").install(package)
+            local qjsc = "qjsc"..(os.host() == "windows" and ".exe" or "")
+            os.cp(path.join(package:installdir("bin"), qjsc), "./")
+            os.cp(path.join(os.scriptdir(), "port/xmake.lua"), "./")
+            package:addenv("PATH", "bin")
+        end
         local configs = {
             cli = package:config("cli") and 'y' or 'n',
-            libc = package:config("libc") and 'y' or 'n',
+            libc = package:config("libc") and 'y' or 'n'
         }
         import("package.tools.xmake").install(package, configs)
     end)

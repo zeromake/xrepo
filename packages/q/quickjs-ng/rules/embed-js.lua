@@ -1,13 +1,27 @@
 rule("embed-js")
-    add_imports("lib.detect.find_tool", "core.tool.compiler")
+    add_imports(
+        "lib.detect.find_tool",
+        "core.tool.compiler",
+        "utils.progress",
+        "core.project.depend"
+    )
     set_extensions(".js")
     on_build_file(function (target, sourcefile, opt)
-        local qjsc = assert(find_tool("qjsc", {norun = true}), "qjsc not found!")
-        local sourcefile_c = path.join(target:autogendir(), path.basename(sourcefile)..".c")
-        local argv = target:extraconf("rules", "embed-js", "argv") or {}
-        argv = table.join(argv, {"-o", sourcefile_c, sourcefile})
-        os:vrunv(qjsc.program, argv)
-        local objectfile_o = target:objectfile(sourcefile_c)
-        compiler.compile(sourcefile_c, objectfile_o)
-        table.insert(target:objectfiles(), objectfile_o)
+        local basename = path.join(target:autogendir(), path.basename(sourcefile))
+        local sourcefile_c = basename..".c"
+        local objectfile_o = target:objectfile(basename)
+        depend.on_changed(function ()
+            os.mkdir(path.directory(sourcefile_c))
+            local qjsc = assert(find_tool("qjsc", {paths={"$(env PATH)", os.projectdir()}, norun = true}), "qjsc not found!")
+            local argv = target:extraconf("rules", "embed-js", "argv") or {}
+            argv = table.join(argv, {"-o", sourcefile_c, sourcefile})
+            progress.show(opt.progress, "compiling.$(mode) %s", sourcefile)
+            os.vrunv(qjsc.program, argv)
+            compiler.compile(sourcefile_c, objectfile_o, table.join(opt, {target = target}))
+            table.insert(target:objectfiles(), objectfile_o)
+        end, {
+            dependfile = target:dependfile(objectfile_o),
+            files = sourcefile,
+            changed = target:is_rebuilt()
+        })
     end)

@@ -48,16 +48,11 @@ target("quickjs")
 
 if get_config("cli") then
     includes("rules/embed-js.lua")
-    target("qjsc")
-        set_default(false)
-        add_files("qjsc.c")
-        add_deps("quickjs")
-
     target("qjs")
         set_default(true)
-        add_rules("embed-js", {argv = {"-fbignum", "-c"}})
+        add_rules("embed-js")
         add_files("qjs.c", "repl.js")
-        add_deps("qjsc")
+        add_deps("quickjs")
         if is_plat("windows", "mingw") then
             add_files("resource.rc")
         end
