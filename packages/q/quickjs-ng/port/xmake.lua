@@ -42,7 +42,7 @@ target("quickjs")
         "libunicode.c",
         "quickjs.c"
     )
-    add_headerfiles("quickjs.h", {prefixdir = "quickjs"})
+    add_headerfiles("quickjs.h", "quickjs-libc.h", {prefixdir = "quickjs"})
     add_packages("zeromake.rules")
     add_rules("@zeromake.rules/export_symbol", {file = 'quickjs.sym'})
     if get_config("libc") then
