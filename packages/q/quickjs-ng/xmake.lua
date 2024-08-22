@@ -18,6 +18,7 @@ package("quickjs-ng")
 
     add_includedirs("include", "include/quickjs")
     add_linkdirs("lib")
+    add_links("quickjs")
 
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "*"), "./")
