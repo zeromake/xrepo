@@ -1,5 +1,0 @@
-rule('export_symbol')
-    on_config(function (target)
-        import("export_symbol_imp")(target)
-    end)
-rule_end()

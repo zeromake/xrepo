@@ -53,7 +53,12 @@ function main(target, opt)
     end
     local syms = {}
     if sym_file then
-        syms = io.readfile(sym_file):split('\n')
+        local _syms = io.readfile(sym_file):split('\n')
+        for _, s in ipairs(_syms) do
+            if s ~= '' then
+                table.insert(syms, s)
+            end
+        end
         table.join2(syms, sym_list)
     elseif sym_list and #sym_list > 0 then
         syms = sym_list

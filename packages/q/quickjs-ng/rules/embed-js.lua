@@ -18,10 +18,10 @@ rule("embed-js")
             progress.show(opt.progress, "compiling.$(mode) %s", sourcefile)
             os.vrunv(qjsc.program, argv)
             compiler.compile(sourcefile_c, objectfile_o, table.join(opt, {target = target}))
-            table.insert(target:objectfiles(), objectfile_o)
         end, {
             dependfile = target:dependfile(objectfile_o),
             files = sourcefile,
             changed = target:is_rebuilt()
         })
+        table.insert(target:objectfiles(), objectfile_o)
     end)

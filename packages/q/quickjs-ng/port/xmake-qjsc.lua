@@ -7,7 +7,7 @@ set_arch(os.arch())
 
 if is_plat("windows", "mingw") then
     add_cflags("/TC", {tools = {"clang_cl", "cl"}})
-    add_cflags("/experimental:c11atomics", {tools = {"clang_cl", "cl"}})
+    add_cflags("/experimental:c11atomics", {tools = {"clang_cl", "cl"}, force = true})
     add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
     add_defines(
         "UNICODE",
@@ -18,9 +18,7 @@ if is_plat("windows", "mingw") then
     )
 end
 
-
 add_defines(
-    "CONFIG_BIGNUM=1",
     "_GNU_SOURCE"
 )
 

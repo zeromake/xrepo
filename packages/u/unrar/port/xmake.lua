@@ -8,7 +8,7 @@ end
 
 set_encodings("utf-8")
 
-includes("export_symbol.lua")
+add_requires("zeromake.rules")
 if is_plat("windows") then
     set_languages("c++14")
 else 
@@ -74,7 +74,9 @@ target("unrar")
         "dll.cpp",
         "qopen.cpp"
     )
-    add_rules("export_symbol", {export = {
+    
+    add_packages("zeromake.rules")
+    add_rules("@zeromake.rules/export_symbol", {export = {
         "RAROpenArchive",
         "RAROpenArchiveEx",
         "RARCloseArchive",

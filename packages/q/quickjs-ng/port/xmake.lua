@@ -12,9 +12,11 @@ option("libc")
     set_showmenu(true)
 option_end()
 
+add_requires("zeromake.rules")
+
 if is_plat("windows", "mingw") then
     add_cflags("/TC", {tools = {"clang_cl", "cl"}})
-    add_cflags("/experimental:c11atomics", {tools = {"clang_cl", "cl"}})
+    add_cflags("/experimental:c11atomics", {tools = {"clang_cl", "cl"}, force = true})
     add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
     add_defines(
         "UNICODE",
@@ -28,7 +30,6 @@ end
 set_encodings("utf-8")
 
 add_defines(
-    "CONFIG_BIGNUM=1",
     "_GNU_SOURCE"
 )
 
@@ -42,6 +43,8 @@ target("quickjs")
         "quickjs.c"
     )
     add_headerfiles("quickjs.h", {prefixdir = "quickjs"})
+    add_packages("zeromake.rules")
+    add_rules("@zeromake.rules/export_symbol", {file = 'quickjs.sym'})
     if get_config("libc") then
         add_files("quickjs-libc.c")
     end

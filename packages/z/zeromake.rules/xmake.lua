@@ -1,0 +1,6 @@
+package("zeromake.rules")
+    set_license("MIT")
+    set_kind("library", {headeronly = true})
+    set_sourcedir(os.scriptdir())
+    on_install(function (package)
+    end)
