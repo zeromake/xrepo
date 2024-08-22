@@ -56,7 +56,7 @@ rule('export_symbol')
         if sym_file then
             local _syms = io.readfile(sym_file):split('\n')
             for _, s in ipairs(_syms) do
-                if s ~= '' then
+                if s ~= '' and not s:startswith('#') then
                     table.insert(syms, s)
                 end
             end
