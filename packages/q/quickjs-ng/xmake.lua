@@ -15,7 +15,10 @@ package("quickjs-ng")
     add_versions("2024.08.19-alpha", "7bcbccc0123e07802b9fb3732addbd5b110a7630b66d2bbef7b791be5bfb99d4")
     add_configs("cli", {description = "build cli", default = false, type = "boolean"})
     add_configs("libc", {description = "build libc", default = true, type = "boolean"})
+
     add_includedirs("include", "include/quickjs")
+    add_linkdirs("lib")
+
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "*"), "./")
         os.cp(path.join(os.scriptdir(), "rules"), "./")
