@@ -9,13 +9,12 @@ local options = {
     "xmp",
 }
 
-
 for _, op in ipairs(options) do
     option(op)
         set_default(false)
         set_showmenu(true)
     option_end()
-    if has_config(op) then 
+    if has_config(op) then
         add_requires(op)
     end
 end
@@ -56,6 +55,10 @@ target("sdl2_mixer")
     end
 
     -- mp3
+    add_includedirs("src/codecs")
+    add_defines("MUSIC_MP3_MINIMP3=1")
+
+    -- mpg123
     if has_config("mpg123") then
         add_defines("MUSIC_MP3_MPG123=1")
     else
