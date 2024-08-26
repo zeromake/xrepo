@@ -102,6 +102,11 @@ package("sdl2")
     on_install(function (package)
         local configs = {}
         local packagedeps = {}
+        if package:is_plat("android") then
+            local filename = "src/sensor/android/SDL_androidsensor.c"
+            local content = io.readfile(filename):gsub("ALooper_pollAll%(0", "ALooper_pollOnce(0")
+            io.writefile(filename, content)
+        end
         if package:is_plat("linux") then
             table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
             table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
