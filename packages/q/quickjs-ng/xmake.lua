@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2024.08.19-alpha"] = "archive/3a583764853900a9a3c31735efa3b58541707dbb.tar.gz",
+        ["2024.09.13-alpha"] = "archive/8557bd0a0a051d52d15a467a25b99bdc155d09a7.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -12,6 +13,7 @@ package("quickjs-ng")
         version = getVersion
     })
 
+    add_versions("2024.09.13-alpha", "db4ae6253fe715bb9d6c2b107e2cf8ddd251ae3e7aa79cff86bdddea99426cd8")
     add_versions("2024.08.19-alpha", "7bcbccc0123e07802b9fb3732addbd5b110a7630b66d2bbef7b791be5bfb99d4")
     add_configs("cli", {description = "build cli", default = false, type = "boolean"})
     add_configs("libc", {description = "build libc", default = true, type = "boolean"})

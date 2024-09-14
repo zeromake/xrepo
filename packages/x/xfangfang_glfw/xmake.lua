@@ -2,6 +2,7 @@ local function getVersion(version)
     local versions = {
         ['2023.04.15-alpha'] = 'archive/288235ec228582bf2bc9cf7765261e4d12426cfb.tar.gz',
         ['2024.02.26-alpha'] = 'archive/823dd308d8c596ba9e9bbf77cdca0574d00ae5e2.tar.gz',
+        ["2024.09.12-alpha"] = "archive/5af677b5dd7a43059747984b12e27c117601d304.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -15,6 +16,7 @@ package("xfangfang_glfw")
         version = getVersion
     })
 
+    add_versions("2024.09.12-alpha", "2ff9177caba83b4f4b10d88275e8a1b4f9b14cbe2b9936505fcbf727e4ca7759")
     add_versions("2023.04.15-alpha", "ec99f7a754be6e41de39ff4260ff2b3488691917abe9cdaef7fd818acd078165")
     add_versions("2024.02.26-alpha", "7f15797992f2c60689e169f0c1a8fc3c052e28f0a04c07da3442d7ee92aee6e7")
     add_deps("cmake")

@@ -3,6 +3,7 @@ local function getVersion(version)
         ["2024.06.17-alpha"] = "archive/c970b0bb0768724f5be2ee7ee36bc07b01fc6a62.tar.gz",
         ["2024.07.02-alpha"] = "archive/78f07444c249deb47c7e6279b556c9dcf94d1cc7.tar.gz",
         ["2024.07.10-alpha"] = "archive/7b20c1936229370277d1c61bde950bce194de584.tar.gz",
+        ["2024.09.10-alpha"] = "archive/1eb96dd0f96b9ea73065f9078244c2255c2b75d9.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -17,6 +18,7 @@ package("sokol")
         version = getVersion
     })
 
+    add_versions("2024.09.10-alpha", "ea46acebdd11f84489654632ac441efd23bd31d6b18ca8e4dab48bd613a77028")
     add_versions("2024.07.10-alpha", "e157aab728f7f32c70254c2f9df21f8428e794769081d2758bb8c3dcfdaa8a4f")
     add_versions("2024.07.02-alpha", "7cd4561c85c2d0f50b09006934d2cf2e5533d81e9e5f4922caedc23aa9717a8d")
     add_versions("2024.06.17-alpha", "de9c9c1263521927db4d2463dc1ff5ff0100b4a6e8fe60ce32a726a4af5d14f1")

@@ -4,6 +4,7 @@ package("eastl")
     set_license("BSD-3-Clause")
 
     set_urls("https://github.com/electronicarts/EASTL/archive/refs/tags/$(version).tar.gz")
+    add_versions("3.21.23", "2bcb48f88f7daf9f91c165aae751c10d11d6959b6e10f2dda8f1db893e684022")
     add_versions("3.21.12", "2a4d77e5eda23ec52fea8b22abbf2ea8002f38396d2a3beddda3ff2e17f7db2e")
 
     add_deps("eabase")

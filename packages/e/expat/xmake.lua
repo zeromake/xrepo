@@ -7,6 +7,7 @@ package("expat")
         return version:gsub("%.", "_") .. "/expat-" .. version
     end})
 
+    add_versions("2.6.3", "b8baef92f328eebcf731f4d18103951c61fa8c8ec21d5ff4202fb6f2198aeb2d")
     add_versions("2.6.2", "9c7c1b5dcbc3c237c500a8fb1493e14d9582146dd9b42aa8d3ffb856a3b927e0")
     add_versions("2.6.1", "4677d957c0c6cb2a3321101944574c24113b637c7ab1cf0659a27c5babc201fd")
     add_versions("2.5.0", "6f0e6e01f7b30025fa05c85fdad1e5d0ec7fd35d9f61b22f34998de11969ff67")

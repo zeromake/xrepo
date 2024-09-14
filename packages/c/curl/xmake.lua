@@ -6,6 +6,7 @@ package("curl")
         return version:gsub("%.", "_") .. "/curl-" .. version
     end})
 
+    add_versions("8.10.0", "be30a51f7bbe8819adf5a8e8cc6991393ede31f782b8de7b46235cc1eb7beb9f")
     add_versions("8.8.0", "40d3792d38cfa244d8f692974a567e9a5f3387c547579f1124e95ea2a1020d0d")
     add_versions("8.7.1", "05bbd2b698e9cfbab477c33aa5e99b4975501835a41b7ca6ca71de03d8849e76")
     add_versions("8.6.0", "b4785f2d8877fa92c0e45d7155cf8cc6750dbda961f4b1a45bcbec990cf2fa9b")

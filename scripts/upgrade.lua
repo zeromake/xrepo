@@ -56,6 +56,12 @@ local version_transform = {
         version = version:sub(11)
         local index = string.rfind(version, '.', true)
         return version:sub(1, index-1).."-release"..version:sub(index)
+    end,
+    icu4c = function (version)
+        return version:sub(9):gsub('-', '.')
+    end,
+    mbedtls = function (version)
+        return version:sub(9)
     end
 }
 

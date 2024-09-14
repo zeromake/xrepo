@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2023.04.20-alpha"] = "archive/068d5ee1a3ac40dabd00d211d5013af44be55bea.tar.gz",
+        ["2024.08.23-alpha"] = "archive/23e35d792b9154f922b8b575b12596a4d8664c65.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -12,6 +13,7 @@ package("leveldb")
         version = getVersion
     })
 
+    add_versions("2024.08.23-alpha", "eebf7bdda256c7d6ae689c7db3400180ddb07852dbca187caad1f5a42299f56d")
     add_versions("2023.04.20-alpha", "8f6106a84eb6f22d1b28029741b1879081c38bd53722e5938f720397104ebc80")
     on_install(function (package)
         io.writefile("port_config.h.in", [[

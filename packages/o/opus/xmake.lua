@@ -4,6 +4,7 @@ package("opus")
     set_license("MIT")
     set_urls("https://github.com/xiph/opus/releases/download/v$(version)/opus-$(version).tar.gz")
 
+    add_versions("1.5.2", "9480e329e989f70d69886ded470c7f8cfe6c0667cc4196d4837ac9e668fb7404")
     add_versions("1.4", "c9b32b4253be5ae63d1ff16eea06b94b5f0f2951b7a02aceef58e3a3ce49c51f")
     
     -- add_includedirs("include")

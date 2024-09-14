@@ -3,8 +3,8 @@ package("bzip2")
     set_description("Freely available, patent free, high-quality data compressor.")
 
     set_license("zlib")
-    set_urls("https://sourceware.org/pub/bzip2/bzip2-$(version).tar.gz")
-    add_versions("1.0.8", "ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269")
+    set_urls("https://gitlab.com/bzip2/bzip2/-/archive/bzip2-$(version)/bzip2-bzip2-$(version).tar.gz")
+    add_versions("1.0.8", "db106b740252669664fd8f3a1c69fe7f689d5cd4b132f82ba82b9afba27627df")
 
     add_includedirs("include")
     on_install(function (package)

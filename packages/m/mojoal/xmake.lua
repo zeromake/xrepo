@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2023.07.01-alpha"] = "archive/1adfdf5cd5447c68e11b0ab9f74318a4e364e7c9.tar.gz",
+        ["2024.08.12-alpha"] = "archive/a9e2f30b04f10df1912d06ff5a610edda4677ba5.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -12,6 +13,7 @@ package("mojoal")
         version = getVersion
     })
 
+    add_versions("2024.08.12-alpha", "06bdc0dc73fd8143aa22f1af04b419451ba7637fdc6ff5a9f078e1e36784d15a")
     add_versions("2023.07.01-alpha", "83620b1a78a76cdb7e2c51f1e41e0978e0ef4071e4bbc48fe251a2fee2c69e3c")
     add_deps("sdl2")
     on_load(function (package)

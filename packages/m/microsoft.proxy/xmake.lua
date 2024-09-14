@@ -5,9 +5,7 @@ package("microsoft.proxy")
     set_license("MIT")
     set_urls("https://github.com/microsoft/proxy/archive/refs/tags/$(version).tar.gz")
 
-    add_versions("2.4.0", "7eed973655938d681a90dcc0c200e6cc1330ea8611a9c1a9e1b30439514443cb")
-    add_versions("2.3.1", "bfec45ada9cd3dc576df34bbe877c5d03a81906a00759970c0197c3fa041c5c7")
-    add_versions("2.2.0", "a18ecc395e5f962c79e3231ad7492a267b61463a595220be118ceb00009c86cf")
+    add_versions("3.0.0", "7e073e217e5572bc4c17ed5893273c80ea34c87e1406c853beeb9ca9bdda9733")
     on_install(function (package)
         os.cp("*.h", package:installdir("include/proxy"))
     end)
@@ -16,29 +14,46 @@ package("microsoft.proxy")
         assert(package:check_cxxsnippets({
             test = [[
 #include <iostream>
-#include <map>
-#include <string>
-#include <vector>
+#include <sstream>
 
-#include <proxy/proxy.h>
+#include "proxy.h"
 
-namespace poly {
+PRO_DEF_MEM_DISPATCH(MemDraw, Draw);
+PRO_DEF_MEM_DISPATCH(MemArea, Area);
 
-PRO_DEF_MEMBER_DISPATCH(at, std::string(int));
-PRO_DEF_FACADE(Dictionary, at);
+struct Drawable : pro::facade_builder
+    ::add_convention<MemDraw, void(std::ostream& output)>
+    ::add_convention<MemArea, double() noexcept>
+    ::support_copy<pro::constraint_level::nontrivial>
+    ::build {};
 
-}  // namespace poly
+class Rectangle {
+ public:
+  Rectangle(double width, double height) : width_(width), height_(height) {}
+  Rectangle(const Rectangle&) = default;
 
-void demo_print(pro::proxy<poly::Dictionary> dictionary) {
-  std::cout << dictionary(1) << std::endl;
+  void Draw(std::ostream& out) const {
+    out << "{Rectangle: width = " << width_ << ", height = " << height_ << "}";
+  }
+  double Area() const noexcept { return width_ * height_; }
+
+ private:
+  double width_;
+  double height_;
+};
+
+std::string PrintDrawableToString(pro::proxy<Drawable> p) {
+  std::stringstream result;
+  result << "entity = ";
+  p->Draw(result);
+  result << ", area = " << p->Area();
+  return std::move(result).str();
 }
 
 int main() {
-  std::map<int, std::string> container1{{1, "hello"}};
-  std::vector<std::string> container2{"hello", "world"};
-  demo_print(&container1);  // print: hello\n
-  demo_print(&container2);  // print: world\n
-  return 0;
+  pro::proxy<Drawable> p = pro::make_proxy<Drawable, Rectangle>(3, 5);
+  std::string str = PrintDrawableToString(p);
+  std::cout << str << "\n";  // Prints: "entity = {Rectangle: width = 3, height = 5}, area = 15"
 }
 ]]
         }, {configs = {languages = "c++20"}}))

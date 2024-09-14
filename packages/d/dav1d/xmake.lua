@@ -1,13 +1,9 @@
 
 local function getVersion(version)
     local versions = {
-        ['2023.10.19-alpha'] = 'archive/fd4ecc2fd870fa267e1995600dddf212c6e49300.tar.gz',
-        ["2024.02.29-alpha"] = "archive/85a10359cdfe904af58499716cfb5dbcbf5f14c7.tar.gz",
-        ["2024.04.15-alpha"] = "archive/37d52435d1e839546e725b7b4116334d3b3a5bac.tar.gz",
-        ["2024.05.14-alpha"] = "archive/d835c6bf69d074c57b416c867c2586940a39adbf.tar.gz",
-        ["2024.05.27-alpha"] = "archive/da2cc7817cff218b30f2c813a8a142a43f9376bd.tar.gz",
         ["2024.06.17-alpha"] = "archive/ca83ee6d9dd2c2210deb8e285de4fd72e929e390.tar.gz",
         ["2024.06.26-alpha"] = "archive/2355eeb8f254a1c34dbb0241be5c70cdf6ed46d1.tar.gz",
+        ["2024.09.12-alpha"] = "archive/dd32cd5027c8c4bd43dc72d79df020186865bc7f.tar.gz",
     }
     return versions[tostring(version)]
 end
@@ -20,13 +16,9 @@ package("dav1d")
     set_urls("https://github.com/videolan/dav1d/$(version)", {
         version = getVersion
     })
+    add_versions("2024.09.12-alpha", "12ad1c6dca3c3b66dab0390d244725e46225c919cdc3f144dd795b5a065eac84")
     add_versions("2024.06.26-alpha", "b89413c7886db62f0cf38a3a8534b05ac265bef0827116e8a3b83f03ccf43e2d")
     add_versions("2024.06.17-alpha", "8e65990c24a8e5f67322c1c31817bfdff46f204f406f433104d90ab1e91562f2")
-    add_versions("2024.05.27-alpha", "0c01a46cce30eb30900f852291d8a7ecff9ecdeea7308e4614fdb67a1335ca2e")
-    add_versions("2024.05.14-alpha", "a4ba426b36d196225d30f252505e0dc1c59a11b8ea8a6eb9113a6fb4d4ca3751")
-    add_versions("2024.04.15-alpha", "a9a7df1ecc3f133ac48ce122e0da91c8cdc8007ad8a9aadc6bd3c38c9437fbf9")
-    add_versions("2024.02.29-alpha", "ae3768efe4699423960f9d20c3efcd0cfd7f76e21fd0321d01b31f1645d0746d")
-    add_versions("2023.10.19-alpha", "ca076dbca6683076011ebdd5d791342bb58575cc5a226caee05643096d4a7af9")
     on_install(function (package)
         io.writefile('config.h.in', [[
 #pragma once

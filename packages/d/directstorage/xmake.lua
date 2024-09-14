@@ -4,6 +4,7 @@ package("directstorage")
     set_license("MIT")
     set_urls("https://globalcdn.nuget.org/packages/microsoft.direct3d.directstorage.$(version).nupkg")
 
+    add_versions("1.2.3", "00a555cbb5734b35b67f63c2c0a3878e3ab4a25fbef44351090721f4941867c0")
     add_versions("1.2.2", "25cab8bce31d6a044caaa255b416b22d91e47fe98916a631d9f7cb7017fc011d")
     on_install("windows", "mingw", function (package)
         import("lib.detect.find_tool")

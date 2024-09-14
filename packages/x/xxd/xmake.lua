@@ -5,6 +5,7 @@ package("xxd")
     set_license("BSL-1.0")
     set_urls("https://github.com/ckormanyos/xxd/archive/refs/tags/v$(version).tar.gz")
 
+    add_versions("1.2", "9bc67df9a7200682181e914b9671def339664d4f48d69837c08c816b4bb98438")
     add_versions("1.1", "5bedfa8245a11c415b5799d18e8a39a3a5008c15a0d83d34afd951a4406774fa")
     on_install(function (package)
         io.writefile("xmake.lua", [[
