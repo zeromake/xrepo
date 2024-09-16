@@ -128,7 +128,10 @@ function get_release_latest(repo, secret)
         "my_client_id:"..secret,
         'https://github.com/'..repo..'/releases/latest'
     })
-    local _start = string.find(outdata, 'location:')
+    local _start = string.find(outdata, 'Location:')
+    if _start == nil then
+        _start = string.find(outdata, 'location:')
+    end
     _start = string.find(outdata, 'releases/tag', _start + 9)
     if _start then
         _start = _start + 13

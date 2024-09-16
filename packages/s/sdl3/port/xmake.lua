@@ -1,10 +1,5 @@
 add_rules("mode.debug", "mode.release")
 
-option("winrt")
-    set_default(false)
-    set_showmenu(true)
-option_end()
-
 option("x11")
     set_default(true)
     set_showmenu(true)
@@ -78,7 +73,33 @@ local sdlSrc = {
     "src/joystick/virtual/*.c",
     "src/camera/SDL_camera.c",
     "src/camera/dummy/*.c",
+    "src/filesystem/*.c",
+    "src/storage/*.c",
+    "src/storage/generic/*.c",
+    "src/storage/steam/*.c",
+    "src/time/*.c",
+    "src/gpu/*.c",
+    "src/gpu/vulkan/*.c",
+    "src/process/*.c",
+    "src/process/dummy/*.c",
+    "src/video/offscreen/*.c",
+    "src/main/*.c",
+    "src/dialog/*.c",
 }
+
+if is_plat("windows", "mingw") then
+    table.join2(sdlSrc, {
+        "src/process/windows/*.c",
+        "src/time/windows/*.c",
+        "src/main/windows/*.c",
+    })
+else
+    table.join2(sdlSrc, {
+        "src/process/posix/*.c",
+        "src/time/unix/*.c",
+        "src/main/generic/*.c",
+    })
+end
 
 
 if is_plat("macosx") then
@@ -102,6 +123,8 @@ if is_plat("macosx") then
         "src/video/dummy/*.c",
         "src/hidapi/mac/*.c",
         "src/camera/coremedia/*.m",
+        "src/gpu/metal/*.m",
+        "src/dialog/cocoa/*.c",
     })
 elseif is_plat("iphoneos") then
     add_cxflags("-fembed-bitcode")
@@ -124,12 +147,13 @@ elseif is_plat("iphoneos") then
         "src/hidapi/ios/*.m",
         "src/locale/dummy/*.c",
         "src/camera/coremedia/*.m",
+        "src/gpu/metal/*.m",
+        "src/dialog/dummy/*.c",
     })
 elseif is_plat("windows", "mingw") then
     table.join2(sdlSrc, {
         "src/video/windows/*.c",
         "src/audio/wasapi/*.c",
-        "src/audio/winmm/*.c",
         "src/audio/directsound/*.c",
         "src/filesystem/windows/*.c",
         "src/core/windows/*.c",
@@ -141,40 +165,27 @@ elseif is_plat("windows", "mingw") then
         "src/sensor/windows/*.c",
         "src/sensor/dummy/*.c",
         "src/video/dummy/*.c",
-        "src/hidapi/windows/*.c",
-        "src/camera/mediafoundation/*.c"
+        "src/camera/mediafoundation/*.c",
+        "src/gpu/d3d11/*.c",
+        "src/gpu/d3d12/*.c",
+        "src/dialog/windows/*.c",
     })
-    if get_config("winrt") then
-        table.join2(sdlSrc, {
-            "src/audio/wasapi/*.cpp",
-            "src/core/winrt/*.cpp",
-            "src/filesystem/winrt/*.cpp",
-            "src/misc/winrt/*.cpp",
-            "src/power/winrt/*.cpp",
-            "src/render/direct3d11/*.cpp",
-            "src/thread/windows/SDL_syssem.c",
-            "src/thread/stdcpp/*.cpp",
-            "src/video/winrt/*.cpp",
-            "src/locale/winrt/SDL_syslocale.c",
-            "src/haptic/dummy/*.c",
-        })
-        add_requires("cppwinrt")
-    else
-        table.join2(sdlSrc, {
-            "src/thread/generic/SDL_syscond.c",
-            "src/thread/windows/*.c",
-            "src/locale/windows/*.c",
-            "src/misc/windows/*.c",
-        })
-    end
+    table.join2(sdlSrc, {
+        "src/thread/generic/SDL_syscond.c",
+        "src/thread/generic/SDL_sysrwlock.c",
+        "src/thread/windows/*.c",
+        "src/locale/windows/*.c",
+        "src/misc/windows/*.c",
+    })
 elseif is_plat("android") then
     table.join2(sdlSrc, {
+        "src/camera/android/*.c",
         "src/video/android/*.c",
         "src/misc/android/*.c",
         "src/audio/aaudio/*.c",
         "src/audio/openslES/*.c",
-        "src/audio/android/*.c",
         "src/filesystem/android/*.c",
+        "src/filesystem/posix/*.c",
         "src/thread/pthread/*.c",
         "src/core/android/*.c",
         "src/timer/unix/*.c",
@@ -185,6 +196,7 @@ elseif is_plat("android") then
         "src/power/android/*.c",
         "src/sensor/android/*.c",
         "src/locale/android/*.c",
+        "src/dialog/unix/*.c",
     })
     add_requires("ndk-cpufeatures")
 elseif is_plat("linux") then
@@ -207,8 +219,9 @@ elseif is_plat("linux") then
         "src/video/dummy/*.c",
         "src/timer/unix/*.c",
         "src/joystick/steam/*.c",
-        "src/joystick/dummy/*.c",
+        "src/joystick/linux/*.c",
         "src/sensor/dummy/*.c",
+        "src/dialog/unix/*.c",
     })
 end
 
@@ -218,7 +231,7 @@ target("sdl3")
     if is_plat("windows", "mingw") then
         add_defines("SDL_THREAD_WINDOWS=1")
     end
-    add_includedirs("src", "include", "include/SDL3")
+    add_includedirs("src", "include", "include/SDL3", "include/build_config")
     add_includedirs("src/video/khronos")
     for _, f in ipairs(sdlSrc) do
         add_files(f)
@@ -297,38 +310,19 @@ target("sdl3")
         if is_kind("shared") then
             add_defines("DLL_EXPORT")
         end
-        if get_config("winrt") then
-            add_packages("cppwinrt")
-            add_defines(
-                "SDL_BUILDING_WINRT=1",
-                "WINAPI_FAMILY=WINAPI_FAMILY_APP"
-            )
-            add_syslinks(
-                "msvcrt",
-                "dxgi",
-                "d3d11",
-                "synchronization",
-                "xinput",
-                "mmdevapi"
-            )
-            -- support cx
-            set_runtimes("MD")
-            add_cxxflags("/ZW")
-        else
-            add_syslinks(
-                "gdi32",
-                "user32",
-                "winmm",
-                "shell32",
-                "setupapi",
-                "advapi32",
-                "version",
-                "ole32",
-                "cfgmgr32",
-                "imm32",
-                "oleaut32"
-            )
-        end
+        add_syslinks(
+            "gdi32",
+            "user32",
+            "winmm",
+            "shell32",
+            "setupapi",
+            "advapi32",
+            "version",
+            "ole32",
+            "cfgmgr32",
+            "imm32",
+            "oleaut32"
+        )
     elseif is_plat("android") then
         add_packages("ndk-cpufeatures")
         add_defines("GL_GLEXT_PROTOTYPES", "ANDROID")
