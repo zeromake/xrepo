@@ -1,5 +1,8 @@
 rule('export_symbol')
     on_config(function(target)
+        if target:kind() ~= "shared" then
+            return
+        end
         local function generateWindowsExportSymbol(out, syms)
             local f = io.open(out..".def", "wb")
             if f == nil then
