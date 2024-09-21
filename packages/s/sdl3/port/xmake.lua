@@ -112,7 +112,7 @@ if is_plat("macosx") then
         "src/audio/coreaudio/*.m",
         "src/joystick/apple/*.m",
         "src/filesystem/cocoa/*.m",
-        "src/file/cocoa/*.m",
+        "src/filesystem/posix/*.c",
         "src/thread/pthread/*.c",
         "src/core/unix/*.c",
         "src/timer/unix/*.c",
@@ -121,14 +121,12 @@ if is_plat("macosx") then
         "src/joystick/darwin/*.c",
         "src/sensor/dummy/*.c",
         "src/video/dummy/*.c",
-        "src/hidapi/mac/*.c",
+        -- "src/hidapi/mac/*.c",
         "src/camera/coremedia/*.m",
         "src/gpu/metal/*.m",
-        "src/dialog/cocoa/*.c",
+        "src/dialog/cocoa/*.m",
     })
 elseif is_plat("iphoneos") then
-    add_cxflags("-fembed-bitcode")
-    add_mxflags("-fembed-bitcode")
     table.join2(sdlSrc, {
         "src/power/uikit/*.m",
         "src/video/uikit/*.m",
@@ -143,7 +141,6 @@ elseif is_plat("iphoneos") then
         "src/haptic/dummy/*.c",
         "src/video/dummy/*.c",
         "src/loadso/dlopen/*.c",
-        "src/file/cocoa/*.m",
         "src/hidapi/ios/*.m",
         "src/locale/dummy/*.c",
         "src/camera/coremedia/*.m",
@@ -253,7 +250,8 @@ target("sdl3")
             "CoreHaptics",
             "QuartzCore",
             "AVFoundation",
-            "CoreMedia"
+            "CoreMedia",
+            "UniformTypeIdentifiers"
         )
     elseif is_plat("iphoneos") then
         add_frameworks(
