@@ -10,6 +10,7 @@ if is_plat("windows", "mingw") then
 end
 
 set_encodings("utf-8")
+set_languages("c99")
 
 local common_sources = {
     "src/fs-poll.c",
@@ -105,7 +106,6 @@ target("uv")
             "_CRT_DECLARE_NONSTDC_NAMES=0"
         )
         add_syslinks(
-            "psapi",
             "user32",
             "advapi32",
             "iphlpapi",
