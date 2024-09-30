@@ -16,6 +16,7 @@ package("imgui")
     })
 
     --insert version
+    add_versions("1.91.2", "a3c4fd857a0a48f6edad3e25de68fa1e96d2437f1665039714d1de9ad579b8d0")
     add_versions("1.91.1", "2c13a8909f75222c836abc9b3f60cef31c445f3f41f95d8242118ea789d145ca")
     add_versions("1.90.9", "04943919721e874ac75a2f45e6eb6c0224395034667bf508923388afda5a50bf")
     add_versions("1.90.8", "f606b4fb406aa0f8dad36d4a9dd3d6f0fd39f5f0693e7468abc02d545fb505ae")

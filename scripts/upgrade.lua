@@ -298,6 +298,7 @@ function main(...)
                         output = output..xmakeContext:sub(1, addVersionEnd-1)
                         output = output..'\n    '..release_insert_version
                         output = output..xmakeContext:sub(addVersionEnd)
+                        xmakeContext = output
                         io.writefile(xmakePath, output, {encoding = "binary"})
                     end
                 end
@@ -335,6 +336,7 @@ function main(...)
                     output = output..xmakeContext:sub(alphaVersionStart, addVersionStart-1)
                     output = output..'\n    '..alpha_insert_version
                     output = output..xmakeContext:sub(addVersionStart)
+                    xmakeContext = output
                     io.writefile(xmakePath, output, {encoding = "binary"})
                 end
             end

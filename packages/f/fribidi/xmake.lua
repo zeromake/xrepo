@@ -7,6 +7,7 @@ package("fribidi")
     set_urls("https://github.com/fribidi/fribidi/releases/download/v$(version)/fribidi-$(version).tar.xz")
 
     --insert version
+    add_versions("1.0.16", "1b1cde5b235d40479e91be2f0e88a309e3214c8ab470ec8a2744d82a5a9ea05c")
     add_versions("1.0.15", "0bbc7ff633bfa208ae32d7e369cf5a7d20d5d2557a0b067c9aa98bcbf9967587")
     add_versions("1.0.14", "76ae204a7027652ac3981b9fa5817c083ba23114340284c58e756b259cd2259a")
     add_versions("1.0.13", "7fa16c80c81bd622f7b198d31356da139cc318a63fc7761217af4130903f54a2")
