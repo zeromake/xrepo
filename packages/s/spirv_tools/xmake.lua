@@ -4,6 +4,7 @@ package("spirv_tools")
     set_license("Apache-2.0")
     set_urls("https://github.com/KhronosGroup/SPIRV-Tools/archive/refs/tags/v$(version).tar.gz")
 
+    --insert version
     add_versions("2024.1", "137780e2a8b5c722888f9ec0fb553e6e92f38a0a5c7fcdad9b715152448b9d82")
 
     add_deps("spirv_headers", "protobuf-cpp")

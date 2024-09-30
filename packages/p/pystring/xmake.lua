@@ -4,6 +4,7 @@ local function getVersion(version)
         ["2022.09.27-alpha"] = "archive/7d16bc814ccb4cad03c300dcb77440034caa84f7.tar.gz",
         ["2023.07.23-alpha"] = "archive/76a2024e132bcc83bec1ecfebeacd5d20d490bfe.tar.gz",
         ["2024.08.18-alpha"] = "archive/c5ca4f569d7d99ed42dfc54130f9cabd183ec657.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -15,6 +16,7 @@ package("pystring")
     set_urls("https://github.com/imageworks/pystring/$(version)", {
         version = getVersion,
     })
+    --insert version
     add_versions("2024.08.18-alpha", "3ccb200de50edbdcf32881db05c756ffa7a261cddaa387b0be0571453c2ed2af")
     add_versions("2023.07.23-alpha", "40a694bb42b41e245ff68712db59b67fcd59091cb7cb933c0873c20a75354f9d")
     add_versions("2020.02.04-alpha", "46161e75f85a3e8867233aebb6f4399f405c565db76dc07731a7ef662459609d")

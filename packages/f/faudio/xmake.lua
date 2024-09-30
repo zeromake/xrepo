@@ -8,6 +8,7 @@ package("faudio")
             return tostring(version):match("(%d+%.%d+)%.%d+")
         end
     })
+    --insert version
     add_versions("24.09", "696ef2a0fb4c6208f239f21803ff3f39041d92db1769cf19e390782be07430b6")
     add_versions("24.07", "f7cd15ed111133fbc1ac387fa3e715b3a67d5e4cf59d8e290ac85d856d92367b")
     add_versions("24.06", "62a6d0e6254031e7a9f485afe4ad5fe35f86eafbf232f37d64ffc618bb89f703")

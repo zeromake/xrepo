@@ -14,6 +14,7 @@ package("zeromake.imgui")
         version=getVersion
     })
 
+    --insert version
     add_versions("2024.06.11-alpha", "0109698bd03c884441fa32ce977f5d0bb0b8fcee9366d574a65e7835c4d4478e")
     
     add_configs("backend", {description = "Select backend", default = "", type = "string"})

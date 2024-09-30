@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2024.07.24-alpha"] = "archive/cf7438bd7865f0fc98a5aee8526308fcaa398926.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -15,6 +16,7 @@ package("sokol-wayland")
         version = getVersion
     })
 
+    --insert version
     add_versions("2024.07.24-alpha", "de229e1065ef4ef8dcd9119f67ad2d88a30d8bca38faa76f2c70a338cb4ccdfc")
 
     on_install(function (package)

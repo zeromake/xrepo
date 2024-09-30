@@ -4,6 +4,7 @@ package("jinja2cpp")
     set_license("MIT")
     set_urls("https://github.com/jinja2cpp/Jinja2Cpp/archive/refs/tags/$(version).tar.gz")
 
+    --insert version
     add_versions("1.3.2", "227afb9d16eb1a47c3f3ca10c2f589dd2791c5d8b4767c73e26a0b8997e4c03e")
     add_versions("1.3.1", "3188b95127b4cd628fa33430704fd8e07b3c311202ed51b9e2796b0f99342037")
     add_deps(

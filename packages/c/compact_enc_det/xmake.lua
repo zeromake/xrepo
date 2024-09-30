@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2024.02.12-alpha"] = "archive/d127078cedef9c6642cbe592dacdd2292b50bb19.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -12,6 +13,7 @@ package("compact_enc_det")
         version = getVersion
     })
 
+    --insert version
     add_versions("2024.02.12-alpha", "64ac9ec452931253e687939198fbd7236d764f3670bfcb61b3b7f6c40d5332e0")
     on_install(function (package)
         io.writefile("xmake.lua", [[

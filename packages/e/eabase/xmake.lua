@@ -5,6 +5,7 @@ package("eabase")
     set_license("BSD-3-Clause")
 
     set_urls("https://github.com/electronicarts/EABase/archive/refs/tags/$(version).tar.gz")
+    --insert version
     add_versions("2.09.05", "f85b98c96f1976aa013c8d6016c5e37a409633ac3fce843cd4ec0b89c67e6b7a")
 
     on_install(function (package)

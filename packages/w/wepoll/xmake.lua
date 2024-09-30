@@ -4,6 +4,7 @@ package("wepoll")
     set_license("MIT")
     set_urls("https://github.com/piscisaureus/wepoll/archive/refs/tags/v$(version).tar.gz")
 
+    --insert version
     add_versions("1.5.8", "3f68e5f2f5a35c2eb641b73a6d0e605668ea66e5bd9ff1e170660e3b2a60c74e")
     add_syslinks("ws2_32")
     on_install(function (package)

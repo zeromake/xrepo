@@ -1,7 +1,8 @@
 local function getVersion(version)
     local versions ={
         ["2022.05.07-alpha"] = "archive/1cd244dca8451b0f5f18f04c8eaa4bfe3f866c49.tar.gz",
-        ["2024.01.10-alpha"] = "archive/8182e51df5b434851cada6acfcbf9c4631f020ca.tar.gz"
+        ["2024.01.10-alpha"] = "archive/8182e51df5b434851cada6acfcbf9c4631f020ca.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -14,6 +15,7 @@ package("jpeg")
     set_urls("https://github.com/libsdl-org/jpeg/$(version)", {
         version = getVersion
     })
+    --insert version
     add_versions("2024.01.10-alpha", "e5ae9d6524c28ac225c76829d911cf2712e2d17ac45fdf0dcba05ac2fd138e0b")
     add_versions("2022.05.07-alpha", "149dc39fc0e37bab3996430c581bdb525e3664e380ffcd57b05addafa8e2800d")
 

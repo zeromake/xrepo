@@ -4,6 +4,7 @@ local function getVersion(version)
         ["2023.05.07-alpha"] = "archive/f2aa30ea21a63c9ceeb6393e7d5d0c85a05a52a7.tar.gz",
         ["2024.04.09-alpha"] = "archive/7a878bf3587bcdaa358c43e5bccb372006011d25.tar.gz",
         ["2024.07.18-alpha"] = "archive/7440cdaeb711db16a0be4b824e1a2053daa099e3.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -44,6 +45,7 @@ package("kcp")
         version = getVersion
     })
 
+    --insert version
     add_versions("2024.07.18-alpha", "27a1f089b7f2d2ba552ef70c603d9b92253088d26837d153219bf363e40a8bd2")
     add_versions("2024.04.09-alpha", "6c17ca320d793a7f639cf8e95e4d41aadf2061958474cad73efc6e23ca9e658d")
     add_versions("2023.05.07-alpha", "5bfa9fb6de27f23e263be5398dddc443348008a94fd287ece80a5b98207b2e37")

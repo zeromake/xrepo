@@ -5,6 +5,7 @@ package("nonstd.any")
     set_license("BSL-1.0")
     set_urls("https://github.com/martinmoene/any-lite/archive/refs/tags/v$(version).tar.gz")
 
+    --insert version
     add_versions("0.4.0", "889549098291a1313d2fc8cd12dcdab13214d05cdce7ed5fe2dc724cdd7b3125")
     on_install(function (package)
         os.cp("include/nonstd", package:installdir("include").."/")

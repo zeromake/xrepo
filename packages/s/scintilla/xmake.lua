@@ -9,6 +9,7 @@ package("scintilla")
         version = getVersion
     })
 
+    --insert version
     add_versions("5.5.0", "e553e95509f01f92aa157fa02d06a712642e13d69a11ec1a02a7ddf22c406231")
 
     add_configs("module", {default = nil, type = "string"})

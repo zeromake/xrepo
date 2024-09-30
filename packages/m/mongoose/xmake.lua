@@ -2,6 +2,7 @@
 local function getVersion(version)
     local versions ={
         ["2024.02.27-alpha"] = "archive/05fe1f8e3617cf2f84f461f7c6708fe8c17a151b.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -12,6 +13,7 @@ package("mongoose")
             version = getVersion
         }
     )
+    --insert version
     add_versions("2024.02.27-alpha", "5669f3939e874995493a2c059436b5b520a9eb03487651b05ab042fc01cd0f73")
 
     on_install(function (package)

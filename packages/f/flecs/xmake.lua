@@ -4,6 +4,7 @@ package("flecs")
     set_license("MIT")
     set_urls("https://github.com/SanderMertens/flecs/archive/refs/tags/v$(version).tar.gz")
 
+    --insert version
     add_versions("4.0.1", "d88928226b3a6e7ebc7c818db50b2fb5828021ed3bcd206c4e2a3b0406472d2b")
     add_versions("4.0.0", "6c9826c8602f797acd775269d143763adfb3d3a93031cc81bced2b6d267469d2")
     add_versions("3.2.11", "8ebc5f6f3ec7bbba30b0afe9d22f157437925772857ea1c6e4201eb5d31b4fe5")

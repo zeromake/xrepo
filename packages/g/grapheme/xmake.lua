@@ -2,6 +2,7 @@
 local function getVersion(version)
     local versions ={
         ["2023.12.01-alpha"] = "archive/c8b34aa04ac8702e55ba4b8946d6794c9c6056f5.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -14,6 +15,7 @@ package("grapheme")
         version = getVersion
     })
 
+    --insert version
     add_versions("2023.12.01-alpha", "4b51172351f3be4ea45361e7f76fe7b03e7cf509c868529a83fa737ed3985d3e")
     on_install(function (package)
             io.writefile(

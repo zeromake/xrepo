@@ -5,6 +5,7 @@ package("glad")
     set_license("MIT")
 
     add_urls("https://github.com/Dav1dde/glad/archive/v$(version).tar.gz")
+    --insert version
     add_versions("2.0.5", "850351f1960f3fed775f0b696d7f17615f306beb56be38a20423284627626df1")
     add_versions("0.1.36", "8470ed1b0e9fbe88e10c34770505c8a1dc8ccb78cadcf673331aaf5224f963d2")
     add_configs("api", {description = "gl:core", default = "", type = "string"})

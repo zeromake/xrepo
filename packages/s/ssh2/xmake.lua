@@ -4,6 +4,7 @@ package("ssh2")
     set_license("BSD-3-Clause")
     set_urls("https://github.com/libssh2/libssh2/releases/download/libssh2-1.11.0/libssh2-1.11.0.tar.gz")
 
+    --insert version
     add_versions("1.11.0", "3736161e41e2693324deb38c26cfdc3efe6209d634ba4258db1cecff6a5ad461")
     if is_plat("windows", "mingw") then
         add_syslinks("user32")

@@ -9,6 +9,7 @@ package("re2")
         version = getVersion
     })
 
+    --insert version
     add_versions("2024.06.01", "7326c74cddaa90b12090fcfc915fe7b4655723893c960ee3c2c66e85c5504b6c")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")

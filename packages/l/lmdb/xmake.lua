@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2024.08.10-alpha"] = "archive/9c9d34558cc438f99aebd1ab58f83fd7faeabc0a.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -12,6 +13,7 @@ package("lmdb")
         version = getVersion
     })
 
+    --insert version
     add_versions("2024.08.10-alpha", "356165c0edf4b16d5c2606b70dda620c0e8fa1a8e97d0ec7963330dcd7863a70")
     on_install(function (package)
         io.writefile("xmake.lua", [[

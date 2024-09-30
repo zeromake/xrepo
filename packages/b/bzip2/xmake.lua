@@ -4,9 +4,9 @@ package("bzip2")
 
     set_license("zlib")
     set_urls("https://gitlab.com/bzip2/bzip2/-/archive/bzip2-$(version)/bzip2-bzip2-$(version).tar.gz")
+    --insert version
     add_versions("1.0.8", "db106b740252669664fd8f3a1c69fe7f689d5cd4b132f82ba82b9afba27627df")
 
-    add_includedirs("include")
     on_install(function (package)
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")

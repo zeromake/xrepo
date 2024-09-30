@@ -4,6 +4,7 @@ package("opusfile")
     set_license("BSD-3-Clause")
     set_urls("https://github.com/xiph/opusfile/releases/download/v$(version)/opusfile-$(version).tar.gz")
 
+    --insert version
     add_versions("0.12", "118d8601c12dd6a44f52423e68ca9083cc9f2bfe72da7a8c1acb22a80ae3550b")
     add_deps("ogg", "opus")
     on_install(function (package)

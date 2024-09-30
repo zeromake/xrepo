@@ -5,6 +5,7 @@ package("protobuf-cpp")
 
     add_urls("https://github.com/protocolbuffers/protobuf/releases/download/v$(version)/protobuf-$(version).tar.gz")
 
+    --insert version
     add_versions("27.1", "6fbe2e6f703bcd3a246529c2cab586ca12a98c4e641f5f71d51fde09eb48e9e7")
     add_configs("zlib", {description = "Enable zlib", default = false, type = "boolean"})
 

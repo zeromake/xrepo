@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2024.08.26-alpha"] = "archive/3abe2707606ee66e43cbc78c970a753dbfc4986c.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -11,6 +12,7 @@ package("fdk-aac")
     set_license("MIT")
     set_urls("https://github.com/zeromake/fdk-acc/$(version)", {version = getVersion})
 
+    --insert version
     add_versions("2024.08.26-alpha", "67ce3b8dee444990e6494a2711c4b3a552fe53e21f2ef6a51ffd3877a70f29f4")
     add_patches("2024.08.26-alpha", path.join(os.scriptdir(), "patches/fix.patch"), "9deea84d11cd43b27b4db1c453c5fd5cbfd606b3020000b6d39131fc9773964b")
     on_install(function (package)

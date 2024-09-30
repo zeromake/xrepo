@@ -1,11 +1,11 @@
-
-
 package("raqm")
-    set_homepage("Todo")
-    set_description("Todo")
+    set_homepage("https://host-oman.github.io/libraqm")
+    set_description("A library for complex text layout")
     set_license("MIT")
     set_urls("https://github.com/HOST-Oman/libraqm/releases/download/v$(version)/raqm-$(version).tar.xz")
 
+    --insert version
+    add_versions("0.10.2", "3e936f2c4e585c3168dbe121fcb7d6c55702027c68e491076381da5c4060559c")
     add_versions("0.10.1", "4d76a358358d67c5945684f2f10b3b08fb80e924371bf3ebf8b15cd2e321d05d")
     add_versions("0.9.0", "9ed6fdf41da6391fc9bf7038662cbe412c330aa6eb22b19704af2258e448107c")
 

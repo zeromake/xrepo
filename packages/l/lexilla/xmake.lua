@@ -9,6 +9,7 @@ package("lexilla")
         version = getVersion
     })
 
+    --insert version
     add_versions("5.3.2", "fc06be954401c9dc1810f927bccd2604c43a70cf98178161cf817e95c4ebf00f")
     add_deps("scintilla")
     on_install(function (package)

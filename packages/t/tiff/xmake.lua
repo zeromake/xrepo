@@ -6,6 +6,7 @@ package("tiff")
     set_license("MIT")
     set_urls("https://download.osgeo.org/libtiff/tiff-$(version).tar.xz")
 
+    --insert version
     add_versions("4.4.0", "49307b510048ccc7bc40f2cba6e8439182fe6e654057c1a1683139bf2ecb1dc1")
 
     for _, op in ipairs(options) do

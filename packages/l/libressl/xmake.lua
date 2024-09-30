@@ -5,6 +5,7 @@ package("libressl")
 
     add_urls("https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-$(version).tar.gz")
 
+    --insert version
     add_versions("3.9.2", "7b031dac64a59eb6ee3304f7ffb75dad33ab8c9d279c847f92c89fb846068f97")
     add_versions("3.8.2", "6d4b8d5bbb25a1f8336639e56ec5088052d43a95256697a85c4ce91323c25954")
     add_configs("asm", {description = "use asm", default = true, type = "boolean"})

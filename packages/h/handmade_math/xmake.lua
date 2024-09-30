@@ -3,6 +3,7 @@ local function getVersion(version)
         ["2023.12.16-alpha"] = "archive/322826bcee79cb9f288dd229a505d6c46784b047.tar.gz",
         ["2024.04.11-alpha"] = "archive/43836aa3a6226682b594a6ba818baf16c0538b81.tar.gz",
         ["2024.05.28-alpha"] = "archive/bdc7dd2a516b08715a56f8b8eecefe44c9d68f40.tar.gz",
+        --insert getVersion
     }
     if versions[tostring(version)] == nil then
         return "archive/refs/tags/v"..tostring(version)..".tar.gz"
@@ -17,6 +18,7 @@ package("handmade_math")
     set_license("MIT")
     set_urls("https://github.com/HandmadeMath/HandmadeMath/$(version)", {version = getVersion})
 
+    --insert version
     add_versions("2024.05.28-alpha", "9cfe6f14375e284dbaa111650059609053a969767b90cf15ab3bba9495a564e0")
     add_versions("2024.04.11-alpha", "6dacbddf4838d7c809054182d42d2e584719a66ab669b027d7b22b3d18295b93")
     add_versions("2023.12.16-alpha", "3ab66f15970c8161b70958e23478a32ec447db148a446ef71f559b3dbc9f8453")

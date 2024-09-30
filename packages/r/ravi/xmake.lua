@@ -4,6 +4,7 @@ package("ravi")
     set_license("MIT")
     set_urls("https://github.com/dibyendumajumdar/ravi/archive/refs/tags/$(version).tar.gz")
 
+    --insert version
     add_versions("1.0-beta11", "7730b264ded32d4b211b344c44ff4e3e92f1ee9ff6b2279ca3e15bb86c75ef6e")
 
     add_configs("jit", {description = "support jit", default = true, type = "boolean"})

@@ -5,6 +5,7 @@ local function getVersion(version)
         ["2024.07.02-alpha"] = "archive/bad6eb7c7c7573d63f35892d5f9c749710bb6f41.tar.gz",
         ["2024.07.12-alpha"] = "archive/23c7bff3f01ab2f56a913aae2165b54c78b9bb84.tar.gz",
         ["2024.07.23-alpha"] = "archive/592ccc17552ba3eb51b479432986d8786c4fbbe0.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -16,6 +17,7 @@ package("fyaml")
         version = getVersion
     })
 
+    --insert version
     add_versions("2024.07.23-alpha", "507efe5d1358b89f0f6651a1b167e4f0cc900c8f9e09336c1c5c7a81308be29c")
     add_versions("2024.07.12-alpha", "b486d674bf74a9f802809c01122fffa439db56e6bffc90ec6bbdae1f5ca86919")
     add_versions("2024.07.02-alpha", "af8d17fff7b6eb61f4828f709a0ebfb8ab59d0531bb5e31f2f0ef00f363702c2")

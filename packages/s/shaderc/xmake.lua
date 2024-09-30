@@ -5,6 +5,7 @@ package("shaderc")
 
     set_urls("https://github.com/google/shaderc/archive/refs/tags/v2024.1.tar.gz")
 
+    --insert version
     add_versions("2024.1", "eb3b5f0c16313d34f208d90c2fa1e588a23283eed63b101edd5422be6165d528")
     add_configs("cli", {description = "build cli", default = false, type = "boolean"})
 

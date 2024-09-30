@@ -9,6 +9,7 @@ package("abseil")
         version = getVersion
     })
 
+    --insert version
     add_versions("2024.01.16-2", "733726b8c3a6d39a4120d7e45ea8b41a434cdacde401cba500f14236c49b39dc")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")

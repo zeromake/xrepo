@@ -4,6 +4,7 @@ package("png")
     set_license("libpng-2.0")
 
     set_urls("https://github.com/pnggroup/libpng/archive/refs/tags/v$(version).tar.gz")
+    --insert version
     add_versions("1.6.44", "0ef5b633d0c65f780c4fced27ff832998e71478c13b45dfb6e94f23a82f64f7c")
     add_versions("1.6.43", "fecc95b46cf05e8e3fc8a414750e0ba5aad00d89e9fdf175e94ff041caf1a03a")
     add_versions("1.6.40", "62d25af25e636454b005c93cae51ddcd5383c40fa14aa3dae8f6576feb5692c2")

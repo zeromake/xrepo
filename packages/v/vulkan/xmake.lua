@@ -10,6 +10,7 @@ package("vulkan")
         version = getVersion
     })
 
+    --insert version
     add_versions("1.3.250-release.1", "fab945cdae8ab5d8f983ff9cda39d80cfe7ab644660e577e977566dd73380785")
     add_links("vulkan-1")
     on_install("windows", "mingw", function (package)

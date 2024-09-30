@@ -6,6 +6,7 @@ package("qr-code-generator")
     set_urls("https://github.com/nayuki/QR-Code-generator/archive/refs/tags/v$(version).tar.gz")
     add_configs("cpp", {description = "Support cpp link", default = false, type = "boolean"})
 
+    --insert version
     add_versions("1.8.0", "2ec0a4d33d6f521c942eeaf473d42d5fe139abcfa57d2beffe10c5cf7d34ae60")
     on_load(function (package)
         if package:config("cpp") then

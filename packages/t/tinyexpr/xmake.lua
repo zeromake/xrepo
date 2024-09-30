@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2024.04.05-alpha"] = "archive/9907207e5def0fabdb60c443517b0d9e9d521393.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -13,6 +14,7 @@ package("tinyexpr")
         version = getVersion
     })
 
+    --insert version
     add_versions("2024.04.05-alpha", "897e32058491d3a74d79847d3405cb4bd2de877aa8657dafe9916b8fb915f34d")
     on_install(function (package)
         io.writefile("xmake.lua", [[

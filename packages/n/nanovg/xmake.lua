@@ -4,6 +4,7 @@ local function getVersion(version)
         ["2023.03.29-alpha"] = "archive/aa6917c02688ceb72d30fc31f34f0bdfc9b4a559.tar.gz",
         ["2024.04.25-alpha"] = "archive/12335ea226214440296927c8fe821dba9ee17d5a.tar.gz",
         ["2024.04.30-alpha"] = "archive/f98e6a64b190364a1b6a40e37070a6134fdac28c.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -22,6 +23,7 @@ package("nanovg")
                 version = getVersion
             }
         )
+        --insert version
         add_versions("2024.04.30-alpha", "89594f7ff959d80316950154355d184997e61d604cd3f02ce14e0da7f88b9e01")
         add_versions("2024.04.25-alpha", "ac08fe1f8b0b79688c16fad2bcf27f711b7ed649d5b13e76069f4137491faff0")
         add_versions("2023.12.25-alpha", "65d2285824134fb71e03337e4bfaead4a84831e242b5e0d3d9a83cb612250260")

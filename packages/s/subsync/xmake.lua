@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2019.03.08-alpha"] = "archive/752b62685aff0c79ffc56c090a4cbb1ec82dfd61.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -12,6 +13,7 @@ package("subsync")
     set_license("GPL-3.0")
     set_urls("https://github.com/xuminic/subsync/$(version)", {version = getVersion})
 
+    --insert version
     add_versions("2019.03.08-alpha", "af95437827ceb14467702bc502584f72489dfd99625b68ee6c04b1883ea01668")
     on_install(function (package)
     io.writefile("xmake.lua", [[

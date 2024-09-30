@@ -5,6 +5,7 @@ package("inja")
     set_license("MIT")
     set_urls("https://github.com/pantor/inja/archive/refs/tags/v$(version).tar.gz")
 
+    --insert version
     add_versions("3.4.0", "7155f944553ca6064b26e88e6cae8b71f8be764832c9c7c6d5998e0d5fd60c55")
     add_deps("nlohmann_json")
 

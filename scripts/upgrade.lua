@@ -285,7 +285,21 @@ function main(...)
                         download_sha256 = hash.sha256('./'..download_path)
                     end
                     print('\n', packageDir, '-------------release new-------------')
-                    print('add_versions("'..latest_version..'", "'..(download_sha256 or 'nil')..'")')
+                    local release_insert_version = 'add_versions("'..latest_version..'", "'..(download_sha256 or 'nil')..'")'
+                    print(release_insert_version)
+                    if argv.write == true then
+                        local addVersionStart = xmakeContext:find('--insert version')
+                        if addVersionStart == nil then
+                            print('--insert 标识不存在')
+                            goto continue
+                        end
+                        local addVersionEnd = addVersionStart+16
+                        local output = ''
+                        output = output..xmakeContext:sub(1, addVersionEnd-1)
+                        output = output..'\n    '..release_insert_version
+                        output = output..xmakeContext:sub(addVersionEnd)
+                        io.writefile(xmakePath, output, {encoding = "binary"})
+                    end
                 end
             end
         end
@@ -304,8 +318,25 @@ function main(...)
                     download_sha256 = hash.sha256('./'..download_path)
                 end
                 print('\n', packageDir, '-------------alpha new-------------')
-                print('["'..alpha_version..'"] = "archive/'..alpha_sha..'.tar.gz",')
-                print('add_versions("'..alpha_version..'", "'..(download_sha256 or 'nil')..'")')
+                local alpha_insert_get_version = '["'..alpha_version..'"] = "archive/'..alpha_sha..'.tar.gz",'
+                print(alpha_insert_get_version)
+                local alpha_insert_version = 'add_versions("'..alpha_version..'", "'..(download_sha256 or 'nil')..'")'
+                print(alpha_insert_version)
+                if argv.write == true then
+                    local alphaVersionStart = xmakeContext:find('--insert getVersion')
+                    if alphaVersionStart == nil then
+                        print('--insert 标识不存在')
+                        goto continue
+                    end
+                    local addVersionStart = xmakeContext:find('--insert version')+16
+                    local output = ''
+                    output = output..xmakeContext:sub(1, alphaVersionStart-1)
+                    output = output..alpha_insert_get_version..'\n        '
+                    output = output..xmakeContext:sub(alphaVersionStart, addVersionStart-1)
+                    output = output..'\n    '..alpha_insert_version
+                    output = output..xmakeContext:sub(addVersionStart)
+                    io.writefile(xmakePath, output, {encoding = "binary"})
+                end
             end
         end
         ::continue::

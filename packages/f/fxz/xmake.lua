@@ -1,7 +1,8 @@
 
 local function getVersion(version)
     local versions = {
-        ['2022.01.09-alpha'] = 'archive/f12d7eb3ecebcfa5e2d3dc8a016772b3cd101f39.tar.gz'
+        ['2022.01.09-alpha'] = 'archive/f12d7eb3ecebcfa5e2d3dc8a016772b3cd101f39.tar.gz',
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -12,6 +13,7 @@ package("fxz")
     set_license("MIT")
     set_urls("https://github.com/conor42/fxz/$(version)", {version = getVersion})
 
+    --insert version
     add_versions("2022.01.09-alpha", "dffa4ec239bd43db13b5cba8d18eecb3c34e10289d1c576cfb81066a0660e4c9")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")

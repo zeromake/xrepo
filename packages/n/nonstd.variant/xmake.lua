@@ -5,6 +5,7 @@ package("nonstd.variant")
     set_license("BSL-1.0")
     set_urls("https://github.com/martinmoene/variant-lite/archive/refs/tags/v$(version).tar.gz")
 
+    --insert version
     add_versions("2.0.0", "70c1509e24d03abfd22d2e702ab398238e69658b7b2890ce1d7e9731d6b5a7cb")
     on_install(function (package)
         os.cp("include/nonstd", package:installdir("include").."/")

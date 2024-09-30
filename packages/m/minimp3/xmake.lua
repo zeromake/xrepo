@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2021.11.30-alpha"] = "archive/afb604c06bc8beb145fecd42c0ceb5bda8795144.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -13,6 +14,7 @@ package("minimp3")
         version = getVersion
     })
 
+    --insert version
     add_versions("2021.11.30-alpha", "21672c32aaac29cf4b7e6f8e0154767080ae87faa79c682498453e5a9bc5e0d3")
     on_install(function (package)
         os.cp("*.h", package:installdir("include/minimp3"))
