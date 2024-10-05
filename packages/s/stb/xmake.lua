@@ -5,6 +5,7 @@ local function getVersion(version)
         ['2024.02.13-alpha'] = 'archive/ae721c50eaf761660b4f90cc590453cdb0c2acd0.tar.gz',
         ["2024.05.31-alpha"] = "archive/013ac3beddff3dbffafd5177e7972067cd2b5083.tar.gz",
         ["2024.07.29-alpha"] = "archive/f75e8d1cad7d90d72ef7a4661f1b994ef78b4e31.tar.gz",
+        ["2024.10.02-alpha"] = "archive/31707d14fdb75da66b3eed52a2236a70af0d0960.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -19,6 +20,7 @@ package("stb")
         version = getVersion
     })
     --insert version
+    add_versions("2024.10.02-alpha", "c0e74a95c942c47d746d7c2a5e9df96cc0a56d1f967dfe268f48c7f9367a419f")
     add_versions("2024.07.29-alpha", "bc6ccf08bec08fea8ef423c7117dca06d2f62d2b27c5485f6865584b533fa7fa")
     add_versions("2024.05.31-alpha", "b01aa93e1a968aed55f43e072c98ee401d2f20e897aabdb1a166c7166886ed11")
     add_versions("2024.02.13-alpha", "cd82be3ddc4146ef738f80a794a83f2ed45faab1c5b23278121788ef7b598e89")

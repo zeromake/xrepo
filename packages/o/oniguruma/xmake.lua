@@ -5,6 +5,7 @@ local function getVersion(version)
         ["2024.07.04-alpha"] = "archive/b6c8d55ac402fd89e448153bc4f827ae1ee65840.tar.gz",
         ["2024.09.11-alpha"] = "archive/5666d4a9d576d5c19c9cf2cbd19079f49213407e.tar.gz",
         ["2024.09.24-alpha"] = "archive/2da403bf58ac0d78f221578b96844416c40aedca.tar.gz",
+        ["2024.10.04-alpha"] = "archive/43a8c3f3daf263091f3a74019d4b32ebb6417093.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -19,6 +20,7 @@ package("oniguruma")
     })
 
     --insert version
+    add_versions("2024.10.04-alpha", "0873621d5d3f52d34c51a46afdca1012bbf8cfbc51eed34b7497eced99428b5e")
     add_versions("2024.09.24-alpha", "2deb2205069498c3ae0656ab8a905aea73905e84b30ef2988f9eff7a52b8e71d")
     add_versions("2024.09.11-alpha", "9ed4df5012e17a5884b576008a220c8bd0d96e8afb9e1af9b26459210a3e217a")
     add_versions("2024.07.04-alpha", "a06091d2ec4630b78d5d2a2b5885a012c40c34626f6b3a79713ea4855f451cd9")
