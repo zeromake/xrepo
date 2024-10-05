@@ -105,11 +105,6 @@ package("sdl2")
     on_install(function (package)
         local configs = {}
         local packagedeps = {}
-        if package:is_plat("android") then
-            local filename = "src/sensor/android/SDL_androidsensor.c"
-            local content = io.readfile(filename):gsub("ALooper_pollAll%(0", "ALooper_pollOnce(0")
-            io.writefile(filename, content)
-        end
         if package:is_plat("linux") then
             table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
             table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
@@ -119,9 +114,9 @@ package("sdl2")
             configs["winrt"] = package:config("winrt") and "y" or "n"
             configs["bmp_compat"] = package:config("bmp_compat") and "y" or "n"
             import("package.tools.xmake").install(package, configs)
-            if package:is_plat("android") then
-                os.cp("android-project/app/src/main/java/org/libsdl/app/*.java", package:installdir("lib/org.libsdl.app"))
-            end
+        end
+        if package:is_plat("android") then
+            os.cp("android-project/app/src/main/java/org/libsdl/app/*.java", package:installdir("lib/org.libsdl.app"))
         end
     end)
 
