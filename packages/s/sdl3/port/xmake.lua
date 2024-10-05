@@ -133,6 +133,8 @@ elseif is_plat("iphoneos") then
         "src/render/metal/*.m",
         "src/misc/ios/*.m",
         "src/audio/coreaudio/*.m",
+        "src/filesystem/cocoa/*.m",
+        "src/filesystem/posix/*.c",
         "src/joystick/apple/*.m",
         "src/joystick/steam/*.c",
         "src/timer/unix/*.c",
@@ -267,7 +269,8 @@ target("sdl3")
             "CoreMotion",
             "CoreBluetooth",
             "AVFoundation",
-            "CoreMedia"
+            "CoreMedia",
+            "CoreVideo"
         )
     elseif is_plat("linux", "bsd") then
         if is_plat("bsd") then

@@ -56,7 +56,8 @@ package("sdl3")
             "CoreMotion",
             "CoreBluetooth",
             "AVFoundation",
-            "CoreMedia"
+            "CoreMedia",
+            "CoreVideo"
         )
     elseif is_plat("windows", "mingw") then
     elseif is_plat("android") then
