@@ -94,6 +94,7 @@ local download_transform = {
     nghttp2 = function (opt) return default_transform(opt, 'nghttp2-') end,
     nghttp3 = function (opt) return default_transform(opt, 'nghttp3-') end,
     ngtcp2 = function (opt) return default_transform(opt, 'ngtcp2-') end,
+    mbedtls = function (opt) return default_transform(opt, 'mbedtls-', '.tar.bz2') end,
 }
 
 
