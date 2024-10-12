@@ -7,6 +7,7 @@ local function getVersion(version)
         ["2024.09.21-alpha"] = "archive/f2c3ccd6a649a25d718cb0c8e8b6196fdbd2407f.tar.gz",
         ["2024.09.30-alpha"] = "archive/ed004fe95d47e30e8248764fddbb08b77ba13187.tar.gz",
         ["2024.10.02-alpha"] = "archive/21d9f29d388c230a7fe4e964397399247162bd5e.tar.gz",
+        ["2024.10.09-alpha"] = "archive/b2e7f06c72cad3fe9027efea9751f48d8ea7e357.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -21,6 +22,7 @@ package("dav1d")
         version = getVersion
     })
     --insert version
+    add_versions("2024.10.09-alpha", "4bcdc9876a9f5f19bba0b0337d71c0d5099391923ef24f93be2ca46a75ed9748")
     add_versions("2024.10.02-alpha", "388eb492749f1cc6453ab34d7c01b29b5e5c3806d999bdb6a850495d5f45b575")
     add_versions("2024.09.30-alpha", "730cc72ee6338193c736e6084d1afef88b710da53b0147e65d4f5ad3e0ac8c84")
     add_versions("2024.09.21-alpha", "19f399bd06be4d72f99587128a02fccf107ac4b8061d73d1e438a520a069d585")

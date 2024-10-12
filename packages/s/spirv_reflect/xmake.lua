@@ -11,6 +11,7 @@ package("spirv_reflect")
     })
 
     --insert version
+    add_versions("1.3.296-release.0", "4a8a43a1210e9eb086174a3d6e4087eb393bf1f2ff3495a91c7386b862cbe193")
     add_versions("1.3.290-release.0", "289b8ba405a2854c5b5231e50034b511a99dd4a6fabd159fd3b30b35a87876a6")
     add_versions("1.3.283-release.0", "ae8cf36d155e5c62536ec6a2b215d479ef5677e447802ec69250efb4ee5ca447")
     add_versions("1.3.280-release.0", "23934b12e528096d678a318f6590a48f5e0e97d4a89d8146b4fddf48f4ff689a")
