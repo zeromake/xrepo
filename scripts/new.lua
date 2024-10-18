@@ -19,6 +19,7 @@ local options = {}
 local function getVersion(version)
     local versions ={
         ["2023.12.25-alpha"] = "archive/f45d73db67eaadc3df98971872add86f660a3ee5.tar.gz",
+        --insert getVersion
     }
     return versions[tostring(version)]
 end
@@ -30,6 +31,7 @@ package("%s")
         version = getVersion
     })
 
+    --insert version
     add_versions("0.0.0", "sha256")
 ]], opt.package)
     if opt.options then
@@ -49,19 +51,8 @@ package("%s")
     end
     out:writef([==[
     on_install(function (package)
-        io.writefile("xmake.lua", [[
-add_rules("mode.debug", "mode.release")
-if is_plat("windows") then
-    add_cflags("/TC", {tools = {"clang_cl", "cl"}})
-    add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
-    add_defines("UNICODE", "_UNICODE")
-end
-set_encodings("utf-8")
-target("%s")
-    set_kind("$(kind)")
-    add_files("xx.c")
-    add_headerfiles("xx.h")
-]], {encoding = "binary"})
+        os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
+        io.writefile("xmake.lua", [[]], {encoding = "binary"})
         local configs = {}
 ]==], opt.package)
     if opt.options then

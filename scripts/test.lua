@@ -8,7 +8,7 @@ local options =
 {
     {'v', "verbose",    "k",  nil, "Enable verbose information."                }
 ,   {'D', "diagnosis",  "k",  nil, "Enable diagnosis information."              }
-,   {nil, "shallow",    "k",  nil, "Only install the root packages."            }
+,   {'s', "shallow",    "k",  nil, "Only install the root packages."            }
 ,   {'k', "kind",       "kv", nil, "Enable static/shared library."              }
 ,   {'p', "plat",       "kv", nil, "Set the given platform."                    }
 ,   {'a', "arch",       "kv", nil, "Set the given architecture."                }

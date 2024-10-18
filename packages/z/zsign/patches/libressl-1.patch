@@ -1,0 +1,20 @@
+diff --git a/openssl.cpp b/openssl.cpp
+index aacbf84..2f7e86c 100644
+--- a/openssl.cpp
++++ b/openssl.cpp
+@@ -5,7 +5,6 @@
+ #include <openssl/pem.h>
+ #include <openssl/cms.h>
+ #include <openssl/err.h>
+-#include <openssl/provider.h>
+ #include <openssl/pkcs12.h>
+ #include <openssl/conf.h>
+ 
+@@ -695,7 +694,6 @@ bool ZSignAsset::Init(const string &strSignerCertFile, const string &strSignerPK
+ 			if (NULL == evpPKey)
+ 			{
+ 				BIO_reset(bioPKey);
+-				OSSL_PROVIDER_load(NULL, "legacy");
+ 				PKCS12 *p12 = d2i_PKCS12_bio(bioPKey, NULL);
+ 				if (NULL != p12)
+ 				{
