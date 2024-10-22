@@ -6,6 +6,7 @@ local function getVersion(version)
         ["2024.09.29-alpha"] = "archive/fa9f257c7b2b1c434fa03a99dac02ef760c56d14.tar.gz",
         ["2024.09.30-alpha"] = "archive/2ad47c08f104ab33d832307293df0b0910ce0791.tar.gz",
         ["2024.10.03-alpha"] = "archive/03198a016bc895f66c8b4b2811e0380f6ff4558f.tar.gz",
+        ["2024.10.19-alpha"] = "archive/6566d9075d5fed48af014c93f87c4aed8c4bd21c.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -20,6 +21,7 @@ package("nuklear")
     })
 
     --insert version
+    add_versions("2024.10.19-alpha", "ca9d537cd0232a4c8ab58e1220e68972f906b314ac5de7b79e354f10859d9acf")
     add_versions("2024.10.03-alpha", "78c8f8876007f57f27841b1d56e7f10aa682b95609a0f73db672294c73c4f8d4")
     add_versions("2024.09.30-alpha", "a9d03859cb470be9b1ed4f0923274aa1ca989b7ee937bdb66eddf57d32d56f0c")
     add_versions("2024.09.29-alpha", "672f9fabd4d17047e99dbd27448ff19aad8c6dc97ef9c519da1fe61561942b77")

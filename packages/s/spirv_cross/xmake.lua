@@ -4,6 +4,7 @@ local function getVersion(version)
         ["2024.06.19-alpha"] = "archive/6fd1f75636b1c424b809ad8a84804654cf5ae48b.tar.gz",
         ["2024.09.10-alpha"] = "archive/f84c1fbe3cbb69fa99e9115f658e52df0e95f1bf.tar.gz",
         ["2024.09.25-alpha"] = "archive/b28b3559d3882f918825cd90342dcfa955770bad.tar.gz",
+        ["2024.10.15-alpha"] = "archive/e670b39cfced2f7258c73dc7cd708c6c639beaf0.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -17,6 +18,7 @@ package("spirv_cross")
     })
 
     --insert version
+    add_versions("2024.10.15-alpha", "4836d8f95dc8904fa0749c42e0bae1f3870ede8dd50acf69aca15725b137e6f9")
     add_versions("2024.09.25-alpha", "36440037c03e7f50a7597ea934833b56dbfcb2c5d80ab0129aff099ba9b61c5c")
     add_versions("2024.09.10-alpha", "baca43df685661e8f07911ba9de22c515f3849ea2d6c8bfa309ed01b7fe7f618")
     add_versions("2024.06.19-alpha", "0633c4e8dbd2cff0c0d90fe16b0ab68d94a796dad9f84a90bf84830c0f2aeec2")

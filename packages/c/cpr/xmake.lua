@@ -6,6 +6,7 @@ package("cpr")
     set_urls("https://github.com/libcpr/cpr/archive/refs/tags/$(version).tar.gz")
 
     --insert version
+    add_versions("1.11.0", "fdafa3e3a87448b5ddbd9c7a16e7276a78f28bbe84a3fc6edcfef85eca977784")
     add_versions("1.10.5", "c8590568996cea918d7cf7ec6845d954b9b95ab2c4980b365f582a665dea08d8")
 
     add_links("cpr")

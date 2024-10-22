@@ -62,7 +62,11 @@ local version_transform = {
     end,
     mbedtls = function (version)
         return version:sub(9)
-    end
+    end,
+    basis_universal = function (version)
+        local index = string.rfind(version, '_', true)
+        return version:sub(1, index-1):gsub('_', '.').."-release"..version:sub(index+1)
+    end,
 }
 
 local function default_transform(opt, prefix, suffix)
