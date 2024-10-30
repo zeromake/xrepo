@@ -8,6 +8,7 @@ package("icu4c")
         end,
     })
     --insert version
+    add_versions("76.1", "a2c443404f00098e9e90acf29dc318e049d2dc78d9ae5f46efb261934a730ce2")
     add_versions("75.1", "cb968df3e4d2e87e8b11c49a5d01c787bd13b9545280fc6642f826527618caef")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
