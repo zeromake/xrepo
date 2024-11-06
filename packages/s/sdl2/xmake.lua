@@ -5,6 +5,7 @@ package("sdl2")
     set_urls("https://github.com/libsdl-org/SDL/releases/download/release-$(version)/SDL2-$(version).tar.gz")
 
     --insert version
+    add_versions("2.30.9", "24b574f71c87a763f50704bbb630cbe38298d544a1f890f099a4696b1d6beba4")
     add_versions("2.30.8", "380c295ea76b9bd72d90075793971c8bcb232ba0a69a9b14da4ae8f603350058")
     add_versions("2.30.7", "2508c80438cd5ff3bbeb8fe36b8f3ce7805018ff30303010b61b03bb83ab9694")
     add_versions("2.30.6", "c6ef64ca18a19d13df6eb22df9aff19fb0db65610a74cc81dae33a82235cacd4")
@@ -115,9 +116,7 @@ package("sdl2")
             configs["bmp_compat"] = package:config("bmp_compat") and "y" or "n"
             import("package.tools.xmake").install(package, configs)
         end
-        if package:is_plat("android") then
-            os.cp("android-project/app/src/main/java/org/libsdl/app/*.java", package:installdir("lib/org.libsdl.app"))
-        end
+        os.cp("android-project/app/src/main/java/org/libsdl/app/*.java", package:installdir("lib/org.libsdl.app"))
     end)
 
     -- use msbuild

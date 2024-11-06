@@ -8,6 +8,7 @@ local function getVersion(version)
         ["2024.10.08-alpha"] = "archive/c2cd87dc149fc16a6a949f8f9b4dc24c8739e2da.tar.gz",
         ["2024.10.20-alpha"] = "archive/4252593bcf05be593db879ee71f19a5f0837952b.tar.gz",
         ["2024.10.22-alpha"] = "archive/a4ab993fbeda78f56dc20e94e256fad6e38ef228.tar.gz",
+        ["2024.11.04-alpha"] = "archive/f45378940601e777fad147c98023d65af153202e.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -22,6 +23,7 @@ package("borealis")
         version = getVersion
     })
     --insert version
+    add_versions("2024.11.04-alpha", "d7ef46623b4b5b9268ad863877beadfc32876a3ddfb7de5b13686b2f11444b44")
     add_versions("2024.10.22-alpha", "2ad052ff92f791894bcb6f89f700ddd213fc33429a2890ad22f19a7b7891f82e")
     add_versions("2024.10.20-alpha", "da4f748aabf37cf1d7f236c7ddbf5f7d69208b50f50043d66b443a80403da173")
     add_versions("2024.10.08-alpha", "38a120bf53485dfb93efd1364c1e99078410e2449ff202fc18f3dfb99125d7b1")

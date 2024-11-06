@@ -5,6 +5,7 @@ local function getVersion(version)
         ["2024.10.22-alpha"] = "archive/b0982e89828a4f18a203f1127da90ef8753a1b32.tar.gz",
         ["2024.10.24-alpha"] = "archive/4ea26a777104fcd59ddb49d77f4a91a66dee13c9.tar.gz",
         ["2024.10.30-alpha"] = "archive/24bdbb8bf401ce99cc488e1eecf659774dad7b60.tar.gz",
+        ["2024.11.05-alpha"] = "archive/588e32ea5af69193e19bd8b1ca81aa4a085a1623.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -18,6 +19,7 @@ package("sdl3")
     set_urls("https://github.com/libsdl-org/SDL/$(version)", {version = getVersion})
 
     --insert version
+    add_versions("2024.11.05-alpha", "594064a6432c9ce33d3d8b53a92d81c6db1c1f031b47ddbdff643a9de77237df")
     add_versions("2024.10.30-alpha", "b052e388efc72b33693fd97e47145437e2c191c926fab58b0b4580a1d6ac842d")
     add_versions("2024.10.24-alpha", "efe10573b05f09703902bf35ef9a33cc396165935477762d249c931e9ef6b2bd")
     add_versions("2024.10.22-alpha", "a98668cba1d0a46dce5149c5c6928526d22686f5327a7458206069fadc9906bc")

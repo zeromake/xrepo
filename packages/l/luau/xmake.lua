@@ -15,6 +15,7 @@ package("luau")
     })
 
     --insert version
+    add_versions("0.650", "a605ae7a188455844ab131ff0d2df6f38c088142d6bd5eebb87795e619c3d7aa")
     add_versions("0.649", "a5bdce9052b7feb163b3488a7c9b4213353b846bb588e6d33ad9dbec41a02754")
     add_versions("0.648", "0177b98d837545556a032b35fae918ceb07d1b29adbfa163a35bf2fac0e996ac")
     add_versions("0.647", "0fe258a9854e937fbbf3ad8b3d56ff3c1879578cc88ca1f52ef7a84b98312c62")

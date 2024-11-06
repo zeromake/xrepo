@@ -6,6 +6,7 @@ package("lunasvg")
 
     set_urls("https://github.com/sammycage/lunasvg/archive/refs/tags/v$(version).tar.gz")
     --insert version
+    add_versions("3.0.1", "39e3f47d4e40f7992d7958123ca1993ff1a02887539af2af1c638da2855a603c")
     add_versions("3.0.0", "075f0a049ff205ce059feb1fe3ac0e826a1ac62d2360cb72463395f68c4c8764")
     add_versions("2.4.1", "db9d2134c8c2545694e71e62fb0772a7d089fe53e1ace1e08c2279a89e450534")
     add_versions("2.4.0", "0682c60501c91d75f4261d9c1a5cd44c2c9da8dba76f8402eab628448c9a4591")
