@@ -1,7 +1,7 @@
 package("editorconfig-core")
     set_homepage("https://editorconfig.org")
     set_description("EditorConfig core library written in C")
-    set_license("BSD")
+    set_license("BSD-3-Clause")
     set_urls("https://github.com/editorconfig/editorconfig-core-c/archive/refs/tags/v$(version).tar.gz")
 
     --insert version
