@@ -32,7 +32,7 @@ target("mmkv")
         add_defines("FORCE_POSIX")
     end
     if is_arch("arm.*") then
-        local flags = "-march=armv7a"
+        local flags = ""
         if is_arch("arm64.*") then
             flags = "-march=armv8+crypto"
         end
