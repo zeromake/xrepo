@@ -24,7 +24,7 @@ target("mmkv")
         "Core/MMKVPredef.h",
         "Core/MMBuffer.h",
         "Core/MiniPBCoder.h",
-        {prefixdir = "mmkv"}
+        {prefixdir = "MMKV"}
     )
     if is_plat("android") then
         add_defines("__ANDROID__")
@@ -32,5 +32,9 @@ target("mmkv")
         add_defines("FORCE_POSIX")
     end
     if is_arch("arm.*") then
-        add_files("Core/aes/openssl/*.S")
+        local flags = "-march=armv7a"
+        if is_arch("arm64.*") then
+            flags = "-march=armv8+crypto"
+        end
+        add_files("Core/aes/openssl/*.S", {asflags = flags})
     end

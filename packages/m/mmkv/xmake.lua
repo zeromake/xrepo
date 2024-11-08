@@ -20,5 +20,5 @@ package("mmkv")
             static void test() {
                 auto mmkv = MMKV::defaultMMKV();
             }
-        ]], {configs = {languages = "c++20"}, includes = {"mmkv/mmkv.h"}}))
+        ]], {configs = {languages = "c++20"}, includes = {"MMKV/MMKV.h"}}))
     end)
