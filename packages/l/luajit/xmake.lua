@@ -156,15 +156,9 @@ target("buildvm")
 
 local function getVersion(version)
     local versions ={
-        ["2023.09.25-alpha"] = "archive/becf5cc65d966a8926466dd43407c48bfea0fa13.tar.gz",
-        ["2024.02.04-alpha"] = "archive/0d313b243194a0b8d2399d8b549ca5a0ff234db5.tar.gz",
-        ["2024.03.10-alpha"] = "archive/d06beb0480c5d1eb53b3343e78063950275aa281.tar.gz",
-        ["2024.04.22-alpha"] = "archive/5790d253972c9d78a0c2aece527eda5b134bbbf7.tar.gz",
-        ["2024.05.25-alpha"] = "archive/93e87998b24021b94de8d1c8db244444c46fb6e9.tar.gz",
-        ["2024.07.03-alpha"] = "archive/04dca7911ea255f37be799c18d74c305b921c1a6.tar.gz",
-        ["2024.09.04-alpha"] = "archive/87ae18af97fd4de790bb6c476b212e047689cc93.tar.gz",
         ["2024.09.29-alpha"] = "archive/f5fd22203eadf57ccbaa4a298010d23974b22fc0.tar.gz",
         ["2024.10.02-alpha"] = "archive/97813fb924edf822455f91a5fbbdfdb349e5984f.tar.gz",
+        ["2024.11.14-alpha"] = "archive/fe71d0fb54ceadfb5b5f3b6baf29e486d97f6059.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -180,15 +174,9 @@ package("luajit")
         }
     )
     --insert version
+    add_versions("2024.11.14-alpha", "92325f209b21aaf0a67b099bc73cf9bbac5789a9749bdc3898d4a990abb4f36e")
     add_versions("2024.10.02-alpha", "cbf1647acbd340c62b9c342dae43290762efa1b26d8bf8457f143fabf8ed86c7")
     add_versions("2024.09.29-alpha", "8be67f0e7ad10201f634633731846e56a16392eae85b9c49c9274f17e85451b5")
-    add_versions("2024.09.04-alpha", "7e34f3aac8cbfacfe8dada50140d4b89d708e0fde60f27ec0643226c2f38ab5f")
-    add_versions("2024.07.03-alpha", "346b028d9ba85e04b7e23a43cc51ec076574d2efc0d271d4355141b0145cd6e0")
-    add_versions("2024.05.25-alpha", "026eb4531cddff20acc72ec97378ccfc30326173c491d6c01834b48b42a80518")
-    add_versions("2024.04.22-alpha", "a299cd389c4568cff4c900e9e86fb56b1f422bf38497a695f6a96e37607a6645")
-    add_versions("2024.03.10-alpha", "6abd146a1dfa240a965748f63221633446affa2a715e3eb03879136e3efb95f4")
-    add_versions("2024.02.04-alpha", "53731880dbc4adbbf82ba69a85b5dbe15266032b8b94a077c0835bc10ec75f12")
-    add_versions("2023.09.25-alpha", "6d7e8fc691d45fe837d05e2a03f3a41b0886a237544d30f74f1355ce2c8d9157")
     on_install(function (package)
         local lua_target = nil
         local lua_os = nil

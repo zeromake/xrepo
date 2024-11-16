@@ -1,13 +1,8 @@
 local function getVersion(version)
     local versions ={
-        ["2024.06.18-alpha"] = "archive/5d127b917f080c6f052553c47170ec0ba702e54f.tar.gz",
-        ["2024.06.19-alpha"] = "archive/6fd1f75636b1c424b809ad8a84804654cf5ae48b.tar.gz",
-        ["2024.09.10-alpha"] = "archive/f84c1fbe3cbb69fa99e9115f658e52df0e95f1bf.tar.gz",
-        ["2024.09.25-alpha"] = "archive/b28b3559d3882f918825cd90342dcfa955770bad.tar.gz",
-        ["2024.10.15-alpha"] = "archive/e670b39cfced2f7258c73dc7cd708c6c639beaf0.tar.gz",
-        ["2024.10.23-alpha"] = "archive/f93223f344595ecc1cef631d40d6f42466248431.tar.gz",
         ["2024.10.30-alpha"] = "archive/bf41c8a4f09576d42ca1b975cfa355d4709cecb1.tar.gz",
         ["2024.11.05-alpha"] = "archive/a0183472e012867077e09c7531693e30388752b2.tar.gz",
+        ["2024.11.13-alpha"] = "archive/9040e0d25dc545a6d725276bdbd0362791c81f14.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -21,14 +16,9 @@ package("spirv_cross")
     })
 
     --insert version
+    add_versions("2024.11.13-alpha", "9dfe085080254d2a1a70e1bb0beb6c6355d989d524ae2f8f813cb37e74b25cd0")
     add_versions("2024.11.05-alpha", "a76ce896211fb056246affca577a0874d184b26fd33ca65a691c8360867db45b")
     add_versions("2024.10.30-alpha", "004de9f2ce173058b816241b4fcbfd159ee61f0898b46c0dc49b84a822630252")
-    add_versions("2024.10.23-alpha", "a7a30883bf663d509b9935a5da6cb1a910ff7f74e00a78fcb45a20b17376d9db")
-    add_versions("2024.10.15-alpha", "4836d8f95dc8904fa0749c42e0bae1f3870ede8dd50acf69aca15725b137e6f9")
-    add_versions("2024.09.25-alpha", "36440037c03e7f50a7597ea934833b56dbfcb2c5d80ab0129aff099ba9b61c5c")
-    add_versions("2024.09.10-alpha", "baca43df685661e8f07911ba9de22c515f3849ea2d6c8bfa309ed01b7fe7f618")
-    add_versions("2024.06.19-alpha", "0633c4e8dbd2cff0c0d90fe16b0ab68d94a796dad9f84a90bf84830c0f2aeec2")
-    add_versions("2024.06.18-alpha", "499f3cf3534b882b99614cf855eb92976d15a1cee20f03a234520d10d1f92fb3")
     add_configs("cli", {description = "build cli", default = false, type = "boolean"})
     add_includedirs("include", "include/spirv_cross")
     on_install(function (package)

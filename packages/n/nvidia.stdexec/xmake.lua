@@ -1,15 +1,8 @@
 local function getVersion(version)
     local versions ={
-        ["2024.06.16-alpha"] = "archive/089c4613385f808c3b39c4f4915f658157013a36.tar.gz",
-        ["2024.07.03-alpha"] = "archive/6d007d3f61384e45e16c837ecd67d0a0adc6e83f.tar.gz",
-        ["2024.07.10-alpha"] = "archive/604b94d54e235a2d2a6b0c5bbdb7139d1834a9b5.tar.gz",
-        ["2024.09.06-alpha"] = "archive/cddcd5a17dbec59d8502c0c6108553a20e74d2da.tar.gz",
-        ["2024.09.16-alpha"] = "archive/fbd384d1bcbe9dfb9805765f7f40e8dff417a662.tar.gz",
-        ["2024.09.20-alpha"] = "archive/519f931ef9d44ca6cc8b2c8a3b3cb760a3523d4f.tar.gz",
-        ["2024.10.09-alpha"] = "archive/4d8d1944126fbc17d15894341f92838ef5db66cc.tar.gz",
-        ["2024.10.22-alpha"] = "archive/f11f711ed300f880b0caffa69e5daf1fe8323b5e.tar.gz",
         ["2024.10.26-alpha"] = "archive/35e8941066ad5c69bcb82741914585a8611917c2.tar.gz",
         ["2024.11.04-alpha"] = "archive/c1508b1e46d5806a1c452c9c90821261716d1473.tar.gz",
+        ["2024.11.11-alpha"] = "archive/15dcdbcc464891d369ab46a9e8d5521ddc7853d7.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -24,16 +17,9 @@ package("nvidia.stdexec")
     })
 
     --insert version
+    add_versions("2024.11.11-alpha", "3dabc83539c85cd697ed33ad66cc847a867cabd258fd742985eacb371cc196b1")
     add_versions("2024.11.04-alpha", "8241469708636adaf07e927d61d681fe22cf7c1dc85e0c8856a4389f35fe2e8e")
     add_versions("2024.10.26-alpha", "14cc28a01ffc7938ae0ac19fa0292159a020e67a97ccd4c2380504f424ce3808")
-    add_versions("2024.10.22-alpha", "4fadf14c68b595f59eaa2da92ca42e59fd5762f68708e06709f894f36181c915")
-    add_versions("2024.10.09-alpha", "624b450472623bccbce9131b5f4c798219c0213b8d386969f2685256c490b614")
-    add_versions("2024.09.20-alpha", "0151f9034e3f6014e5ac495f427f03571a5522571e43a8dd401c2c991d841665")
-    add_versions("2024.09.16-alpha", "5cee808c19d4783c5d24ca6a8bbc3c1cbb72d8678b234d62af733b81d24caf1b")
-    add_versions("2024.09.06-alpha", "ee9c7684bb9ce2a8ac34ca2c7ecd7b204fe24d10b67ddaa5a35ad298c02837a5")
-    add_versions("2024.07.10-alpha", "aeef43715e865d7ddb03402f8988c09fbb340d7af9da938a3ad44e3e41cc091a")
-    add_versions("2024.07.03-alpha", "bdeacab677daba740cad65faa8e8bb72f8a167609b4bc1bf84a08b941f5a82d2")
-    add_versions("2024.06.16-alpha", "928d1662ab9f3d9475ccad3e59e5badd788e406c2df81b8fb0dd513d598bd8bd")
     on_install(function (package)
         os.cp("include/*", package:installdir("include"))
     end)

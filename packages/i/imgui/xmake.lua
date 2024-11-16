@@ -11,22 +11,12 @@ package("imgui")
     set_homepage("https://github.com/ocornut/imgui")
     set_description("Dear ImGui: Bloat-free Graphical User interface for C++ with minimal dependencies")
     set_license("MIT")
-    set_urls("https://github.com/ocornut/imgui/$(version)", {
-        version=getVersion
-    })
+    set_urls("https://github.com/ocornut/imgui/archive/refs/tags/v$(version).tar.gz")
 
     --insert version
+    add_versions("1.91.5", "2aa2d169c569368439e5d5667e0796d09ca5cc6432965ce082e516937d7db254")
     add_versions("1.91.4", "a455c28d987c78ddf56aab98ce0ff0fda791a23a2ec88ade46dd106b837f0923")
     add_versions("1.91.3", "29949d7b300c30565fbcd66398100235b63aa373acfee0b76853a7aeacd1be28")
-    add_versions("1.91.2", "a3c4fd857a0a48f6edad3e25de68fa1e96d2437f1665039714d1de9ad579b8d0")
-    add_versions("1.91.1", "2c13a8909f75222c836abc9b3f60cef31c445f3f41f95d8242118ea789d145ca")
-    add_versions("1.90.9", "04943919721e874ac75a2f45e6eb6c0224395034667bf508923388afda5a50bf")
-    add_versions("1.90.8", "f606b4fb406aa0f8dad36d4a9dd3d6f0fd39f5f0693e7468abc02d545fb505ae")
-    add_versions("1.90.7", "872574217643d4ad7e9e6df420bb8d9e0d468fb90641c2bf50fd61745e05de99")
-    add_versions("1.90.6", "70b4b05ac0938e82b4d5b8d59480d3e2ca63ca570dfb88c55023831f387237ad")
-    add_versions("1.90.5", "e94b48dba7311c85ba8e3e6fe7c734d76a0eed21b2b42c5180fd5706d1562241")
-    add_versions("1.90.4", "5d9dc738af74efa357f2a9fc39fe4a28d29ef1dfc725dd2977ccf3f3194e996e")
-    add_versions("1.90", "170986e6a4b83d165bfc1d33c2c5a5bc2d67e5b97176287485c51a2299249296")
 
     add_configs("backend", {description = "Select backend", default = "", type = "string"})
     add_configs("freetype", {description = "Use freetype", default = false, type = "boolean"})

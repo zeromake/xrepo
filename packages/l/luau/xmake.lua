@@ -15,17 +15,9 @@ package("luau")
     })
 
     --insert version
+    add_versions("0.652", "56c904c5ea25e537bdc8675ed52f5f0b56eb3d6e960fb9f93b8443229076f518")
     add_versions("0.650", "a605ae7a188455844ab131ff0d2df6f38c088142d6bd5eebb87795e619c3d7aa")
     add_versions("0.649", "a5bdce9052b7feb163b3488a7c9b4213353b846bb588e6d33ad9dbec41a02754")
-    add_versions("0.648", "0177b98d837545556a032b35fae918ceb07d1b29adbfa163a35bf2fac0e996ac")
-    add_versions("0.647", "0fe258a9854e937fbbf3ad8b3d56ff3c1879578cc88ca1f52ef7a84b98312c62")
-    add_versions("0.646", "6c9927ebbc1fc57b1ba41dbd8d2c561c10e05e1e00299c49c4b5bdfca4c26167")
-    add_versions("0.645", "28aaa3e57e7adc44debedc6be9802f2625334eef0124ff722c8ab340dc6bbe1c")
-    add_versions("0.643", "069702be7646917728ffcddcc72dae0c4191b95dfe455c8611cc5ad943878d3d")
-    add_versions("0.634", "122c302f62edae41183287a16182db85703ada8ca489360da346686facac8915")
-    add_versions("0.632", "61a3f6c02a6fe35b753e4286f922b24c6ce8b6f85aef57bb90b65891d7a8505a")
-    add_versions("0.631", "485caec5a013315eee831edeb76f751fa57440046c05195674b18110f25694c4")
-    add_versions("0.630", "601938ebd428d37c2bb10697500bff4fe304f7c0651cf64721b9dc5600a30ed9")
 
     add_configs("extern_c", {description = "extern C", default = false, type = "boolean"})
     add_configs("cli", {description = "cli", default = false, type = "boolean"})

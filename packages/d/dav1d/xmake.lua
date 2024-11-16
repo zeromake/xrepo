@@ -1,16 +1,9 @@
 
 local function getVersion(version)
     local versions = {
-        ["2024.06.17-alpha"] = "archive/ca83ee6d9dd2c2210deb8e285de4fd72e929e390.tar.gz",
-        ["2024.06.26-alpha"] = "archive/2355eeb8f254a1c34dbb0241be5c70cdf6ed46d1.tar.gz",
-        ["2024.09.12-alpha"] = "archive/dd32cd5027c8c4bd43dc72d79df020186865bc7f.tar.gz",
-        ["2024.09.21-alpha"] = "archive/f2c3ccd6a649a25d718cb0c8e8b6196fdbd2407f.tar.gz",
-        ["2024.09.30-alpha"] = "archive/ed004fe95d47e30e8248764fddbb08b77ba13187.tar.gz",
-        ["2024.10.02-alpha"] = "archive/21d9f29d388c230a7fe4e964397399247162bd5e.tar.gz",
-        ["2024.10.09-alpha"] = "archive/b2e7f06c72cad3fe9027efea9751f48d8ea7e357.tar.gz",
-        ["2024.10.21-alpha"] = "archive/ef4aff75b0b56a8e1af996458ae653c0728a1596.tar.gz",
         ["2024.10.29-alpha"] = "archive/e542f661d0946b6d40ea88c0c5bc50fa193fe7f1.tar.gz",
         ["2024.11.05-alpha"] = "archive/93f12c117a4e1c0cc2b129dcc52e84dbd9b84200.tar.gz",
+        ["2024.11.15-alpha"] = "archive/f772f3e678ae0a38509b8ece0c894455f028432f.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -25,16 +18,9 @@ package("dav1d")
         version = getVersion
     })
     --insert version
+    add_versions("2024.11.15-alpha", "804ae8f8c66fe37f49e5e09f3ce88d7f1b29af8fb47e20d7dd5924a6483ebf9e")
     add_versions("2024.11.05-alpha", "0da11d161beb294689847936abf240227ef3b08d02cdc3eb71b9e5cbff388416")
     add_versions("2024.10.29-alpha", "b6792d5d07c67292697e0dbe87e7680a7f6c0cc2c58777ccc35c86b4d4f4b867")
-    add_versions("2024.10.21-alpha", "0e9d7e4478020586f135574b5f43656157e0f8e06fbfdf80b5d0bb80c0b06dad")
-    add_versions("2024.10.09-alpha", "4bcdc9876a9f5f19bba0b0337d71c0d5099391923ef24f93be2ca46a75ed9748")
-    add_versions("2024.10.02-alpha", "388eb492749f1cc6453ab34d7c01b29b5e5c3806d999bdb6a850495d5f45b575")
-    add_versions("2024.09.30-alpha", "730cc72ee6338193c736e6084d1afef88b710da53b0147e65d4f5ad3e0ac8c84")
-    add_versions("2024.09.21-alpha", "19f399bd06be4d72f99587128a02fccf107ac4b8061d73d1e438a520a069d585")
-    add_versions("2024.09.12-alpha", "12ad1c6dca3c3b66dab0390d244725e46225c919cdc3f144dd795b5a065eac84")
-    add_versions("2024.06.26-alpha", "b89413c7886db62f0cf38a3a8534b05ac265bef0827116e8a3b83f03ccf43e2d")
-    add_versions("2024.06.17-alpha", "8e65990c24a8e5f67322c1c31817bfdff46f204f406f433104d90ab1e91562f2")
     on_install(function (package)
         io.writefile('config.h.in', [[
 #pragma once

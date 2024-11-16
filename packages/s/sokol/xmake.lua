@@ -1,12 +1,8 @@
 local function getVersion(version)
     local versions ={
-        ["2024.07.10-alpha"] = "archive/7b20c1936229370277d1c61bde950bce194de584.tar.gz",
-        ["2024.09.10-alpha"] = "archive/1eb96dd0f96b9ea73065f9078244c2255c2b75d9.tar.gz",
-        ["2024.09.15-alpha"] = "archive/f62817137961a1eedc3eac03f62012795d2c79c4.tar.gz",
-        ["2024.09.20-alpha"] = "archive/38e4c9a516f8808d706343a5c525acfe7007fe67.tar.gz",
-        ["2024.10.16-alpha"] = "archive/4bda1469d3b311af03a34dd956460776c920dc2e.tar.gz",
         ["2024.10.23-alpha"] = "archive/c25638026fc2fa23331ceae10cff056048b57db6.tar.gz",
         ["2024.10.27-alpha"] = "archive/76ded2def8d9914c1c7e1e6e7bdd8970c7b6e7c4.tar.gz",
+        ["2024.11.15-alpha"] = "archive/2c6fc7470e9b9121a178e6e68c55f2f06fac4647.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -23,13 +19,9 @@ package("sokol")
     })
 
     --insert version
+    add_versions("2024.11.15-alpha", "e65fa0c8450def026cc44c05891bde76258fa99b79f342775377b937e88a9a68")
     add_versions("2024.10.27-alpha", "63c723f1573673541a9124e8c7e8c448cd42f220321d45ef087c6f3f2c53eb5a")
     add_versions("2024.10.23-alpha", "ad9fda561c017d4547cbc9ebdc3f9c1b661fa5f619b81e5b0887d5ee350c7525")
-    add_versions("2024.10.16-alpha", "67db876f0b4bbb6828f48636119bd73a488c726a787f35f72af89fb16bc6b54c")
-    add_versions("2024.09.20-alpha", "8cf12da40f26d9787c0f3443fe4ac24ac608b99d8840aa88a781ae3c0321694a")
-    add_versions("2024.09.15-alpha", "020a4ddc698ce25e00d67057d164142eb1837bb5337967b87be22131768c565f")
-    add_versions("2024.09.10-alpha", "ea46acebdd11f84489654632ac441efd23bd31d6b18ca8e4dab48bd613a77028")
-    add_versions("2024.07.10-alpha", "e157aab728f7f32c70254c2f9df21f8428e794769081d2758bb8c3dcfdaa8a4f")
 
     on_install(function (package)
         os.cp("*.h", package:installdir("include"))

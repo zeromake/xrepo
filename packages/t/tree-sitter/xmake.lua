@@ -5,14 +5,9 @@ package("tree-sitter")
     set_urls("https://github.com/tree-sitter/tree-sitter/archive/refs/tags/v$(version).tar.gz")
 
     --insert version
+    add_versions("0.24.4", "d704832a6bfaac8b3cbca3b5d773cad613183ba8c04166638af2c6e5dfb9e2d2")
     add_versions("0.24.3", "0a8d0cf8e09caba22ed0d8439f7fa1e3d8453800038e43ccad1f34ef29537da1")
     add_versions("0.24.1", "7adb5bb3b3c2c4f4fdc980a9a13df8fbf3526a82b5c37dd9cf2ed29de56a4683")
-    add_versions("0.23.1", "30ea382bdaea8fc71e3d52850da509398f56d77b7c41e3494da46a1158d37b86")
-    add_versions("0.23.0", "6403b361b0014999e96f61b9c84d6950d42f0c7d6e806be79382e0232e48a11b")
-    add_versions("0.22.6", "e2b687f74358ab6404730b7fb1a1ced7ddb3780202d37595ecd7b20a8f41861f")
-    add_versions("0.22.5", "6bc22ca7e0f81d77773462d922cf40b44bfd090d92abac75cb37dbae516c2417")
-    add_versions("0.21.0", "6bb60e5b63c1dc18aba57a9e7b3ea775b4f9ceec44cc35dac4634d26db4eb69c")
-    add_versions("0.20.8", "6181ede0b7470bfca37e293e7d5dc1d16469b9485d13f13a605baec4a8b1f791")
     on_install(function (package)
         io.writefile('xmake.lua', [[
 add_rules("mode.debug", "mode.release")
