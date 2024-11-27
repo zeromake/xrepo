@@ -6,6 +6,7 @@ package("microsoft.proxy")
     set_urls("https://github.com/microsoft/proxy/archive/refs/tags/$(version).tar.gz")
 
     --insert version
+    add_versions("3.1.0", "c86ed7767ed3e90250632f2b5269c83225b0ae986314c58596d421b245f26cd1")
     add_versions("3.0.0", "7e073e217e5572bc4c17ed5893273c80ea34c87e1406c853beeb9ca9bdda9733")
     on_install(function (package)
         os.cp("*.h", package:installdir("include/proxy"))

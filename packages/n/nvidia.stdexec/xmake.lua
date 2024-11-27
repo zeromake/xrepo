@@ -3,6 +3,7 @@ local function getVersion(version)
         ["2024.10.26-alpha"] = "archive/35e8941066ad5c69bcb82741914585a8611917c2.tar.gz",
         ["2024.11.04-alpha"] = "archive/c1508b1e46d5806a1c452c9c90821261716d1473.tar.gz",
         ["2024.11.11-alpha"] = "archive/15dcdbcc464891d369ab46a9e8d5521ddc7853d7.tar.gz",
+        ["2024.11.18-alpha"] = "archive/999a11e0a82f9e4d0cedb29ed0b0282543b30805.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -17,6 +18,7 @@ package("nvidia.stdexec")
     })
 
     --insert version
+    add_versions("2024.11.18-alpha", "355130e4ba9b8d7b670291cb5e528324946deb0667a7b478501a4b18efbc7b26")
     add_versions("2024.11.11-alpha", "3dabc83539c85cd697ed33ad66cc847a867cabd258fd742985eacb371cc196b1")
     add_versions("2024.11.04-alpha", "8241469708636adaf07e927d61d681fe22cf7c1dc85e0c8856a4389f35fe2e8e")
     add_versions("2024.10.26-alpha", "14cc28a01ffc7938ae0ac19fa0292159a020e67a97ccd4c2380504f424ce3808")
