@@ -67,6 +67,9 @@ local version_transform = {
         local index = string.rfind(version, '_', true)
         return version:sub(1, index-1):gsub('_', '.').."-release"..version:sub(index+1)
     end,
+    sevenzip = function (version)
+        return version..".0"
+    end,
 }
 
 local function default_transform(opt, prefix, suffix)
@@ -99,6 +102,9 @@ local download_transform = {
     nghttp3 = function (opt) return default_transform(opt, 'nghttp3-') end,
     ngtcp2 = function (opt) return default_transform(opt, 'ngtcp2-') end,
     mbedtls = function (opt) return default_transform(opt, 'mbedtls-', '.tar.bz2') end,
+    sevenzip = function (opt) 
+        return 'https://github.com/'..opt.repo..'/releases/download/'..opt.tag..'/7z'..opt.tag:gsub('%.', '')..'-src.tar.xz'
+    end,
 }
 
 
