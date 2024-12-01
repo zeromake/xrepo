@@ -462,6 +462,8 @@ end
 -- configvar_check_has_member("HAVE_SOCKADDR_IN6_SIN6_ADDR", "struct sockaddr_in6", "sin6_addr", {includes = sockaddr_in6_include})
 configvar_check_has_member("HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID", "struct sockaddr_in6", "sin6_scope_id", {includes = sockaddr_in6_include})
 
+set_configvar("CURL_OS", format("$(arch)-$(os)"))
+
 -- TODO
 -- cares
 -- gss by https://github.com/heimdal/heimdal
@@ -496,6 +498,8 @@ target("curl")
         end
         add_frameworks("CoreFoundation", "SystemConfiguration", "Security")
         add_syslinks("ldap")
+    elseif is_plat("linux") then
+        set_configvar("CURL_DISABLE_LDAP", 1)
     end
     add_packages("zlib")
     if get_config("libressl") then

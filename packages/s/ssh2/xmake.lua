@@ -2,17 +2,17 @@ package("ssh2")
     set_homepage("https://libssh2.org")
     set_description("libssh2 is a client-side C library implementing the SSH2 protocol")
     set_license("BSD-3-Clause")
-    set_urls("https://github.com/libssh2/libssh2/releases/download/libssh2-1.11.0/libssh2-1.11.0.tar.gz")
+    set_urls("https://github.com/libssh2/libssh2/releases/download/libssh2-$(version)/libssh2-$(version).tar.gz")
 
     --insert version
-    add_versions("1.11.1", "82b35c61c78b475647bdc981a183c5b5ab0d979e1caee94186e8f9150f2b0d0d")
+    add_versions("1.11.1", "d9ec76cbe34db98eec3539fe2c899d26b0c837cb3eb466a56b0f109cabf658f7")
     add_versions("1.11.0", "3736161e41e2693324deb38c26cfdc3efe6209d634ba4258db1cecff6a5ad461")
     if is_plat("windows", "mingw") then
         add_syslinks("user32")
     end
 
     on_install(function (package)
-        local transforme_configfile = function (input, output) 
+        local transforme_configfile = function (input, output)
             output = output or input
             local lines = io.readfile(input):gsub("@([%w_]+)@", "${%1}"):split("\n")
             local out = io.open(output, 'wb')

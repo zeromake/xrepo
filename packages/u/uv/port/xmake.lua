@@ -138,7 +138,7 @@ target("uv")
     if is_plat("bsd") or is_apple then
         add_files(unpack(bsd_or_apple_sources))
     end
-    if is_apple then 
+    if is_apple then
         add_defines(
             "_DARWIN_UNLIMITED_SELECT=1",
             "_DARWIN_USE_64_BIT_INODE=1"
