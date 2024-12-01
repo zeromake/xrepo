@@ -40,6 +40,7 @@ rule('export_symbol')
                 f:write(';\n')
             end
             f:write("local:\n\t*;\n")
+            f:write("};\n")
             f:close()
         end
         local sym_list = nil
@@ -93,7 +94,7 @@ rule('export_symbol')
                 target:add('shflags', '-exported_symbols_list '..out..'.exp', {force = true})
             else
                 generateGccExportSymbol(out, syms)
-                target:add('shflags', '-Wl,--version-script,"'..out..'.ver"', {force = true})
+                target:add('shflags', '-Wl,--version-script,'..out..'.ver', {force = true})
             end
         end
     end)
