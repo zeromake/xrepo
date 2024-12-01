@@ -48,7 +48,6 @@ set_encodings("utf-8")
 
 target("7zip")
     set_kind("shared")
-    add_cxflags("-Wno-parentheses-equality")
     add_defines("UNICODE", "_UNICODE", "Z7_EXTERNAL_CODECS", "Z7_PPMD_SUPPORT")
     add_files("C/*.c")
     add_files("CPP/7zip/Common/*.cpp")
@@ -72,4 +71,9 @@ target("7zip")
         "CPP/Windows/Synchronization.cpp"
     )
     add_files("CPP/Common/*.cpp")
+    if is_plat("windows", "mingw") then
+        add_syslinks("user32", "oleaut32", "advapi32")
+    else
+        add_cxflags("-Wno-parentheses-equality")
+    end
     add_rules("@zeromake.rules/export_symbol", {export = exportSymbols})

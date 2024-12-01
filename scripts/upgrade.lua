@@ -107,6 +107,45 @@ local download_transform = {
     end,
 }
 
+function fetch(url)
+    local outdata, errdata = os.iorunv('curl', {
+        '-i',
+        url
+    })
+    return outdata
+end
+
+local upgrade_transform = {
+    lexilla = function ()
+        local release_url = 'https://www.scintilla.org/LexillaDownload.html'
+        local outdata = fetch(release_url)
+        if outdata == nil then
+            return nil, nil
+        end
+        local _start = string.find(outdata, 'Release ')
+        if _start == nil then
+            return nil, nil
+        end
+        local _end = string.find(outdata, '\n', _start+8)
+        local version = outdata:sub(_start+8, _end-1)
+        return version, 'https://www.scintilla.org/lexilla'..version:gsub('%.', '')..'.tgz'
+    end,
+    scintilla = function ()
+        local release_url = 'https://www.scintilla.org/ScintillaDownload.html'
+        local outdata = fetch(release_url)
+        if outdata == nil then
+            return nil, nil
+        end
+        local _start = string.find(outdata, 'Release ')
+        if _start == nil then
+            return nil, nil
+        end
+        local _end = string.find(outdata, '\n', _start+8)
+        local version = outdata:sub(_start+8, _end-1)
+        return version, 'https://www.scintilla.org/scintilla'..version:gsub('%.', '')..'.tgz'
+    end,
+}
+
 
 local function load_packages(filters)
     local packageDirs = nil
@@ -187,6 +226,21 @@ function get_alpha_latest(repo, secret)
     return sha, _date
 end
 
+function _download_file(url, out, opt)
+    if not os.exists(out) and opt.download then
+        os.runv('curl', {
+            '-L',
+            '-o',
+            out,
+            url
+        })
+        if os.filesize(out) < 512 then
+            os.rm(out)
+            assert(false, '下载失败')
+        end
+    end
+end
+
 function download_file(repo, opt)
     local is_release = opt.release or false
     local download_url = nil
@@ -202,20 +256,42 @@ function download_file(repo, opt)
     end
     local filename = hash.md5(bytes(download_url))
     local filepath = 'downloads/'..filename
-    print('download', download_url, filepath)
-    if not os.exists(filepath) and opt.download then
-        os.runv('curl', {
-            '-L',
-            '-o',
-            filepath,
-            download_url
-        })
-        if os.filesize(filepath) < 512 then
-            os.rm(filepath)
-            assert(false, '下载失败')
-        end
+    _download_file(download_url, filepath, opt)
+    local download_sha256 = nil
+    if os.exists(filepath) then
+        download_sha256 = hash.sha256('./'..filepath)
     end
     return filepath
+end
+
+function otherReleaseVersion(xmakePath, xmakeContext, versions, packageName, argv)
+    local latest_version, latest_url = upgrade_transform[packageName]()
+    if latest_version == nil then
+        return
+    end
+    local filename = hash.md5(bytes(latest_url))
+    local download_path = 'downloads/'..filename
+    _download_file(latest_url, download_path, {download = true})
+    local download_sha256 = nil
+    if os.exists(download_path) then
+        download_sha256 = hash.sha256('./'..download_path)
+    end
+    print(packageName, '-------------release new-------------')
+    local release_insert_version = 'add_versions("'..latest_version..'", "'..(download_sha256 or 'nil')..'")'
+    print(release_insert_version)
+    if argv.write == true then
+        local addVersionStart = xmakeContext:find('--insert version')
+        if addVersionStart == nil then
+            print('--insert 标识不存在')
+            return
+        end
+        local addVersionEnd = addVersionStart+16
+        local output = ''
+        output = output..xmakeContext:sub(1, addVersionEnd-1)
+        output = output..'\n    '..release_insert_version
+        output = output..xmakeContext:sub(addVersionEnd)
+        io.writefile(xmakePath, output, {encoding = "binary"})
+    end
 end
 
 function main(...)
@@ -231,20 +307,7 @@ function main(...)
         local xmakeContext = io.readfile(xmakePath)
         local urls = {}
         local _prev = 0
-        while true do
-            local _start = string.find(xmakeContext, 'set_urls%("https://github%.com', _prev)
-            if _start == nil then break end
-            _start = _start + 29
-            local _end = string.find(xmakeContext, '"', _start)
-            if _end == nil then break end
-            table.insert(urls, xmakeContext:sub(_start, _end-1))
-            _prev = _end
-        end
-        if #urls ~= 1 then
-            goto continue
-        end
         local versions = {}
-        _prev = 0
         local has_release = false
         local has_alpha = false
         while true do
@@ -261,6 +324,24 @@ function main(...)
             end
             versions[version_string] = true
             _prev = _end
+        end
+        if upgrade_transform[packageName] ~= nil then
+            otherReleaseVersion(xmakePath, xmakeContext, versions, packageName, argv)
+            goto continue
+        end
+
+        _prev = 0
+        while true do
+            local _start = string.find(xmakeContext, 'set_urls%("https://github%.com', _prev)
+            if _start == nil then break end
+            _start = _start + 29
+            local _end = string.find(xmakeContext, '"', _start)
+            if _end == nil then break end
+            table.insert(urls, xmakeContext:sub(_start, _end-1))
+            _prev = _end
+        end
+        if #urls ~= 1 then
+            goto continue
         end
         local url = string.split(urls[1], "/")
         has_alpha = #url == 3 and has_alpha
