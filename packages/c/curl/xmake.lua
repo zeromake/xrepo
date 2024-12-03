@@ -100,10 +100,6 @@ ${define HAVE_SA_FAMILY_T}
 ${define HAVE_SSIZE_T}
 ${define USE_WIN32_LARGE_FILES}
 
-#ifndef CURL_OS
-${define CURL_OS}
-#endif
-
 #ifndef HAVE_SSIZE_T
 #ifdef HAVE_LONGLONG
 #define ssize_t long long

@@ -187,6 +187,8 @@ package("luajit")
             lua_os = "LUAJIT_OS_OSX"
         elseif os.host() == "linux" or os.host() == "android" then 
             lua_os = "LUAJIT_OS_LINUX"
+        else
+            lua_os = "LUAJIT_OS_OTHER"
         end
         if package:is_arch("x86") then
             lua_target = "LUAJIT_ARCH_x86"
@@ -208,8 +210,6 @@ package("luajit")
         if package:is_plat("iphoneos") then
             commonDefines = commonDefines.."    add_defines(\"TARGET_OS_IPHONE=1\")\n"
             commonDefines = commonDefines.."    add_defines(\"LUAJIT_NO_UNWIND\")\n"
-        else
-            commonDefines = commonDefines.."    add_defines(\"TARGET_OS_IPHONE=0\")\n"
         end
         io.writefile(
             "xmake.lua",

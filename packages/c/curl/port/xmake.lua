@@ -462,7 +462,6 @@ end
 -- configvar_check_has_member("HAVE_SOCKADDR_IN6_SIN6_ADDR", "struct sockaddr_in6", "sin6_addr", {includes = sockaddr_in6_include})
 configvar_check_has_member("HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID", "struct sockaddr_in6", "sin6_scope_id", {includes = sockaddr_in6_include})
 
-set_configvar("CURL_OS", format("$(arch)-$(os)"))
 
 -- TODO
 -- cares
@@ -486,6 +485,10 @@ target("curl")
 
     set_configvar("HAVE_ZLIB_H", 1)
     set_configvar("HAVE_LIBZ", 1)
+    
+    on_config(function (target)
+        target:add("defines", "CURL_OS="..vformat('"$(arch)-$(os)"'))
+    end)
 
     if is_plat("windows", "mingw") then
         set_configvar("USE_WIN32_IDN", 1)
@@ -563,6 +566,9 @@ target("curl_cli")
         "BUILDING_LIBCURL",
         "BUILDING_CURL_CLI"
     )
+    on_config(function (target)
+        target:add("defines", "CURL_OS="..vformat('"$(arch)-$(os)"'))
+    end)
     add_deps("curl")
     add_includedirs("lib", "include", "$(buildir)/config")
     add_files("src/*.c")
