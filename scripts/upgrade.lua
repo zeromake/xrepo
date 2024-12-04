@@ -228,6 +228,7 @@ end
 
 function _download_file(url, out, opt)
     if not os.exists(out) and opt.download then
+        print('download: '..url)
         os.runv('curl', {
             '-L',
             '-o',

@@ -487,7 +487,7 @@ target("curl")
     set_configvar("HAVE_LIBZ", 1)
     
     on_config(function (target)
-        target:add("defines", "CURL_OS="..vformat('"$(arch)-$(os)"'))
+        target:add("defines", "CURL_OS="..vformat('"xmake:$(os)-$(arch)"'))
     end)
 
     if is_plat("windows", "mingw") then
@@ -567,7 +567,7 @@ target("curl_cli")
         "BUILDING_CURL_CLI"
     )
     on_config(function (target)
-        target:add("defines", "CURL_OS="..vformat('"$(arch)-$(os)"'))
+        target:add("defines", "CURL_OS="..vformat('"xmake:$(os)-$(arch)"'))
     end)
     add_deps("curl")
     add_includedirs("lib", "include", "$(buildir)/config")
