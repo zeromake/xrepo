@@ -186,10 +186,9 @@ elseif is_arch("arm64.*") then
         "arm/jfdctfst-neon.c",
         "arm/jidctred-neon.c",
         "arm/jquanti-neon.c",
-        "arm/jccolor-neon.c",
-        "arm/jidctint-neon.c",
         "arm/jidctfst-neon.c",
         "arm/aarch64/jsimd.c",
+        "arm/aarch64/jsimd_neon.S",
     })
 elseif is_arch("arm.*") then
     SIMD_DIR = 'simd/arm'
