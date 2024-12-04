@@ -269,6 +269,9 @@ function otherReleaseVersion(xmakePath, xmakeContext, versions, packageName, arg
     if latest_version == nil then
         return
     end
+    if versions[latest_version] ~= nil then
+        return
+    end
     local filename = hash.md5(bytes(latest_url))
     local download_path = 'downloads/'..filename
     _download_file(latest_url, download_path, {download = true})
