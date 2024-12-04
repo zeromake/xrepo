@@ -226,7 +226,9 @@ target("sdl2")
             "AppKit",
             "IOKit",
             "CoreFoundation",
-            "Foundation"
+            "Foundation",
+            "CoreHaptics",
+            "GameController"
         )
         add_syslinks("iconv")
     elseif is_plat("iphoneos") then

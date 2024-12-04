@@ -43,6 +43,7 @@ add_includedirs(
     "CodeGen/include",
     "VM/include",
     "VM/src",
+    "EqSat/include",
     "extern/isocline/include"
 )
 
@@ -55,12 +56,13 @@ target("luau")
         "VM/include/luaconf.h"
     )
     add_files(
-        "Ast/src/**.cpp",
-        "Compiler/src/**.cpp",
-        "Config/src/**.cpp",
-        "Analysis/src/**.cpp",
-        "CodeGen/src/**.cpp",
-        "VM/src/**.cpp"
+        "Ast/src/*.cpp",
+        "Compiler/src/*.cpp",
+        "Config/src/*.cpp",
+        "Analysis/src/*.cpp",
+        "CodeGen/src/*.cpp",
+        "VM/src/*.cpp",
+        "EqSat/src/*.cpp"
     )
 
 if get_config("cli") then

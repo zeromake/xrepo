@@ -9,11 +9,11 @@ end
 
 set_encodings("utf-8")
 
-add_requires("abseil_cpp")
+add_requires("abseil")
 
 target("re2")
     set_kind("$(kind)")
-    add_packages("abseil_cpp")
+    add_packages("abseil")
     add_files("re2/*.cc", "util/*.cc")
     add_includedirs(".")
     set_languages("c++17")
