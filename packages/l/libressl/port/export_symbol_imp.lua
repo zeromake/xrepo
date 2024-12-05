@@ -35,6 +35,7 @@ local function generateGccExportSymbol(out, syms)
         f:write(';\n')
     end
     f:write("local:\n\t*;\n")
+    f:write("};\n")
     f:close()
 end
 
@@ -89,7 +90,7 @@ function main(target, opt)
             target:add('shflags', '-exported_symbols_list '..out..'.exp', {force = true})
         else
             generateGccExportSymbol(out, syms)
-            target:add('shflags', '-Wl,--version-script,"'..out..'.ver"', {force = true})
+            target:add('shflags', '-Wl,--version-script,'..out..'.ver', {force = true})
         end
     end
 end

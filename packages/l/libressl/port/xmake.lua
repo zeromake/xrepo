@@ -314,18 +314,23 @@ target("crypto")
             })
         end
         if not check.HAVE_GETENTROPY then
+            local skip = false
             if is_plat("windows", "mingw") then
                 target:add("files", "crypto/compat/getentropy_win.c")
-            elseif is_plat("linux", "android") then
+            elseif is_plat("linux") then
                 target:add("files", "crypto/compat/getentropy_linux.c")
             elseif is_plat("bsd") then
                 target:add("files", "crypto/compat/getentropy_freebsd.c")
-            else
+            elseif is_plat("macosx") then
                 target:add("files", "crypto/compat/getentropy_osx.c")
+            else
+                skip = true
             end
-            extra_join({
-                'getentropy',
-            })
+            if not skip then
+                extra_join({
+                    'getentropy',
+                })
+            end
         end
         if not check.HAVE_TIMINGSAFE_BCMP then
             target:add("files", "crypto/compat/timingsafe_bcmp.c")

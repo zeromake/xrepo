@@ -239,7 +239,6 @@ CRYPTO_FILES = {
     "crypto/engine/*.c",
     "crypto/err/*.c",
     "crypto/evp/*.c",
-    "crypto/gost/*.c",
     "crypto/hkdf/*.c",
     "crypto/hmac/*.c",
     "crypto/idea/*.c",

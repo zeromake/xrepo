@@ -192,6 +192,7 @@ function main(...)
     for idx, package in irpairs(packages) do
         assert(package == package:lower(), "package(%s) must be lower case!", package)
         if not _package_is_supported(argv, package) then
+            print("package(%s) is not supported!", package)
             table.remove(packages, idx)
         end
     end
