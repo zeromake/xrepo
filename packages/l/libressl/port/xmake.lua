@@ -35,6 +35,12 @@ option("merge_archive")
     set_showmenu(true)
 option_end()
 
+option("version4")
+    set_default(true)
+    set_description("version 4")
+    set_showmenu(true)
+option_end()
+
 set_installdir(get_config('installdir'))
 
 if is_plat("windows") then
@@ -84,7 +90,11 @@ add_defines(
     "__BEGIN_HIDDEN_DECLS=",
     "__END_HIDDEN_DECLS="
 )
-includes("files.lua")
+if get_config("version4") then
+    includes("files4.lua")
+else
+    includes("files.lua")
+end
 includes("util.lua")
 includes("export_symbol.lua")
 
@@ -98,6 +108,9 @@ target("crypto")
     set_kind("$(kind)")
     add_defines("LIBRESSL_CRYPTO_INTERNAL")
     add_deps("check.object")
+    for _, dir in ipairs(COMMON_INCLUDE_DIRS) do
+        add_includedirs(dir)
+    end
     
     for _, dir in ipairs(CRYPTO_INCLUDE_DIRS) do
         add_includedirs(dir)
@@ -134,26 +147,30 @@ target("crypto")
         add_files(table.unpack(CRYPTO_ASM_FILE[asm_host]))
         add_defines(table.unpack(CRYPTO_ASM_DEFINE[asm_host]))
     end
-    if not host_asm_check.HOST_ASM_ELF_X86_64 and 
+    if not get_config("version4") and
+        not host_asm_check.HOST_ASM_ELF_X86_64 and 
         not host_asm_check.HOST_ASM_MACOSX_X86_64 and
         not host_asm_check.HOST_ASM_MASM_X86_64 and
         not host_asm_check.HOST_ASM_ELF_ARMV4 and
         not host_asm_check.HOST_ASM_MINGW64_X86_64 then
         add_files("crypto/aes/aes_core.c")
     end
-
     if not host_asm_check.HOST_ASM_ELF_X86_64 and 
         not host_asm_check.HOST_ASM_MACOSX_X86_64 and
         not host_asm_check.HOST_ASM_MASM_X86_64 and
         not host_asm_check.HOST_ASM_MINGW64_X86_64 then
-        add_files(
-            "crypto/aes/aes_cbc.c",
-            "crypto/camellia/camellia.c",
-            "crypto/camellia/cmll_cbc.c",
-            "crypto/rc4/rc4_enc.c",
-            "crypto/rc4/rc4_skey.c",
-            "crypto/whrlpool/wp_block.c"
-        )
+        if get_config("version4") then
+            add_files("crypto/camellia/camellia.c")
+        else
+            add_files(
+                "crypto/aes/aes_cbc.c",
+                "crypto/camellia/camellia.c",
+                "crypto/camellia/cmll_cbc.c",
+                "crypto/rc4/rc4_enc.c",
+                "crypto/rc4/rc4_skey.c",
+                "crypto/whrlpool/wp_block.c"
+            )
+        end
     end
     add_files(table.unpack(CRYPTO_FILES))
     local CRYPTO_UNEXPORT = {}
@@ -360,9 +377,13 @@ target("ssl")
     -- end
     add_rules("export_symbol", {file = 'ssl/ssl.sym'})
     add_files("ssl/*.c|empty.c")
+    for _, dir in ipairs(COMMON_INCLUDE_DIRS) do
+        add_includedirs(dir)
+    end
     add_includedirs(
         "ssl",
         "ssl/hidden",
+        "crypto",
         "crypto/bio",
         "include/compat",
         "include"

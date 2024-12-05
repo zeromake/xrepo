@@ -89,7 +89,7 @@ rule('export_symbol')
             elseif is_plat("mingw") then
                 generateWindowsExportSymbol(out, syms)
                 target:add('files', out..'.def')
-            elseif is_plat("macosx") then
+            elseif is_plat("macosx", "iphoneos") then
                 generateAppleExportSymbol(out, syms)
                 target:add('shflags', '-exported_symbols_list '..out..'.exp', {force = true})
             else

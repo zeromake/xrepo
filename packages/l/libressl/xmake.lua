@@ -6,8 +6,11 @@ package("libressl")
     add_urls("https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-$(version).tar.gz")
 
     --insert version
+    add_versions("4.0.0", "4d841955f0acc3dfc71d0e3dd35f283af461222350e26843fea9731c0246a1e4")
     add_versions("3.9.2", "7b031dac64a59eb6ee3304f7ffb75dad33ab8c9d279c847f92c89fb846068f97")
-    add_versions("3.8.2", "6d4b8d5bbb25a1f8336639e56ec5088052d43a95256697a85c4ce91323c25954")
+
+
+    add_patches("4.0.0", path.join(os.scriptdir(), "patches/001-ios-add-byte-order-macros.patch"), "4682df68e68be07ca3b1e362ac2035cf293ac786df9f99fc866522564d7b957f")
     add_configs("asm", {description = "use asm", default = true, type = "boolean"})
     add_configs("openssldir", {description = "openssldir set", default = nil, type = "string"})
     if is_plat("windows", "mingw") then
@@ -24,6 +27,11 @@ package("libressl")
         table.insert(configs, "--asm="..(package:config("asm") and 'y' or 'n'))
         if package:config('openssldir') then
             table.insert(configs, "--openssldir="..package:config('openssldir'))
+        end
+        if package:version():ge("4.0.0") then
+            table.insert(configs, "--version4=y")
+        else
+            table.insert(configs, "--version4=n")
         end
         import("package.tools.xmake").install(package, configs)
     end)

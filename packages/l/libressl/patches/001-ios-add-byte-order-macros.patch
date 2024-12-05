@@ -1,0 +1,22 @@
+diff --git a/include/compat/endian.h b/include/compat/endian.h
+index 5376c1a..c9440e6 100644
+--- a/include/compat/endian.h
++++ b/include/compat/endian.h
+@@ -62,7 +62,7 @@
+ #endif
+ #endif
+ 
+-#if defined(__APPLE__) && !defined(HAVE_ENDIAN_H)
++#if defined(__APPLE__) && !defined(be16toh)
+ #include <libkern/OSByteOrder.h>
+ #define be16toh(x) OSSwapBigToHostInt16((x))
+ #define htobe16(x) OSSwapHostToBigInt16((x))
+@@ -74,7 +74,7 @@
+ #define htobe64(x) OSSwapHostToBigInt64(x)
+ #define le64toh(x) OSSwapLittleToHostInt64(x)
+ #define be64toh(x) OSSwapBigToHostInt64(x)
+-#endif /* __APPLE__ && !HAVE_ENDIAN_H */
++#endif /* __APPLE__ && !defined(be16toh) */
+ 
+ #if defined(_WIN32) && !defined(HAVE_ENDIAN_H)
+ #include <winsock2.h>

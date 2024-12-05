@@ -144,8 +144,16 @@ local upgrade_transform = {
         local version = outdata:sub(_start+8, _end-1)
         return version, 'https://www.scintilla.org/scintilla'..version:gsub('%.', '')..'.tgz'
     end,
+    libressl = function ()
+        local release_url = 'https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/'
+        local outdata = fetch(release_url)
+        if outdata == nil then
+            return nil, nil
+        end
+        local version = outdata:match('^.*>libressl%-(%d+%.%d+%.%d+)%.tar%.gz<')
+        return version, 'https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-'..version..'.tar.gz'
+    end,
 }
-
 
 local function load_packages(filters)
     local packageDirs = nil

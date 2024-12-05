@@ -21,21 +21,26 @@ CRYPTO_INCLUDE_DIRS = {
     "crypto/x509",
     "crypto/lhash",
     "crypto/stack",
+    "crypto/err",
+    "crypto/conf",
     "include/compat",
     "include",
 }
 
-local COMMON_INCLUDE_DIRS = {}
-
+COMMON_INCLUDE_DIRS = {}
 
 if is_arch("arm64.*") then
     table.insert(CRYPTO_INCLUDE_DIRS, "crypto/bn/arch/aarch64")
+    table.insert(COMMON_INCLUDE_DIRS, "crypto/arch/aarch64")
 elseif is_arch("arm.*") then
     table.insert(CRYPTO_INCLUDE_DIRS, "crypto/bn/arch/arm")
+    table.insert(COMMON_INCLUDE_DIRS, "crypto/arch/arm")
 elseif is_arch("x64", "x86_64") then
     table.insert(CRYPTO_INCLUDE_DIRS, "crypto/bn/arch/amd64")
+    table.insert(COMMON_INCLUDE_DIRS, "crypto/arch/amd64")
 elseif is_arch("x86", "i386") then
     table.insert(CRYPTO_INCLUDE_DIRS, "crypto/bn/arch/i386")
+    table.insert(COMMON_INCLUDE_DIRS, "crypto/arch/i386")
 end
 
 CRYPTO_ASM_FILE = {
@@ -54,11 +59,9 @@ CRYPTO_ASM_FILE = {
         "crypto/aes/bsaes-elf-x86_64.S",
         "crypto/aes/vpaes-elf-x86_64.S",
         "crypto/aes/aesni-elf-x86_64.S",
-        "crypto/aes/aesni-sha1-elf-x86_64.S",
         "crypto/bn/modexp512-elf-x86_64.S",
         "crypto/bn/mont-elf-x86_64.S",
         "crypto/bn/mont5-elf-x86_64.S",
-        "crypto/camellia/cmll-elf-x86_64.S",
         "crypto/md5/md5-elf-x86_64.S",
         "crypto/modes/ghash-elf-x86_64.S",
         "crypto/rc4/rc4-elf-x86_64.S",
@@ -66,7 +69,6 @@ CRYPTO_ASM_FILE = {
         "crypto/sha/sha1-elf-x86_64.S",
         "crypto/sha/sha256-elf-x86_64.S",
         "crypto/sha/sha512-elf-x86_64.S",
-        "crypto/whrlpool/wp-elf-x86_64.S",
         "crypto/cpuid-elf-x86_64.S",
     
         "crypto/bn/arch/amd64/bignum_add.S",
@@ -87,19 +89,15 @@ CRYPTO_ASM_FILE = {
         "crypto/aes/bsaes-macosx-x86_64.S",
         "crypto/aes/vpaes-macosx-x86_64.S",
         "crypto/aes/aesni-macosx-x86_64.S",
-        "crypto/aes/aesni-sha1-macosx-x86_64.S",
         "crypto/bn/modexp512-macosx-x86_64.S",
         "crypto/bn/mont-macosx-x86_64.S",
         "crypto/bn/mont5-macosx-x86_64.S",
-        "crypto/camellia/cmll-macosx-x86_64.S",
         "crypto/md5/md5-macosx-x86_64.S",
         "crypto/modes/ghash-macosx-x86_64.S",
         "crypto/rc4/rc4-macosx-x86_64.S",
-        "crypto/rc4/rc4-md5-macosx-x86_64.S",
         "crypto/sha/sha1-macosx-x86_64.S",
         "crypto/sha/sha256-macosx-x86_64.S",
         "crypto/sha/sha512-macosx-x86_64.S",
-        "crypto/whrlpool/wp-macosx-x86_64.S",
         "crypto/cpuid-macosx-x86_64.S",
     
         "crypto/bn/arch/amd64/bignum_add.S",
@@ -120,16 +118,13 @@ CRYPTO_ASM_FILE = {
         "crypto/aes/bsaes-masm-x86_64.S",
         "crypto/aes/vpaes-masm-x86_64.S",
         "crypto/aes/aesni-masm-x86_64.S",
-        "crypto/aes/aesni-sha1-masm-x86_64.S",
         "crypto/camellia/cmll-masm-x86_64.S",
         "crypto/md5/md5-masm-x86_64.S",
         "crypto/modes/ghash-masm-x86_64.S",
         "crypto/rc4/rc4-masm-x86_64.S",
-        "crypto/rc4/rc4-md5-masm-x86_64.S",
         "crypto/sha/sha1-masm-x86_64.S",
         "crypto/sha/sha256-masm-x86_64.S",
         "crypto/sha/sha512-masm-x86_64.S",
-        "crypto/whrlpool/wp-masm-x86_64.S",
         "crypto/cpuid-masm-x86_64.S",
     },
     MINGW64_X86_64 = {
@@ -137,16 +132,12 @@ CRYPTO_ASM_FILE = {
 		"crypto/aes/bsaes-mingw64-x86_64.S",
 		"crypto/aes/vpaes-mingw64-x86_64.S",
 		"crypto/aes/aesni-mingw64-x86_64.S",
-		"crypto/aes/aesni-sha1-mingw64-x86_64.S",
-		"crypto/camellia/cmll-mingw64-x86_64.S",
 		"crypto/md5/md5-mingw64-x86_64.S",
 		"crypto/modes/ghash-mingw64-x86_64.S",
 		"crypto/rc4/rc4-mingw64-x86_64.S",
-		"crypto/rc4/rc4-md5-mingw64-x86_64.S",
 		"crypto/sha/sha1-mingw64-x86_64.S",
 		"crypto/sha/sha256-mingw64-x86_64.S",
 		"crypto/sha/sha512-mingw64-x86_64.S",
-		"crypto/whrlpool/wp-mingw64-x86_64.S",
 		"crypto/cpuid-mingw64-x86_64.S",
     }
 }
@@ -198,7 +189,7 @@ CRYPTO_ASM_DEFINE = {
         "WHIRLPOOL_ASM",
     }, CRYPTO_COMMON_DEFINE),
     MINGW64_X86_64 = table.join({
-        "endbr32=",
+        "endbr32=endbr64",
         "endbr64=",
         "BSAES_ASM",
         "VPAES_ASM",
@@ -215,13 +206,11 @@ CRYPTO_FILES = {
     "crypto/cryptlib.c",
     "crypto/crypto_init.c",
     "crypto/cversion.c",
-    "crypto/ex_data.c",
     "crypto/malloc-wrapper.c",
     "crypto/mem_clr.c",
     "crypto/mem_dbg.c",
     "crypto/o_fips.c",
-    "crypto/o_init.c",
-    "crypto/o_str.c",
+    "crypto/crypto_ex_data.c",
     "crypto/asn1/*.c",
     "crypto/bf/*.c",
     "crypto/bn/*.c",
@@ -265,14 +254,14 @@ CRYPTO_FILES = {
     "crypto/ts/*.c",
     "crypto/txt_db/*.c",
     "crypto/x509/*.c",
-    "crypto/aes/*.c|aes_cbc.c|aes_core.c",
+    "crypto/aes/*.c",
     "crypto/bio/*.c|b_win.c|b_posix.c|bss_log.c",
     "crypto/chacha/*.c|chacha-merged.c",
-    "crypto/camellia/*.c|camellia.c|cmll_cbc.c",
+    "crypto/camellia/*.c",
     "crypto/des/*.c|ncbc_enc.c",
     "crypto/poly1305/*.c|poly1305-donna.c",
     "crypto/ui/*.c|ui_openssl.c|ui_openssl_win.c",
-    "crypto/whrlpool/*.c|wp_block.c",
     "crypto/lhash/*.c",
     "crypto/stack/*.c",
+    "crypto/rc4/*.c",
 }
