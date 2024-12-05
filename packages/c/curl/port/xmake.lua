@@ -409,6 +409,7 @@ if is_plat("windows", "mingw") then
     configvar_check_cfuncs("HAVE_RECV", "recv", {includes={"winsock2.h"}})
     configvar_check_cfuncs("HAVE_SEND", "send", {includes={"winsock2.h"}})
     set_configvar("USE_WIN32_CRYPTO", 1)
+    add_defines("UNICODE", "_UNICODE")
 else
     set_configvar("HAVE_LDAP_SSL", 1)
     set_configvar("USE_THREADS_POSIX", 1)
@@ -429,6 +430,8 @@ set_configvar("HAVE_ATOMIC", 1)
 set_configvar("USE_WEBSOCKETS", 1)
 set_configvar("HAVE_WRITABLE_ARGV", 1)
 set_configvar("HAVE_DECL_FSEEKO", 1)
+set_configvar("USE_IPV6", 1)
+set_configvar("USE_TLS_SRP", 1)
 
 configvar_check_csnippets("ENABLE_IPV6", [[
 #include <sys/types.h>
@@ -500,7 +503,8 @@ target("curl")
             set_configvar("USE_SECTRANSP", 1)
         end
         add_frameworks("CoreFoundation", "SystemConfiguration", "Security")
-        add_syslinks("ldap")
+        add_syslinks("ldap", "icucore", "iconv")
+        set_configvar("USE_APPLE_IDN", 1)
     elseif is_plat("linux") then
         set_configvar("CURL_DISABLE_LDAP", 1)
     end
