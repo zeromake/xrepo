@@ -497,6 +497,7 @@ target("curl")
         set_configvar("USE_WIN32_IDN", 1)
         set_configvar("USE_SCHANNEL", 1)
         add_syslinks("crypt32", "bcrypt", "advapi32", "ws2_32", "normaliz")
+        add_files("lib/libcurl.rc")
     elseif is_plat("macosx") then
         -- http3 不支持多 tls 后端
         if not get_config("nghttp3") then
@@ -564,6 +565,7 @@ target("curl")
 target("curl_cli")
     set_default(get_config("cli") or false)
     set_kind("binary")
+    set_basename("curl")
     add_defines(
         "HAVE_CONFIG_H=1",
         "CURL_STATICLIB",
@@ -571,8 +573,11 @@ target("curl_cli")
         "BUILDING_CURL_CLI"
     )
     on_config(function (target)
-        target:add("defines", "CURL_OS="..vformat('"xmake:$(os)-$(arch)"'))
+        target:add("defines", "CURL_OS="..vformat('"$(arch)-pc-$(os)"'))
     end)
     add_deps("curl")
     add_includedirs("lib", "include", "$(buildir)/config")
     add_files("src/*.c")
+    if is_plat("windows", "mingw") then
+        add_files("src/curl.rc")
+    end
