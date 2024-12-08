@@ -235,9 +235,9 @@ function get_alpha_latest(repo, secret)
 end
 
 function _download_file(url, out, opt)
+    print('download('..out..'): '..url)
     if not os.exists(out) and opt.download then
-        print('download: '..url)
-        os.runv('curl', {
+        os.execv('curl', {
             '-L',
             '-o',
             out,
