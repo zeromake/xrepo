@@ -154,23 +154,23 @@ configvar_check_cincludes("HAVE_PTHREAD_NP_H", "pthread_np.h")
 configvar_check_sizeof("SIZEOF_SIZEOF_VOID_P", "void*")
 
 if is_plat("windows", "mingw") then
-    configvar_check_cincludes("HAVE_WINSOCK2_H", {"windows.h", "winsock2.h"})
-    configvar_check_cincludes("HAVE_WS2TCPIP_H", {"windows.h", "winsock2.h", "ws2tcpip.h"})
-    configvar_check_cincludes("HAVE_IPHLPAPI_H", {"windows.h", "winsock2.h", "iphlpapi.h"})
-    configvar_check_cincludes("HAVE_NETIOAPI_H", {"windows.h", "winsock2.h", "netioapi.h"})
-    configvar_check_cincludes("HAVE_MSWSOCK_H", {"windows.h", "winsock2.h", "mswsock.h"})
-    configvar_check_cincludes("HAVE_WINSOCK_H", {"windows.h", "winsock.h"})
+    configvar_check_cincludes("HAVE_WINSOCK2_H", {"winsock2.h"})
+    configvar_check_cincludes("HAVE_WS2TCPIP_H", {"ws2tcpip.h"})
+    configvar_check_cincludes("HAVE_IPHLPAPI_H", {"winsock2.h", "windows.h", "ws2tcpip.h", "iphlpapi.h"})
+    configvar_check_cincludes("HAVE_NETIOAPI_H", {"winsock2.h", "windows.h", "ws2tcpip.h", "iphlpapi.h", "netioapi.h"})
+    configvar_check_cincludes("HAVE_MSWSOCK_H", {"mswsock.h"})
+    configvar_check_cincludes("HAVE_WINSOCK_H", {"winsock.h"})
     configvar_check_cincludes("HAVE_WINDOWS_H", "windows.h")
-    configvar_check_cincludes("HAVE_WINTERNL_H", {"windows.h", "winternl.h"})
-    configvar_check_cincludes("HAVE_NTDEF_H", {"windows.h", "ntdef.h"})
-    configvar_check_cincludes("HAVE_NTSTATUS_H", {"windows.h", "ntdef.h", "ntstatus.h"})
+    configvar_check_cincludes("HAVE_WINTERNL_H", {"winternl.h"})
+    configvar_check_cincludes("HAVE_NTDEF_H", {"ntdef.h"})
+    configvar_check_cincludes("HAVE_NTSTATUS_H", {"ntstatus.h"})
 end
 
 local network_include = {}
 if is_plat("windows", "mingw") then
-    network_include = {"windows.h", "winsock2.h", "ws2tcpip.h"}
+    network_include = {"winsock2.h", "ws2tcpip.h", "windows.h"}
 else
-    network_include = {"sys/types.h", "sys/socket.h", "netdb.h"}
+    network_include = {"sys/types.h", "sys/socket.h", "sys/ioctl.h", "netdb.h", "fcntl.h"}
 end
 
 configvar_check_ctypes("HAVE_SOCKLEN_T", "socklen_t", {includes = network_include})
@@ -181,19 +181,24 @@ configvar_check_ctypes("HAVE_STRUCT_ADDRINFO", "struct addrinfo", {includes = ne
 configvar_check_ctypes("HAVE_STRUCT_IN6_ADDR", "struct in6_addr", {includes = network_include})
 configvar_check_ctypes("HAVE_STRUCT_SOCKADDR_IN6", "struct sockaddr_in6", {includes = network_include})
 configvar_check_ctypes("HAVE_STRUCT_SOCKADDR_STORAGE", "struct sockaddr_storage", {includes = network_include})
-configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes = "sys/time.h"})
+if is_plat("windows", "mingw") then
+    configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes = "winsock2.h"})
+else
+    configvar_check_ctypes("HAVE_STRUCT_TIMEVAL", "struct timeval", {includes = "sys/time.h"})
+end
 
-configvar_check_csymbol_exists("HAVE_AF_INET6", "AF_INET6", {includes = "sys/socket.h"})
-configvar_check_csymbol_exists("HAVE_O_NONBLOCK", "O_NONBLOCK", {includes = "fcntl.h"})
-configvar_check_csymbol_exists("HAVE_FIONBIO", "FIONBIO", {includes = "sys/ioctl.h"})
-configvar_check_csymbol_exists("HAVE_IOCTL_SIOCGIFADDR", "SIOCGIFADDR", {includes = "sys/ioctl.h"})
-configvar_check_csymbol_exists("HAVE_MSG_NOSIGNAL", "MSG_NOSIGNAL", {includes = "sys/socket.h"})
-configvar_check_csymbol_exists("HAVE_PF_INET6", "PF_INET6", {includes = "sys/socket.h"})
-configvar_check_csymbol_exists("HAVE_SO_NONBLOCK", "SO_NONBLOCK", {includes = "sys/socket.h"})
+configvar_check_csymbol_exists("HAVE_AF_INET6", "AF_INET6", {includes = network_include})
+configvar_check_csymbol_exists("HAVE_O_NONBLOCK", "O_NONBLOCK", {includes = network_include})
+configvar_check_csymbol_exists("HAVE_FIONBIO", "FIONBIO", {includes = network_include})
+configvar_check_csymbol_exists("HAVE_IOCTL_SIOCGIFADDR", "SIOCGIFADDR", {includes = network_include})
+configvar_check_csymbol_exists("HAVE_MSG_NOSIGNAL", "MSG_NOSIGNAL", {includes = network_include})
+configvar_check_csymbol_exists("HAVE_PF_INET6", "PF_INET6", {includes = network_include})
+configvar_check_csymbol_exists("HAVE_SO_NONBLOCK", "SO_NONBLOCK", {includes = network_include})
 configvar_check_csymbol_exists("HAVE_PTHREAD_INIT", "pthread_init", {includes = "pthread.h"})
 
 configvar_check_chas_member("HAVE_STRUCT_SOCKADDR_IN6_SIN6_SCOPE_ID", "struct sockaddr_in6", "sin6_scope_id", {includes = {"sys/socket.h", "netinet/in.h"}})
 
+local iphlpapi_includes = {"winsock2.h", "windows.h", "ws2tcpip.h", "iphlpapi.h"}
 
 configvar_check_csymbol_exists("HAVE_MEMMEM", "memmem", {includes = "string.h"})
 configvar_check_csymbol_exists("HAVE_CLOSESOCKET", "closesocket", {includes = network_include})
@@ -212,9 +217,9 @@ configvar_check_csymbol_exists("HAVE_GETSERVBYNAME_R", "getservbyname_r", {inclu
 configvar_check_csymbol_exists("HAVE_GETTIMEOFDAY", "gettimeofday", {includes = "sys/time.h"})
 configvar_check_csymbol_exists("HAVE_IF_INDEXTONAME", "if_indextoname", {includes = "net/if.h"})
 configvar_check_csymbol_exists("HAVE_IF_NAMETOINDEX", "if_nametoindex", {includes = "net/if.h"})
-configvar_check_csymbol_exists("HAVE_CONVERTINTERFACEINDEXTOLUID", "ConvertInterfaceIndexToLuid", {includes = "iphlpapi.h"})
-configvar_check_csymbol_exists("HAVE_CONVERTINTERFACELUIDTONAMEA", "ConvertInterfaceLuidToNameA", {includes = "iphlpapi.h"})
-configvar_check_csymbol_exists("HAVE_NOTIFYIPINTERFACECHANGE", "NotifyIpInterfaceChange", {includes = "iphlpapi.h"})
+configvar_check_csymbol_exists("HAVE_CONVERTINTERFACEINDEXTOLUID", "ConvertInterfaceIndexToLuid", {includes = iphlpapi_includes})
+configvar_check_csymbol_exists("HAVE_CONVERTINTERFACELUIDTONAMEA", "ConvertInterfaceLuidToNameA", {includes = iphlpapi_includes})
+configvar_check_csymbol_exists("HAVE_NOTIFYIPINTERFACECHANGE", "NotifyIpInterfaceChange", {includes = iphlpapi_includes})
 configvar_check_csymbol_exists("HAVE_REGISTERWAITFORSINGLEOBJECT", "RegisterWaitForSingleObject", {includes = "windows.h"})
 configvar_check_csymbol_exists("HAVE_INET_NET_PTON", "inet_net_pton", {includes = "arpa/inet.h"})
 
@@ -375,9 +380,9 @@ target("cares")
             'HAVE_ARPA_NAMESER_H',
             'HAVE_ARPA_NAMESER_COMPAT_H',
         }
-        for _, header in ipairs(cares_headers) do
-            if get_configvar(header) then
-                set_configvar('CARES_'..header, 1)
+        for _, cares_header in ipairs(cares_headers) do
+            if get_configvar(cares_header) then
+                set_configvar('CARES_'..cares_header, 1)
             end
         end
     end)
@@ -400,3 +405,8 @@ target("cares")
         add_files("src/lib/cares.rc")
     end
     add_headerfiles("include/*.h", "$(buildir)/config/ares_build.h")
+    if is_kind("shared") then
+        add_defines("CARES_BUILDING_LIBRARY")
+    else
+        add_defines("CARES_STATICLIB")
+    end

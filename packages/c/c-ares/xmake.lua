@@ -6,6 +6,11 @@ package("c-ares")
 
     --insert version
     add_versions("1.34.3", "26e1f7771da23e42a18fdf1e58912a396629e53a2ac71b130af93bbcfb90adbe")
+    on_load(function (package) 
+        if package:is_plat("windows", "mingw") and package:config("shared") ~= true then
+            package:add("defines", "CARES_STATICLIB")
+        end
+    end)
     on_install(function (package)
         local transforme_configfile = function (input, output) 
             output = output or input
