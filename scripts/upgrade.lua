@@ -105,6 +105,9 @@ local download_transform = {
     sevenzip = function (opt) 
         return 'https://github.com/'..opt.repo..'/releases/download/'..opt.tag..'/7z'..opt.tag:gsub('%.', '')..'-src.tar.xz'
     end,
+    ['c-ares'] = function (opt)
+        return default_transform(opt, 'c-ares-')
+    end
 }
 
 function fetch(url)
