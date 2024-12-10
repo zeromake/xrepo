@@ -32,6 +32,7 @@ package("sqlite3")
     add_configs("math_functions",   { description = "Enable the built-in SQL math functions.", default = true, type = "boolean"})
     add_configs("rtree",            { description = "Enable R-Tree.", default = false, type = "boolean"})
     add_configs("safe_mode",        { description = "Use thread safe mode in 0 (single thread) | 1 (serialize) | 2 (mutli thread).", default = "1", type = "string", values = {"0", "1", "2"}})
+    add_configs("cli",              { description = "Build the sqlite3 command line shell.", default = false, type = "boolean"})
 
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")

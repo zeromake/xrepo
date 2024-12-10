@@ -9,6 +9,7 @@ option("dbstat_vtab", {default = false, defines = "SQLITE_ENABLE_DBSTAT_VTAB"})
 option("math_functions", {default = false, defines = "SQLITE_ENABLE_MATH_FUNCTIONS"})
 option("rtree", {default = false, defines = "SQLITE_ENABLE_RTREE"})
 option("safe_mode", {default = "1"})
+option("cli", {default = false})
 
 target("sqlite3")
     set_kind("$(kind)")
@@ -30,7 +31,7 @@ target("sqlite3")
     end
 
 target("sqlite3_cli")
-    set_default(false)
+    set_default(get_config("cli") or false)
     set_basename("sqlite3")
     add_files("shell.c")
     add_deps("sqlite3")
