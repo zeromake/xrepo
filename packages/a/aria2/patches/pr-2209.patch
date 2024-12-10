@@ -1,0 +1,22 @@
+From b1f56fa65c683b5003807c36b4171f3d67d27bde Mon Sep 17 00:00:00 2001
+From: Alex Hua <sealexh@gmail.com>
+Date: Wed, 8 May 2024 19:25:31 +0800
+Subject: [PATCH] Fix high CPU usage when sending unauthorized RPC response
+
+close: alexhua/Aria2-Explorer#63
+---
+ src/HttpServerBodyCommand.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/HttpServerBodyCommand.cc b/src/HttpServerBodyCommand.cc
+index e9e7b92ab9..1ef48f7f73 100644
+--- a/src/HttpServerBodyCommand.cc
++++ b/src/HttpServerBodyCommand.cc
+@@ -149,6 +149,7 @@ void HttpServerBodyCommand::addHttpServerResponseCommand(bool delayed)
+   auto resp = make_unique<HttpServerResponseCommand>(getCuid(), httpServer_, e_,
+                                                      socket_);
+   if (delayed) {
++    e_->deleteSocketForWriteCheck(socket_, resp.get());
+     e_->addCommand(
+         make_unique<DelayedCommand>(getCuid(), e_, 1_s, std::move(resp), true));
+     return;

@@ -1,0 +1,24 @@
+From 89810a0a26cf6b59b86f334f6aa64db8f245803d Mon Sep 17 00:00:00 2001
+From: Alex Hua <sealexh@gmail.com>
+Date: Wed, 24 Jul 2024 23:06:34 +0800
+Subject: [PATCH] fix: Remove redundant filepath separator when use applyDir()
+
+close #1661
+---
+ src/util.cc | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/util.cc b/src/util.cc
+index 07502c0ebf..596681c787 100644
+--- a/src/util.cc
++++ b/src/util.cc
+@@ -2108,6 +2108,9 @@ std::string applyDir(const std::string& dir, const std::string& relPath)
+       s += relPath;
+     }
+     else {
++      while (s.back() == '/' || s.back() == '\\') {
++        s.pop_back();
++      }
+       s += "/";
+       s += relPath;
+     }

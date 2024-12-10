@@ -125,7 +125,7 @@ target("crypto")
     local crypto_asm_files = {}
     local unexport = {}
     if get_config('openssldir') then
-        add_defines('OPENSSLDIR=$(openssldir)')
+        add_defines('OPENSSLDIR="$(openssldir)"')
     else
         if is_plat("windows", "mingw") then
             add_defines('OPENSSLDIR="$(installdir)"')
