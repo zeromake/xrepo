@@ -30,6 +30,7 @@ target("sqlite3")
     end
 
 target("sqlite3_cli")
+    set_default(false)
     set_basename("sqlite3")
     add_files("shell.c")
     add_deps("sqlite3")

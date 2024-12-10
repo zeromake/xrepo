@@ -1,0 +1,13 @@
+diff --git a/src/SocketCore.cc b/src/SocketCore.cc
+index 4e7421b..543f92e 100644
+--- a/src/SocketCore.cc
++++ b/src/SocketCore.cc
+@@ -657,7 +657,7 @@ void SocketCore::closeConnection()
+ #ifndef __MINGW32__
+ #  define CHECK_FD(fd)                                                         \
+     if (fd < 0 || FD_SETSIZE <= fd) {                                          \
+-      logger_->warn("Detected file descriptor >= FD_SETSIZE or < 0. "          \
++      A2_LOG_WARN("Detected file descriptor >= FD_SETSIZE or < 0. "          \
+                     "Download may slow down or fail.");                        \
+       return false;                                                            \
+     }
