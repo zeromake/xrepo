@@ -41,6 +41,12 @@ option("version4")
     set_showmenu(true)
 option_end()
 
+option("ca")
+    set_default(nil)
+    set_description("ca file path")
+    set_showmenu(true)
+option_end()
+
 set_installdir(get_config('installdir'))
 
 if is_plat("windows") then
@@ -411,10 +417,14 @@ target("tls")
         "include/compat",
         "include"
     )
-    if get_config('openssldir') then
-        add_defines('TLS_DEFAULT_CA_FILE="$(openssldir)/cert.pem"')
+    if get_config("ca") then
+        add_defines('TLS_DEFAULT_CA_FILE="$(ca)"')
     else
-        add_defines('TLS_DEFAULT_CA_FILE="$(installdir)/etc/ssl/cert.pem"')
+        if get_config('openssldir') then
+            add_defines('TLS_DEFAULT_CA_FILE="$(openssldir)/cert.pem"')
+        else
+            add_defines('TLS_DEFAULT_CA_FILE="$(installdir)/etc/ssl/cert.pem"')
+        end
     end
     if is_plat("windows", "mingw") then
         add_files("tls/compat/*.c")

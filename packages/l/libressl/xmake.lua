@@ -13,6 +13,7 @@ package("libressl")
     add_patches("4.0.0", path.join(os.scriptdir(), "patches/001-ios-add-byte-order-macros.patch"), "4682df68e68be07ca3b1e362ac2035cf293ac786df9f99fc866522564d7b957f")
     add_configs("asm", {description = "use asm", default = true, type = "boolean"})
     add_configs("openssldir", {description = "openssldir set", default = nil, type = "string"})
+    add_configs("ca", {description = "default ca file path", default = nil, type = "string"})
     if is_plat("windows", "mingw") then
         add_syslinks("ws2_32", "bcrypt")
     elseif is_plat("linux") then
@@ -27,6 +28,9 @@ package("libressl")
         table.insert(configs, "--asm="..(package:config("asm") and 'y' or 'n'))
         if package:config('openssldir') then
             table.insert(configs, "--openssldir="..package:config('openssldir'))
+        end
+        if package:config('ca') then
+            table.insert(configs, "--ca="..package:config('ca'))
         end
         if package:version():ge("4.0.0") then
             table.insert(configs, "--version4=y")

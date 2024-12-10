@@ -2,13 +2,17 @@ includes("@builtin/check")
 add_rules("mode.debug", "mode.release")
 
 add_requires(
-    "libressl",
     "ssh2",
     "expat",
     "zlib",
     "sqlite3",
     "c-ares"
 )
+local openssldir = "/etc/ssl"
+if is_plat("windows", "mingw") then
+    openssldir = "$(env SYSTEMROOT)\\System32"
+end
+add_requires("libressl", {configs = {openssldir = openssldir}})
 
 local common_headers = {
     "argz.h",

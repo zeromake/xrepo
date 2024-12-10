@@ -2,6 +2,7 @@ local function getVersion(version)
     local versions ={
         ["2024.05.17-alpha"] = "3162485457dbe6c7ca8d145bb26db172aed3e44e",
         ["2024.09.05-alpha"] = "0732ba3f61dcfd0d0988f4c351421d84ec8b67e4",
+        ["2024.11.30-alpha"] = "3388e3b2c04b532a55b072d79e77c9fc44c3ca50",
         --insert getVersion
     }
     return versions[tostring(version)]
