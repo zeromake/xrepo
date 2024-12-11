@@ -28,6 +28,9 @@ package("aria2")
     --insert version
     add_versions("2024.06.30-alpha", "4776effe32746a0c930d8b68bac1d8872dae514fe5372e1949eafb4fef29851d")
     add_versions("1.37.0", "60a420ad7085eb616cb6e2bdf0a7206d68ff3d37fb5a956dc44242eb2f79b66b")
+
+    
+    add_configs("uv", {description = "build use libuv", default = false, type = "boolean"})
     for _, v in ipairs(common_patches) do
         add_patches("1.37.0", path.join(os.scriptdir(), v[1]), v[2])
         add_patches("2024.06.30-alpha", path.join(os.scriptdir(), v[1]), v[2])
@@ -36,6 +39,9 @@ package("aria2")
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         os.cp(path.join(os.scriptdir(), "port", "config.h.in"), "config.h.in")
         local configs = {}
+        if package:config("uv") == true then
+            configs["uv"] = "y"
+        end
         import("package.tools.xmake").install(package, configs)
     end)
 

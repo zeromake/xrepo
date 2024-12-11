@@ -8,11 +8,20 @@ add_requires(
     "sqlite3",
     "c-ares"
 )
+
+option("uv")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
 local openssldir = "/etc/ssl"
 if is_plat("windows", "mingw") then
     openssldir = "$(env SYSTEMROOT)\\System32"
 end
 add_requires("libressl", {configs = {openssldir = openssldir}})
+if get_config("uv") then
+    add_requires("uv")
+end
 
 local common_headers = {
     "argz.h",
@@ -37,7 +46,7 @@ local common_headers = {
     "stddef.h",
     "stdint.h",
     "stdio_ext.h",
-    "stdlib.h ",
+    "stdlib.h",
     "string.h",
     "strings.h",
     "sys/epoll.h",
@@ -66,19 +75,34 @@ local common_headers = {
     "windows.h",
     "winsock2.h",
     "ws2tcpip.h",
-    "mmsystem.h",
+    {"mmsystem.h", {"windows.h", "mmsystem.h"}},
     "io.h",
-    "iphlpapi.h",
-    "winioctl.h",
+    {"iphlpapi.h", {"winsock2.h", "windows.h", "ws2tcpip.h", "iphlpapi.h"}},
+    {"winioctl.h", {"windows.h", "winioctl.h"}},
     "share.h",
     "sys/utime.h",
-    "wincrypt.h",
-    "security.h",
+    {"wincrypt.h", {"windows.h", "wincrypt.h"}},
 }
 
 for _, common_header in ipairs(common_headers) do
-    local name = 'HAVE_'..common_header:gsub("/", "_"):gsub("%.", "_"):gsub("-", "_"):upper()
-    configvar_check_cincludes(name, common_header)
+    local k = common_header
+    local v = common_header
+    if type(common_header) == 'table' then
+        k = common_header[1]
+        v = common_header[2]
+    end
+    local name = 'HAVE_'..k:gsub("/", "_"):gsub("%.", "_"):gsub("-", "_"):upper()
+    configvar_check_cincludes(name, v)
+end
+
+if is_plat("windows", "mingw") then
+    configvar_check_csnippets("HAVE_SECURITY_H", [[
+#ifndef SECURITY_WIN32
+#define SECURITY_WIN32 1
+#endif
+#include <windows.h>
+#include <security.h>
+]])
 end
 
 set_configvar("ENABLE_METALINK", 1)
@@ -105,7 +129,6 @@ set_configvar("ENABLE_ASYNC_DNS", 1)
 set_configvar("USE_INTERNAL_MD", 1)
 
 if is_plat("windows", "mingw") then
-    set_configvar("WIN32_LEAN_AND_MEAN", 1)
     add_defines("_POSIX_C_SOURCE=1")
 else
     add_defines("_GNU_SOURCE=1")
@@ -143,10 +166,52 @@ configvar_check_cfuncs("HAVE_TIMEGM", "timegm", {includes = {"time.h"}})
 configvar_check_cfuncs("HAVE_ASCTIME_R", "asctime_r", {includes = {"time.h"}})
 configvar_check_cfuncs("HAVE_MMAP", "mmap", {includes = {"sys/mman.h"}})
 configvar_check_cfuncs("HAVE_BASENAME", "basename", {includes = {"libgen.h"}})
+configvar_check_cfuncs("HAVE_GAI_STRERROR", "gai_strerror", {includes = network_include})
+
+local removes = {
+    "src/WinTLSContext.cc",
+    "src/WinTLSSession.cc",
+    "src/WinConsoleFile.cc",
+
+    "src/AppleTLSContext.cc",
+    "src/AppleTLSSession.cc",
+    "src/AppleMessageDigestImpl.cc",
+
+    "src/LibgnutlsTLSContext.cc",
+    "src/LibgnutlsTLSSession.cc",
+
+    "src/Xml2XmlParser.cc",
+
+    "src/a2gmp.cc",
+    "src/LibgmpDHKeyExchange.cc",
+
+    "src/LibgcryptARC4Encryptor.cc",
+    "src/LibgcryptDHKeyExchange.cc",
+    "src/LibgcryptMessageDigestImpl.cc",
+
+    "src/LibnettleARC4Encryptor.cc",
+    "src/LibnettleMessageDigestImpl.cc",
+
+    -- 使用内部实现
+    -- "src/InternalARC4Encryptor.cc",
+    -- "src/InternalDHKeyExchange.cc",
+    -- "src/InternalMessageDigestImpl.cc",
+
+    "src/LibsslARC4Encryptor.cc",
+    "src/LibsslDHKeyExchange.cc",
+    "src/LibsslMessageDigestImpl.cc",
+
+    -- "src/SelectEventPoll.cc",
+    "src/PollEventPoll.cc",
+    "src/KqueueEventPoll.cc",
+    "src/LibuvEventPoll.cc",
+    "src/PortEventPoll.cc",
+    "src/EpollEventPoll.cc",
+}
 
 target("aria2c")
     add_files("deps/wslay/lib/*.c")
-    add_files("src/*.cc", "src/uri_split.c")
+    add_files("src/*.cc", "src/uri_split.c", "src/gai_strerror.c")
     add_defines("WSLAY_VERSION=\""..PROJECT_VERSION.."\"")
     on_config(function (target)
         local variables = target:get("configvar") or {}
@@ -183,51 +248,29 @@ target("aria2c")
             end
         end
     end)
-    remove_files(
-        "src/WinTLSContext.cc",
-        "src/WinTLSSession.cc",
-
-        "src/AppleTLSContext.cc",
-        "src/AppleTLSSession.cc",
-        "src/AppleMessageDigestImpl.cc",
-
-        "src/LibgnutlsTLSContext.cc",
-        "src/LibgnutlsTLSSession.cc",
-
-        "src/Xml2XmlParser.cc",
-        "src/LibgmpDHKeyExchange.cc",
-        "src/a2gmp.cc",
-        "src/LibnettleMessageDigestImpl.cc",
-        "src/WinConsoleFile.cc",
-
-        "src/LibgcryptARC4Encryptor.cc",
-        "src/LibgcryptDHKeyExchange.cc",
-        "src/LibgcryptMessageDigestImpl.cc",
-
-        "src/LibnettleARC4Encryptor.cc",
-        "src/LibnettleMessageDigestImpl.cc",
-
-        -- 使用内部实现
-        -- "src/InternalARC4Encryptor.cc",
-        -- "src/InternalDHKeyExchange.cc",
-        -- "src/InternalMessageDigestImpl.cc",
-
-        "src/LibsslARC4Encryptor.cc",
-        "src/LibsslDHKeyExchange.cc",
-        "src/LibsslMessageDigestImpl.cc",
-
-        -- "src/SelectEventPoll.cc",
-        "src/KqueueEventPoll.cc",
-        "src/LibuvEventPoll.cc",
-        "src/PortEventPoll.cc",
-        "src/EpollEventPoll.cc"
-    )
+    local skip = {}
     if is_plat("windows", "mingw") then
-        add_files("src/PortEventPoll.cc")
-    elseif is_plat("linux", "android") then
-        add_files("src/EpollEventPoll.cc")
-    elseif is_plat("macosx", "iphoneos", "bsd") then
-        add_files("src/KqueueEventPoll.cc")
+        skip["src/WinConsoleFile.cc"] = true
+        add_syslinks("iphlpapi")
+    end
+    if get_config("uv") then
+        set_configvar("HAVE_LIBUV", 1)
+        skip["src/LibuvEventPoll.cc"] = true
+        add_packages("uv")
+    else
+        if is_plat("linux", "android") then
+            skip["src/EpollEventPoll.cc"] = true
+            set_configvar("HAVE_EPOLL", 1)
+        elseif is_plat("macosx", "iphoneos", "bsd") then
+            skip["src/KqueueEventPoll.cc"] = true
+            set_configvar("HAVE_KQUEUE", 1)
+        end
+    end
+
+    for _, f in ipairs(removes) do
+        if not skip[f] then
+            remove_files(f)
+        end
     end
     add_includedirs("src/includes", "deps/wslay/lib/includes")
     set_languages("c++17")
@@ -246,4 +289,7 @@ target("aria2c")
     add_defines("HAVE_CONFIG_H=1")
     if is_plat("macosx", "iphoneos") then
         add_frameworks("Security")
+    end
+    if is_plat("mingw") then
+        add_ldflags("-static")
     end
