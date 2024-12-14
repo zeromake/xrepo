@@ -65,7 +65,6 @@ CRYPTO_ASM_FILE = {
         "crypto/md5/md5-elf-x86_64.S",
         "crypto/modes/ghash-elf-x86_64.S",
         "crypto/rc4/rc4-elf-x86_64.S",
-        "crypto/rc4/rc4-md5-elf-x86_64.S",
         "crypto/sha/sha1-elf-x86_64.S",
         "crypto/sha/sha256-elf-x86_64.S",
         "crypto/sha/sha512-elf-x86_64.S",

@@ -14,7 +14,7 @@ rule("embed-js")
 
         depend.on_changed(function ()
             os.mkdir(path.directory(sourcefile_c))
-            local qjsc = assert(find_tool("qjsc", {paths={"$(env PATH)", os.projectdir()}, norun = true}), "qjsc not found!")
+            local qjsc = assert(find_tool("qjsc", {paths={"$(env PATH)", target:targetdir()}, norun = true}), "qjsc not found!")
             argv = table.join(argv, {"-o", sourcefile_c, sourcefile})
             progress.show(opt.progress, "compiling.$(mode) %s", sourcefile)
             os.vrunv(qjsc.program, argv)

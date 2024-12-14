@@ -28,6 +28,7 @@ if is_plat("windows", "mingw") then
 end
 
 set_encodings("utf-8")
+includes("rules/embed-js.lua")
 
 add_defines(
     "_GNU_SOURCE"
@@ -49,13 +50,26 @@ target("quickjs")
         add_files("quickjs-libc.c")
     end
 
+target("qjsc")
+    add_files(
+        "cutils.c",
+        "libbf.c",
+        "libregexp.c",
+        "libunicode.c",
+        "quickjs.c",
+        "quickjs-libc.c",
+        "qjsc.c"
+    )
+    if is_plat("windows", "mingw") then
+        add_files("resource.rc")
+    end
+    set_policy("build.fence", true)
+
 if get_config("cli") then
-    includes("rules/embed-js.lua")
     target("qjs")
-        set_default(true)
         add_rules("embed-js")
-        add_files("qjs.c", "repl.js")
-        add_deps("quickjs")
+        add_files("qjs.c", "repl.js", "standalone.js")
+        add_deps("quickjs", "qjsc")
         if is_plat("windows", "mingw") then
             add_files("resource.rc")
         end
