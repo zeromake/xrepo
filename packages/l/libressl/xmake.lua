@@ -19,6 +19,7 @@ package("libressl")
     elseif is_plat("linux") then
         add_syslinks("pthread")
     end
+    add_links("tls", "ssl", "crypto")
     on_install(function (package)
         local export_prefix = package:version():ge("3.9.0") and "libressl_" or ""
         os.cp(path.join(os.scriptdir(), "port", "*.lua"), "./")
@@ -42,5 +43,5 @@ package("libressl")
 
     on_test(function (package)
         assert(package:has_cfuncs("tls_init", {includes = {"tls.h"}}))
-        assert(package:has_cfuncs("SSL_CTX_new", {includes = {"openssl/ssl.h"}, links = {"ssl"}}))
+        assert(package:has_cfuncs("SSL_CTX_new", {includes = {"openssl/ssl.h"}}))
     end)
