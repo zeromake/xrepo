@@ -70,6 +70,9 @@ local version_transform = {
     sevenzip = function (version)
         return version..".0"
     end,
+    aria2 = function (version)
+        return version:sub(9)
+    end,
 }
 
 local function default_transform(opt, prefix, suffix)

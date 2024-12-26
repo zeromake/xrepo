@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2024.12.08-alpha"] = "archive/1d5d948ccf2b02cad806c56395cdc36c00f24599.tar.gz",
+        ["2024.12.25-alpha"] = "archive/b8036bdd41dfc48c614a1a023804306687fcc4c8.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -14,6 +15,7 @@ package("sdl3")
     set_urls("https://github.com/libsdl-org/SDL/$(version)", {version = getVersion})
 
     --insert version
+    add_versions("2024.12.25-alpha", "46b21116354b661ca5502e47eabd355e8d8cce066f5390e7f11dbf7cb75f241b")
     add_versions("2024.12.08-alpha", "a5e6f1bfedd2d798fded5077a5739ab1c961ba2dcccac91581cfa578909ed0df")
 
     if is_plat("macosx") then

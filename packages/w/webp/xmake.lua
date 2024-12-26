@@ -6,6 +6,7 @@ package("webp")
     set_urls("https://github.com/webmproject/libwebp/archive/refs/tags/v$(version).tar.gz")
 
     --insert version
+    add_versions("1.5.0", "668c9aba45565e24c27e17f7aaf7060a399f7f31dba6c97a044e1feacb930f37")
     add_versions("1.4.0", "12af50c45530f0a292d39a88d952637e43fb2d4ab1883c44ae729840f7273381")
     add_versions("1.3.2", "c2c2f521fa468e3c5949ab698c2da410f5dce1c5e99f5ad9e70e0e8446b86505")
     add_versions("1.2.4", "dfe7bff3390cd4958da11e760b65318f0a48c32913e4d5bc5e8d55abaaa2d32e")

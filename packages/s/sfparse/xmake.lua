@@ -4,6 +4,7 @@ local function getVersion(version)
         ["2024.10.04-alpha"] = "archive/f1dd8a9bb40b7c14c4064078c4433397a3e0abcd.tar.gz",
         ["2024.10.18-alpha"] = "archive/93fd4cd5268ad1adc8e3c8ff2002b772b1a8b983.tar.gz",
         ["2024.11.13-alpha"] = "archive/7eaf5b651f67123edf2605391023ed2fd7e2ef16.tar.gz",
+        ["2024.12.15-alpha"] = "archive/930bdf8421f29cf0109f0f1baaafffa376973ed5.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -16,6 +17,7 @@ package("sfparse")
     set_urls("https://github.com/ngtcp2/sfparse/$(version)", {version = getVersion})
 
     --insert version
+    add_versions("2024.12.15-alpha", "6025bda9b3b00df3091fad9967ef04fc48647b62033773f458d88434d26cd1ec")
     add_versions("2024.11.13-alpha", "ca641a06df389d4c316f1cd915ebb6212579c48473c3f7b183cc6547ce4d2970")
     add_versions("2024.10.18-alpha", "e980eb4ba193ee24208da8f13ee676312f43ef32e5e4be77020d1e1619b54310")
     add_versions("2024.10.04-alpha", "26778bbfb310db00a539258097ea7230b3efa0ad0a2671d7c3314db9d988bde1")

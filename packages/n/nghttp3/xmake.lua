@@ -1,10 +1,11 @@
 package("nghttp3")
-    set_homepage("Todo")
-    set_description("Todo")
+    set_homepage("https://nghttp2.org/nghttp3")
+    set_description("HTTP/3 library written in C")
     set_license("MIT")
     set_urls("https://github.com/ngtcp2/nghttp3/releases/download/v$(version)/nghttp3-$(version).tar.gz")
 
     --insert version
+    add_versions("1.7.0", "79a546ec23263b66f22dfcfce180eb51a7b09bb262afca0973f6e479884d3b26")
     add_versions("1.6.0", "a1f92f113c10faca2014b004eb97be363674e23546eb72591c1ac3533f93cba0")
     add_versions("1.5.0", "13d68a48867d2eb0679b81e2e6e065de074abc64246fb11417c3e40988e5ff23")
     add_versions("1.4.0", "43a78073b103acd4668c8d3314eb98e5d002095c1e49014e48ca20bd3094408f")

@@ -10,6 +10,7 @@ package("lexilla")
     })
 
     --insert version
+    add_versions("5.4.2", "d3787bc97ae10f3d12bd286c49ca75e38808dd77dc502fa38dfaefa4ac5e2d89")
     add_versions("5.4.1", "e88380b9823721360c7379f7f9a4bab740617fd6caf42dbe427fa246752a3d68")
     add_versions("5.3.2", "fc06be954401c9dc1810f927bccd2604c43a70cf98178161cf817e95c4ebf00f")
     add_deps("scintilla")
