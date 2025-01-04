@@ -46,6 +46,10 @@ local function use_common()
             add_includedirs("include/compat")
             add_includedirs("include/compat/msvc")
         end
+    else
+        check_cfuncs("HAVE_POSIX_MEMALIGN", "posix_memalign", {includes = {"stdlib.h"}})
+        check_cfuncs("HAVE_MEMALIGN", "memalign", {includes = {"malloc.h"}})
+        check_cfuncs("HAVE_ALIGNED_ALLOC", "aligned_alloc", {includes = {"stdlib.h"}})
     end
     if is_kind("shared") then
         add_defines("DAV1D_BUILDING_DLL=1")
@@ -130,7 +134,6 @@ target("dav1d")
         add_files("src/win32/*.c")
     else
         configvar_check_cfuncs("HAVE_CLOCK_GETTIME", "clock_gettime", {includes = {"time.h"}})
-        configvar_check_cfuncs("HAVE_POSIX_MEMALIGN", "posix_memalign", {includes = {"stdlib.h"}})
     end
     configvar_check_cfuncs("HAVE_DLSYM", "dlsym", {includes = {"dlfcn.h"}})
     if is_plat("windows") then

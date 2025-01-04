@@ -13,6 +13,7 @@ package("sdl2_image")
     set_urls("https://github.com/libsdl-org/SDL_image/releases/download/release-$(version)/SDL2_image-$(version).tar.gz")
 
     --insert version
+    add_versions("2.8.4", "f7c06a8783952cfe960adccdd3d8472b63ab31475b4390d10cfdcc1aea61238f")
     add_versions("2.8.3", "4b000f2c238ce380807ee0cb68a0ef005871691ece8646dbf4f425a582b1bb22")
     add_versions("2.8.2", "8f486bbfbcf8464dd58c9e5d93394ab0255ce68b51c5a966a918244820a76ddc")
     add_versions("2.6.3", "931c9be5bf1d7c8fae9b7dc157828b7eee874e23c7f24b44ba7eff6b4836312c")

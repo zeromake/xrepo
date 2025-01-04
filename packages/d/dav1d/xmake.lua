@@ -7,6 +7,7 @@ local function getVersion(version)
         ["2024.11.26-alpha"] = "archive/767efeca0621ef7ecdfb8a83afdce54c86ed23fd.tar.gz",
         ["2024.12.02-alpha"] = "archive/d242c47b437c950b545e96e7872aa914edc50be5.tar.gz",
         ["2024.12.20-alpha"] = "archive/2ba57aa535896bcc8c450bbf7d0958791e38ec78.tar.gz",
+        ["2025.01.02-alpha"] = "archive/b129d9f2cb897cedba77a60bd5e3621c14ee5484.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -21,6 +22,7 @@ package("dav1d")
         version = getVersion
     })
     --insert version
+    add_versions("2025.01.02-alpha", "3403eede0160e56114dc1e09450444ade1e2e5f4521615107fe472c56d9a5303")
     add_versions("2024.12.20-alpha", "595ca5104fb0403753f709ede29395112257954d86a7cae71efabe220d816810")
     add_versions("2024.12.02-alpha", "ff62bab541c975b5ca05a670132318caaa6f688883171d03d6b23d44476130c0")
     add_versions("2024.11.26-alpha", "d71fe8dd1feb8c1d64672ff5fec848cf38df44730518a3c26b8235b8f352aa80")
@@ -29,10 +31,8 @@ package("dav1d")
     add_versions("2024.10.29-alpha", "b6792d5d07c67292697e0dbe87e7680a7f6c0cc2c58777ccc35c86b4d4f4b867")
     on_install(function (package)
         io.writefile('config.h.in', [[
-#pragma once
-
-#ifdef __CONFIG_H
-#define __CONFIG_H
+#ifdef __CONFIG_H__
+#define __CONFIG_H__
 
 ${define CONFIG_8BPC}
 ${define CONFIG_16BPC}
@@ -58,6 +58,8 @@ ${define HAVE_FSEEKO}
 
 ${define HAVE_CLOCK_GETTIME}
 ${define HAVE_POSIX_MEMALIGN}
+${define HAVE_MEMALIGN}
+${define HAVE_ALIGNED_ALLOC}
 ${define HAVE_DLSYM}
 ${define HAVE_UNISTD_H}
 ${define HAVE_IO_H}
