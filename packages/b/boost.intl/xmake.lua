@@ -14,7 +14,7 @@ package("boost.intl")
     })
 
     --insert version
-    add_versions("2025.01.06-alpha", "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5")
+    add_versions("2025.01.06-alpha", "ba2ff270e8612a65fb4afddfe7b226bd80d8920076b2595949a5b9e93b65ef23")
     add_deps("nonstd.string-view")
     on_install(function (package)
         import("package.tools.xmake").install(package, {})
