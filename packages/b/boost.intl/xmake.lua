@@ -9,12 +9,16 @@ package("boost.intl")
     set_homepage("https://github.com/zeromake/boost.intl")
     set_description("拷贝 boost.locale 模块的 message 实现来作为跨平台的 libintl")
     set_license("BSL-1.0")
-    set_urls("https://github.com/zeromake/boost.intl/$(version)", {
-        version = getVersion
-    })
-
-    --insert version
-    add_versions("2025.01.06-alpha", "64e04de426ac2ba06cfe62af8835f59a9a7c460c4456e2bb52550132b57f484f")
+    local p = path.join(path.directory(os.projectfile()), "../boost.intl")
+    if os.exists(p) and os.isdir(p) then
+        set_sourcedir(p)
+    else
+        set_urls("https://github.com/zeromake/boost.intl/$(version)", {
+            version = getVersion
+        })
+        --insert version
+        add_versions("2025.01.06-alpha", "64e04de426ac2ba06cfe62af8835f59a9a7c460c4456e2bb52550132b57f484f")
+    end
     add_deps("nonstd.string-view")
     on_install(function (package)
         import("package.tools.xmake").install(package, {})
