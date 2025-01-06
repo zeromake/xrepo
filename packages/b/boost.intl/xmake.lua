@@ -1,6 +1,6 @@
 local function getVersion(version)
     local versions ={
-        ["2025.01.06-alpha"] = "archive/be8e046e841dc7938c4254bf95f2221c0980bcdc.tar.gz",
+        ["2025.01.06-alpha"] = "archive/129d553ba1621101941467a9cfc064d8649ef44d.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -14,7 +14,7 @@ package("boost.intl")
     })
 
     --insert version
-    add_versions("2025.01.06-alpha", "9928ca1c2ca62cf6254ff302f70c2da106a5ff12ba65113864cbeb51f73c41e1")
+    add_versions("2025.01.06-alpha", "9006fa75f1b7ca0fc3d2cdff10069f29372dfd3a937c58da7d45ea4e69cc101e")
     add_deps("nonstd.string-view")
     on_install(function (package)
         import("package.tools.xmake").install(package, {})
