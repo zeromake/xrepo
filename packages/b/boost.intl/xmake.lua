@@ -1,6 +1,6 @@
 local function getVersion(version)
     local versions ={
-        ["2025.01.06-alpha"] = "archive/6cece9c091846aa8635a21b29b9d9a812601e2f0.tar.gz",
+        ["2025.01.07-alpha"] = "archive/b5bd92f0175018588c06761ea9b6f7a20f2e886e.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -9,7 +9,7 @@ package("boost.intl")
     set_homepage("https://github.com/zeromake/boost.intl")
     set_description("拷贝 boost.locale 模块的 message 实现来作为跨平台的 libintl")
     set_license("BSL-1.0")
-    local p = path.join(path.directory(os.projectfile()), "../boost.intl")
+    local p = path.join(path.directory(os.projectfile()), "libs/boost.intl")
     if os.exists(p) and os.isdir(p) then
         set_sourcedir(p)
     else
@@ -17,7 +17,7 @@ package("boost.intl")
             version = getVersion
         })
         --insert version
-        add_versions("2025.01.06-alpha", "64e04de426ac2ba06cfe62af8835f59a9a7c460c4456e2bb52550132b57f484f")
+        add_versions("2025.01.07-alpha", "49c8177ec9ece6df0990a56ad17e52657f1979b4d17c263fb7cf399837c50984")
     end
     add_deps("nonstd.string-view")
     on_install(function (package)
