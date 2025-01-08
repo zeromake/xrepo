@@ -22,5 +22,5 @@ rule("shader")
             targetfile,
         })
         batchcmds:show_progress(opt.progress, "${color.build.object}glsl %s", sourcefile)
-        batchcmds:add_depfiles(sourcefile)
+        batchcmds:add_depfiles(sourcefile, targetfile)
     end)
