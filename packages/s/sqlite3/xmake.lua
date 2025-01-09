@@ -4,17 +4,8 @@ package("sqlite3")
     set_license("MIT")
 
     set_urls("https://sqlite.org/$(version)", {version = function (version)
-        local year = "2024"
-        if version:le("3.24") then
-            year = "2018"
-        elseif version:le("3.36") then
-            year = "2021"
-        elseif version:le("3.42") then
-            year = "2022"
-        elseif version:le("3.44") then
-            year = "2023"
-        end
-        local version_str = version:gsub("[.+]", "")
+        local year = tostring(version):match("+(%d+)%.%d+$")
+        version_str = version:gsub(year, ""):gsub("[.+]", "")
         if #version_str < 7 then
             version_str = version_str .. "00"
         end
@@ -22,9 +13,9 @@ package("sqlite3")
     end})
 
     --insert version
-    add_versions("3.47.0+200", "f1b2ee412c28d7472bc95ba996368d6f0cdcf00362affdadb27ed286c179540b")
-    add_versions("3.46.0+100", "67d3fe6d268e6eaddcae3727fce58fcc8e9c53869bdd07a0c61e38ddf2965071")
-    add_versions("3.40.0+0", "0333552076d2700c75352256e91c78bf5cd62491589ba0c69aed0a81868980e7")
+    add_versions("3.47.0+2024.200", "f1b2ee412c28d7472bc95ba996368d6f0cdcf00362affdadb27ed286c179540b")
+    add_versions("3.46.0+2024.100", "67d3fe6d268e6eaddcae3727fce58fcc8e9c53869bdd07a0c61e38ddf2965071")
+    add_versions("3.40.0+2022.0", "0333552076d2700c75352256e91c78bf5cd62491589ba0c69aed0a81868980e7")
 
     add_configs("explain_comments", { description = "Inserts comment text into the output of EXPLAIN.", default = true, type = "boolean"})
     add_configs("dbpage_vtab",      { description = "Enable the SQLITE_DBPAGE virtual table.", default = true, type = "boolean"})

@@ -159,6 +159,17 @@ local upgrade_transform = {
         local version = outdata:match('^.*>libressl%-(%d+%.%d+%.%d+)%.tar%.gz<')
         return version, 'https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-'..version..'.tar.gz'
     end,
+    sqlite3 = function ()
+        local release_url = 'https://sqlite.org/download.html'
+        local outdata = fetch(release_url)
+        if outdata == nil then
+            return nil, nil
+        end
+        local year_code = outdata:match("'(%d+)/sqlite%-autoconf%-%d+%.tar%.gz'")
+        local version_code = outdata:match("'%d+/sqlite%-autoconf%-(%d+)%.tar%.gz'")
+        local version = string.format("%s.%s.%s+%s.%s", version_code:sub(1, 1), version_code:sub(2, 3), version_code:sub(4, 4), year_code, version_code:sub(5))
+        return version, 'https://sqlite.org/'..year_code..'/sqlite-autoconf-'..version_code..'.tar.gz'
+    end,
 }
 
 local function load_packages(filters)
