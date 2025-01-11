@@ -86,6 +86,7 @@ local sdlSrc = {
     "src/video/offscreen/*.c",
     "src/main/*.c",
     "src/dialog/*.c",
+    "src/tray/*.c",
 }
 
 if is_plat("windows", "mingw") then
@@ -128,6 +129,7 @@ if is_plat("macosx") then
         "src/camera/coremedia/*.m",
         "src/gpu/metal/*.m",
         "src/dialog/cocoa/*.m",
+        "src/tray/cocoa/*.m",
     })
 elseif is_plat("iphoneos") then
     table.join2(sdlSrc, {
@@ -170,13 +172,12 @@ elseif is_plat("windows", "mingw") then
         "src/camera/mediafoundation/*.c",
         "src/gpu/d3d12/*.c",
         "src/dialog/windows/*.c",
-    })
-    table.join2(sdlSrc, {
         "src/thread/generic/SDL_syscond.c",
         "src/thread/generic/SDL_sysrwlock.c",
         "src/thread/windows/*.c",
         "src/locale/windows/*.c",
         "src/misc/windows/*.c",
+        "src/tray/windows/*.c",
     })
 elseif is_plat("android") then
     table.join2(sdlSrc, {
@@ -198,6 +199,7 @@ elseif is_plat("android") then
         "src/sensor/android/*.c",
         "src/locale/android/*.c",
         "src/dialog/unix/*.c",
+        "src/tray/unix/*.c",
     })
     add_requires("ndk-cpufeatures")
 elseif is_plat("linux") then
@@ -223,6 +225,7 @@ elseif is_plat("linux") then
         "src/joystick/linux/*.c",
         "src/sensor/dummy/*.c",
         "src/dialog/unix/*.c",
+        "src/tray/unix/*.c",
     })
 end
 

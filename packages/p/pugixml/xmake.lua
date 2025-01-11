@@ -20,6 +20,7 @@ package("pugixml")
     add_configs('no_exceptions', {description = "Disable Exceptions", default = false, type = "boolean"})
 
     --insert version
+    add_versions("1.15", "655ade57fa703fb421c2eb9a0113b5064bddb145d415dd1f88c79353d90d511a")
     add_versions("1.14", "2f10e276870c64b1db6809050a75e11a897a8d7456c4be5c6b2e35a11168a015")
     add_versions("1.13", "40c0b3914ec131485640fa57e55bf1136446026b41db91c1bef678186a12abbe")
     on_install(function (package)
