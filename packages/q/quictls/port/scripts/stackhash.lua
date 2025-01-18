@@ -52,9 +52,10 @@ function generate_stack_macros_int(nametype, realtype, plaintype)
         realtype = realtype,
         plaintype = plaintype,
     }
-    return stack_macros_int_template:gsub("%${(%w+)}", function(key)
+    local result = stack_macros_int_template:gsub("%${(%w+)}", function(key)
         return data[key]
     end)
+    return result
 end
 
 function generate_stack_macros(type)
@@ -82,7 +83,8 @@ function generate_lhash_macros(type)
     local data = {
         type = type,
     }
-    return lhash_macros_template:gsub("%${(%w+)}", function(key)
+    local result = lhash_macros_template:gsub("%${(%w+)}", function(key)
         return data[key]
     end)
+    return result
 end

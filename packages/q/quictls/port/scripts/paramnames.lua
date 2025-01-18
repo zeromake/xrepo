@@ -412,9 +412,13 @@ function table.keys(t)
     return keys
 end
 
+local params_keys = table.keys(params)
+table.sort(params_keys)
+
+
 function generate_public_macros()
     local macros = {}
-    for name, val in ipairs(params) do
+    for _, name in ipairs(params_keys) do
         local val = params[name]
         local def = '# define OSSL_' .. name .. ' '
         if val:startswith('*') then
@@ -432,14 +436,16 @@ function generate_internal_macros()
     local macros = {}
     local count = 0
     local reverse = {}
-    for name, val in ipairs(params) do
+    for _, name in ipairs(params_keys) do
+        local val = params[name]
         if not val:startswith('*') and reverse[val] == nil then
-            count = count + 1
             reverse[val] = count
+            count = count + 1
         end
     end
-    for name, val in pairs(params) do
-        local def = '# define PIDX_' .. name .. ' '
+    for _, name in ipairs(params_keys) do
+        local val = params[name]
+        local def = '#define PIDX_' .. name .. ' '
         if val:startswith('*') then
             def = def .. 'PIDX_' .. val:sub(2)
         else
@@ -455,9 +461,7 @@ function generate_trie()
     local trie = {}
     local nodes = 0
     local chars = 0
-    local keys = table.keys(params)
-    table.sort(keys)
-    for _, name in ipairs(keys) do
+    for _, name in ipairs(params_keys) do
         local val = params[name]
         if not val:startswith('*') then
             local cursor = trie
