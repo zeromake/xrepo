@@ -21,6 +21,10 @@ set_encodings("utf-8")
 
 local openssldir = path.join(get_config("installdir"), "ssl")
 local openssllibdir = path.join(get_config("installdir"), "ssl/lib")
+
+if is_plat("windows", "mingw") then
+    add_defines("WIN32_LEAN_AND_MEAN")
+end
 add_defines(
     "OPENSSLDIR=\""..openssldir.."\"",
     "ENGINESDIR=\""..path.join(openssllibdir, "engines-81.3").."\"",
@@ -210,9 +214,14 @@ target("crypto")
     for _, dir in ipairs(crypto_dirs) do
         add_files(path.join(dir, "*.c"))
     end
+    local asmext = "*.s"
+    if is_plat("android") then
+        asmext = "*.S"
+    elseif is_plat("windows") then
+        asmext = "*.asm"
+    end
     for _, dir in ipairs(crypto_asm_dirs) do
-        add_files(path.join("build", "generate", dir, "*.s"))
-        add_files(path.join("build", "generate", dir, "*.S"))
+        add_files(path.join("build", "generate", dir, asmext))
     end
     add_files(
         "ssl/record/methods/ssl3_cbc.c",

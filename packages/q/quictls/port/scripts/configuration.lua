@@ -65,7 +65,7 @@ function main(target)
         end
     end
     if target:is_plat("windows") then
-        config['perlasm_scheme'] = "nasm"
+        config['perlasm_scheme'] = "masm"
     elseif target:is_plat("mingw") then
         config['perlasm_scheme'] = "mingw64"
     elseif target:is_plat("macosx", "iphoneos") then

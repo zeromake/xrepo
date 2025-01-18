@@ -15,10 +15,6 @@ if is_plat("windows") then
     add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
 end
 
-if is_plat("windows", "mingw") then
-    add_defines("WIN32_LEAN_AND_MEAN")
-end
-
 if get_config("quictls") then
     add_requires("quictls")
 else
