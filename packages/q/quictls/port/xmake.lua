@@ -240,8 +240,50 @@ target("crypto")
         "ssl/record/methods/ssl3_cbc.c",
         "ssl/record/methods/tls_pad.c"
     )
-    if not is_arch("arm64.*") then
+    if is_plat("windows") and is_arch("x86_64", "x64") then
         remove_files(
+            "crypto/LPdir_*.c",
+            "crypto/loongarchcap.c",
+            "crypto/ppccap.c",
+            "crypto/sparcv9cap.c",
+            "crypto/riscvcap.c",
+            "crypto/s390xcap.c",
+            "crypto/ec/ecx_s390x.c",
+            "crypto/evp/legacy_md2.c",
+            "crypto/poly1305/poly1305_base2_44.c",
+            "crypto/poly1305/poly1305_ppc.c",
+            "crypto/rsa/rsa_acvp_test_params.c",
+            "crypto/ec/ecp_nistz256_table.c",
+            "crypto/ec/ecp_s390x_nistp.c",
+            "crypto/sha/sha_ppc.c",
+            "crypto/sha/sha_riscv.c",
+            "crypto/bn/bn_sparc.c",
+            "crypto/bn/bn_ppc.c",
+            "crypto/sm3/sm3_riscv.c",
+
+            "crypto/ec/ecp_ppc.c",
+            "crypto/aes/aes_x86core.c",
+            "crypto/poly1305/poly1305_ieee754.c",
+            "crypto/mem_clr.c",
+            "crypto/sha/keccak1600.c",
+            "crypto/des/ncbc_enc.c",
+            
+            "providers/common/securitycheck_fips.c",
+            "providers/implementations/digests/md2_prov.c",
+            "providers/implementations/rands/seeding/rand_vms.c",
+            "providers/implementations/rands/seeding/rand_vxworks.c",
+            "providers/implementations/macs/blake2_mac_impl.c",
+            "providers/implementations/ciphers/cipher_rc5_hw.c",
+            "providers/implementations/ciphers/cipher_rc5.c",
+
+            "engines/e_devcrypto.c",
+            "engines/e_afalg.c",
+            "engines/e_padlock.c",
+            "engines/e_capi.c",
+            "engines/e_dasync.c",
+            "engines/e_ossltest.c",
+            "engines/e_loader_attic.c",
+
             "crypto/armcap.c",
             "crypto/ec/ecp_sm2p256_table.c",
             "crypto/ec/ecp_sm2p256.c",
@@ -251,69 +293,284 @@ target("crypto")
             "crypto/aes/aes_core.c",
             "crypto/camellia/cmll_cbc.c",
             "crypto/camellia/camellia.c",
-            "crypto/whrlpool/wp_block.c"
-        )
-    end
-    if is_plat("windows") then
-        remove_files(
+            "crypto/whrlpool/wp_block.c",
+            
             "crypto/ec/ecp_nistp224.c",
             "crypto/ec/ecp_nistp256.c",
             "crypto/ec/ecp_nistp384.c",
             "crypto/ec/ecp_nistp521.c"
         )
-    else
+    elseif is_plat("windows") and is_arch("x86") then
+        add_files("crypto/chacha/chacha_enc.c")
         remove_files(
+            "crypto/LPdir_*.c",
+            "crypto/loongarchcap.c",
+            "crypto/ppccap.c",
+            "crypto/sparcv9cap.c",
+            "crypto/riscvcap.c",
+            "crypto/s390xcap.c",
+            "crypto/ec/ecx_s390x.c",
+            "crypto/evp/legacy_md2.c",
+            "crypto/poly1305/poly1305_base2_44.c",
+            "crypto/poly1305/poly1305_ppc.c",
+            "crypto/rsa/rsa_acvp_test_params.c",
+            "crypto/ec/ecp_nistz256_table.c",
+            "crypto/ec/ecp_s390x_nistp.c",
+            "crypto/sha/sha_ppc.c",
+            "crypto/sha/sha_riscv.c",
+            "crypto/bn/bn_sparc.c",
+            "crypto/bn/bn_ppc.c",
+            "crypto/sm3/sm3_riscv.c",
+
+            "crypto/ec/ecp_ppc.c",
+            "crypto/poly1305/poly1305_ieee754.c",
+            "crypto/des/ncbc_enc.c",
+            
+            "providers/common/securitycheck_fips.c",
+            "providers/implementations/digests/md2_prov.c",
+            "providers/implementations/rands/seeding/rand_vms.c",
+            "providers/implementations/rands/seeding/rand_vxworks.c",
+            "providers/implementations/macs/blake2_mac_impl.c",
+            "providers/implementations/ciphers/cipher_rc5_hw.c",
+            "providers/implementations/ciphers/cipher_rc5.c",
+
+            "engines/e_devcrypto.c",
+            "engines/e_afalg.c",
+            "engines/e_padlock.c",
+            "engines/e_capi.c",
+            "engines/e_dasync.c",
+            "engines/e_ossltest.c",
+            "engines/e_loader_attic.c",
+
+            "crypto/armcap.c",
+            "crypto/ec/ecp_sm2p256_table.c",
+            "crypto/ec/ecp_sm2p256.c",
+            "crypto/aes/aes_core.c",
+            
+            "crypto/ec/ecp_nistp224.c",
+            "crypto/ec/ecp_nistp256.c",
+            "crypto/ec/ecp_nistp384.c",
+            "crypto/ec/ecp_nistp521.c"
+        )
+    elseif is_plat("macosx") and is_arch("x86_64", "x64") then
+        remove_files(
+            "crypto/LPdir_*.c",
+            "crypto/loongarchcap.c",
+            "crypto/ppccap.c",
+            "crypto/sparcv9cap.c",
+            "crypto/riscvcap.c",
+            "crypto/s390xcap.c",
+            "crypto/ec/ecx_s390x.c",
+            "crypto/evp/legacy_md2.c",
+            "crypto/poly1305/poly1305_base2_44.c",
+            "crypto/poly1305/poly1305_ppc.c",
+            "crypto/rsa/rsa_acvp_test_params.c",
+            "crypto/ec/ecp_nistz256_table.c",
+            "crypto/ec/ecp_s390x_nistp.c",
+            "crypto/sha/sha_ppc.c",
+            "crypto/sha/sha_riscv.c",
+            "crypto/bn/bn_sparc.c",
+            "crypto/bn/bn_ppc.c",
+            "crypto/sm3/sm3_riscv.c",
+
+            "crypto/ec/ecp_ppc.c",
+            "crypto/aes/aes_x86core.c",
+            "crypto/poly1305/poly1305_ieee754.c",
+            "crypto/sha/keccak1600.c",
+            "crypto/mem_clr.c",
+            "crypto/des/ncbc_enc.c",
+            
+            "providers/common/securitycheck_fips.c",
+            "providers/implementations/digests/md2_prov.c",
+            "providers/implementations/rands/seeding/rand_vms.c",
+            "providers/implementations/rands/seeding/rand_vxworks.c",
+            "providers/implementations/macs/blake2_mac_impl.c",
+            "providers/implementations/ciphers/cipher_rc5_hw.c",
+            "providers/implementations/ciphers/cipher_rc5.c",
+
+            "engines/e_devcrypto.c",
+            "engines/e_afalg.c",
+            "engines/e_padlock.c",
+            "engines/e_capi.c",
+            "engines/e_dasync.c",
+            "engines/e_ossltest.c",
+            "engines/e_loader_attic.c",
+
+            "crypto/armcap.c",
+            "crypto/ec/ecp_sm2p256_table.c",
+            "crypto/ec/ecp_sm2p256.c",
+            "crypto/rc4/rc4_skey.c",
+            "crypto/rc4/rc4_enc.c",
+            "crypto/aes/aes_cbc.c",
+            "crypto/aes/aes_core.c",
+            "crypto/camellia/cmll_cbc.c",
+            "crypto/camellia/camellia.c",
+            "crypto/whrlpool/wp_block.c",
+
+            "providers/implementations/storemgmt/winstore_store.c"
+        )
+    elseif is_plat("macosx") and is_arch("arm64") then
+        remove_files(
+            "crypto/LPdir_*.c",
+            "crypto/loongarchcap.c",
+            "crypto/ppccap.c",
+            "crypto/sparcv9cap.c",
+            "crypto/riscvcap.c",
+            "crypto/s390xcap.c",
+            "crypto/ec/ecx_s390x.c",
+            "crypto/evp/legacy_md2.c",
+            "crypto/poly1305/poly1305_base2_44.c",
+            "crypto/poly1305/poly1305_ppc.c",
+            "crypto/rsa/rsa_acvp_test_params.c",
+            "crypto/ec/ecp_nistz256_table.c",
+            "crypto/ec/ecp_s390x_nistp.c",
+            "crypto/sha/sha_ppc.c",
+            "crypto/sha/sha_riscv.c",
+            "crypto/bn/bn_sparc.c",
+            "crypto/bn/bn_ppc.c",
+            "crypto/sm3/sm3_riscv.c",
+
+            "crypto/ec/ecp_ppc.c",
+            "crypto/aes/aes_x86core.c",
+            "crypto/poly1305/poly1305_ieee754.c",
+            "crypto/sha/keccak1600.c",
+            "crypto/mem_clr.c",
+            "crypto/des/ncbc_enc.c",
+            
+            "providers/common/securitycheck_fips.c",
+            "providers/implementations/digests/md2_prov.c",
+            "providers/implementations/rands/seeding/rand_vms.c",
+            "providers/implementations/rands/seeding/rand_vxworks.c",
+            "providers/implementations/macs/blake2_mac_impl.c",
+            "providers/implementations/ciphers/cipher_rc5_hw.c",
+            "providers/implementations/ciphers/cipher_rc5.c",
+
+            "engines/e_devcrypto.c",
+            "engines/e_afalg.c",
+            "engines/e_padlock.c",
+            "engines/e_capi.c",
+            "engines/e_dasync.c",
+            "engines/e_ossltest.c",
+            "engines/e_loader_attic.c",
+
+            "crypto/armcap.c",
+            "crypto/ec/ecp_sm2p256_table.c",
+            "crypto/ec/ecp_sm2p256.c",
+            "crypto/rc4/rc4_skey.c",
+            "crypto/rc4/rc4_enc.c",
+            "crypto/aes/aes_cbc.c",
+            "crypto/aes/aes_core.c",
+            "crypto/camellia/cmll_cbc.c",
+            "crypto/camellia/camellia.c",
+            "crypto/whrlpool/wp_block.c",
+
+            "providers/implementations/storemgmt/winstore_store.c"
+        )
+    elseif is_arch("x86_64", "x64") then
+        remove_files(
+            "crypto/LPdir_*.c",
+            "crypto/loongarchcap.c",
+            "crypto/ppccap.c",
+            "crypto/sparcv9cap.c",
+            "crypto/riscvcap.c",
+            "crypto/s390xcap.c",
+            "crypto/ec/ecx_s390x.c",
+            "crypto/evp/legacy_md2.c",
+            "crypto/poly1305/poly1305_base2_44.c",
+            "crypto/poly1305/poly1305_ppc.c",
+            "crypto/rsa/rsa_acvp_test_params.c",
+            "crypto/ec/ecp_nistz256_table.c",
+            "crypto/ec/ecp_s390x_nistp.c",
+            "crypto/sha/sha_ppc.c",
+            "crypto/sha/sha_riscv.c",
+            "crypto/bn/bn_sparc.c",
+            "crypto/bn/bn_ppc.c",
+            "crypto/sm3/sm3_riscv.c",
+
+            "crypto/ec/ecp_ppc.c",
+            "crypto/aes/aes_x86core.c",
+            "crypto/poly1305/poly1305_ieee754.c",
+            "crypto/sha/keccak1600.c",
+            "crypto/mem_clr.c",
+            "crypto/des/ncbc_enc.c",
+            
+            "providers/common/securitycheck_fips.c",
+            "providers/implementations/digests/md2_prov.c",
+            "providers/implementations/rands/seeding/rand_vms.c",
+            "providers/implementations/rands/seeding/rand_vxworks.c",
+            "providers/implementations/macs/blake2_mac_impl.c",
+            "providers/implementations/ciphers/cipher_rc5_hw.c",
+            "providers/implementations/ciphers/cipher_rc5.c",
+
+            "engines/e_devcrypto.c",
+            "engines/e_afalg.c",
+            "engines/e_padlock.c",
+            "engines/e_capi.c",
+            "engines/e_dasync.c",
+            "engines/e_ossltest.c",
+            "engines/e_loader_attic.c",
+
+            "crypto/armcap.c",
+            "crypto/ec/ecp_sm2p256_table.c",
+            "crypto/ec/ecp_sm2p256.c",
+            "crypto/rc4/rc4_skey.c",
+            "crypto/rc4/rc4_enc.c",
+            "crypto/aes/aes_cbc.c",
+            "crypto/aes/aes_core.c",
+            "crypto/camellia/cmll_cbc.c",
+            "crypto/camellia/camellia.c",
+            "crypto/whrlpool/wp_block.c",
+
+            "providers/implementations/storemgmt/winstore_store.c"
+        )
+    elseif is_arch("arm64.*") then
+        remove_files(
+            "crypto/LPdir_*.c",
+            "crypto/loongarchcap.c",
+            "crypto/ppccap.c",
+            "crypto/sparcv9cap.c",
+            "crypto/riscvcap.c",
+            "crypto/s390xcap.c",
+            "crypto/ec/ecx_s390x.c",
+            "crypto/evp/legacy_md2.c",
+            "crypto/poly1305/poly1305_base2_44.c",
+            "crypto/poly1305/poly1305_ppc.c",
+            "crypto/rsa/rsa_acvp_test_params.c",
+            "crypto/ec/ecp_nistz256_table.c",
+            "crypto/ec/ecp_s390x_nistp.c",
+            "crypto/sha/sha_ppc.c",
+            "crypto/sha/sha_riscv.c",
+            "crypto/bn/bn_sparc.c",
+            "crypto/bn/bn_ppc.c",
+            "crypto/sm3/sm3_riscv.c",
+
+            "crypto/ec/ecp_ppc.c",
+            "crypto/aes/aes_x86core.c",
+            "crypto/poly1305/poly1305_ieee754.c",
+            "crypto/sha/keccak1600.c",
+            "crypto/mem_clr.c",
+            "crypto/des/ncbc_enc.c",
+            
+            "providers/common/securitycheck_fips.c",
+            "providers/implementations/digests/md2_prov.c",
+            "providers/implementations/rands/seeding/rand_vms.c",
+            "providers/implementations/rands/seeding/rand_vxworks.c",
+            "providers/implementations/macs/blake2_mac_impl.c",
+            "providers/implementations/ciphers/cipher_rc5_hw.c",
+            "providers/implementations/ciphers/cipher_rc5.c",
+
+            "engines/e_devcrypto.c",
+            "engines/e_afalg.c",
+            "engines/e_padlock.c",
+            "engines/e_capi.c",
+            "engines/e_dasync.c",
+            "engines/e_ossltest.c",
+            "engines/e_loader_attic.c",
+
             "providers/implementations/storemgmt/winstore_store.c"
         )
     end
-    if not disable_asm then
-        remove_files(
-            "crypto/mem_clr.c"
-        )
-    end
-    remove_files(
-        "crypto/LPdir_*.c",
-        "crypto/loongarchcap.c",
-        "crypto/ppccap.c",
-        "crypto/sparcv9cap.c",
-        "crypto/riscvcap.c",
-        "crypto/s390xcap.c",
-        "crypto/ec/ecx_s390x.c",
-        "crypto/evp/legacy_md2.c",
-        "crypto/poly1305/poly1305_base2_44.c",
-        "crypto/poly1305/poly1305_ppc.c",
-        "crypto/rsa/rsa_acvp_test_params.c",
-        "crypto/ec/ecp_nistz256_table.c",
-        "crypto/ec/ecp_s390x_nistp.c",
-        "crypto/sha/sha_ppc.c",
-        "crypto/sha/sha_riscv.c",
-        "crypto/bn/bn_sparc.c",
-        "crypto/bn/bn_ppc.c",
-        "crypto/sm3/sm3_riscv.c",
-
-        "crypto/ec/ecp_ppc.c",
-        "crypto/aes/aes_x86core.c",
-        "crypto/poly1305/poly1305_ieee754.c",
-        "crypto/sha/keccak1600.c",
-        "crypto/des/ncbc_enc.c",
-        
-        "providers/common/securitycheck_fips.c",
-        "providers/implementations/digests/md2_prov.c",
-        "providers/implementations/rands/seeding/rand_vms.c",
-        "providers/implementations/rands/seeding/rand_vxworks.c",
-        "providers/implementations/macs/blake2_mac_impl.c",
-        "providers/implementations/ciphers/cipher_rc5_hw.c",
-        "providers/implementations/ciphers/cipher_rc5.c",
-        -- "providers/legacyprov.c",
-
-        "engines/e_devcrypto.c",
-        "engines/e_afalg.c",
-        "engines/e_padlock.c",
-        "engines/e_capi.c",
-        "engines/e_dasync.c",
-        "engines/e_ossltest.c",
-        "engines/e_loader_attic.c"
-    )
+    
 
 target("ssl")
     set_kind("$(kind)")
