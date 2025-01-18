@@ -1,17 +1,33 @@
 local arm64_asm = {
-    "crypto/aes/asm/bsaes-aarch64.pl",
     "crypto/aes/asm/aesv8-armx.pl",
+    "crypto/aes/asm/bsaes-armv8.pl",
     "crypto/aes/asm/vpaes-armv8.pl",
 
     "crypto/bn/asm/armv8-mont.pl",
 
+    "crypto/chacha/asm/chacha-armv8-sve.pl",
     "crypto/chacha/asm/chacha-armv8.pl",
+
+    "crypto/ec/asm/ecp_nistz256-armv8.pl",
+    "crypto/ec/asm/ecp_sm2p256-armv8.pl",
 
     "crypto/md5/asm/md5-aarch64.pl",
 
     "crypto/modes/asm/aes-gcm-armv8_64.pl",
     "crypto/modes/asm/ghashv8-armx.pl",
-    "crypto/poly1305/asm/poly1305-armv8.pl"
+    "crypto/modes/asm/aes-gcm-armv8-unroll8_64.pl",
+
+    "crypto/sha/asm/keccak1600-armv8.pl",
+    "crypto/sha/asm/sha1-armv8.pl",
+    {"crypto/sha/asm/sha512-armv8.pl", "sha256-armv8"},
+    "crypto/sha/asm/sha512-armv8.pl",
+
+    "crypto/sm3/asm/sm3-armv8.pl",
+    "crypto/sm4/asm/sm4-armv8.pl",
+    "crypto/sm4/asm/vpsm4_ex-armv8.pl",
+    "crypto/sm4/asm/vpsm4-armv8.pl",
+
+    "crypto/arm64cpuid.pl",
 }
 
 local x86_64_asm = {

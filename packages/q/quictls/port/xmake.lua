@@ -9,37 +9,57 @@ end
 set_encodings("utf-8")
 
 add_defines(
-    "L_ENDIAN",
-    "OPENSSL_PIC",
     "OPENSSLDIR=\"/usr/local/ssl\"",
     "ENGINESDIR=\"/usr/local/lib/engines-81.3\"",
     "MODULESDIR=\"/usr/local/lib/ossl-modules\"",
-    "_REENTRANT",
-    "OPENSSL_BUILDING_OPENSSL",
-
-    "AES_ASM",
-    "BSAES_ASM",
-    "CMLL_ASM",
-    "ECP_NISTZ256_ASM",
-    "GHASH_ASM",
-    "KECCAK1600_ASM",
-    "MD5_ASM",
-    "OPENSSL_BN_ASM_GF2m",
-    "OPENSSL_BN_ASM_MONT",
-    "OPENSSL_BN_ASM_MONT5",
-    "OPENSSL_CPUID_OBJ",
-    "OPENSSL_IA32_SSE2",
-    "POLY1305_ASM",
-    "RC4_ASM",
-    "SHA1_ASM",
-    "SHA256_ASM",
-    "SHA512_ASM",
-    "VPAES_ASM",
-    "WHIRLPOOL_ASM",
-    "X25519_ASM"
+    "OPENSSL_BUILDING_OPENSSL"
 )
 
-add_includedirs("build/generate/include", "build/generate/providers/common/include", "include", ".")
+if is_arch("arm64.*") then
+    add_defines(
+        "OPENSSL_PIC",
+        "BSAES_ASM",
+        "ECP_NISTZ256_ASM",
+        "ECP_SM2P256_ASM",
+        "KECCAK1600_ASM",
+        "OPENSSL_CPUID_OBJ",
+        "SHA1_ASM",
+        "SHA256_ASM",
+        "SHA512_ASM",
+        "SM4_ASM",
+        "VPAES_ASM",
+        "VPSM4_ASM",
+        "OPENSSL_USE_NODELETE"
+    )
+elseif is_arch("x86_64", "x64") then
+    add_defines(
+        "OPENSSL_PIC",
+        "L_ENDIAN",
+        "_REENTRANT",
+        "AES_ASM",
+        "BSAES_ASM",
+        "CMLL_ASM",
+        "ECP_NISTZ256_ASM",
+        "GHASH_ASM",
+        "KECCAK1600_ASM",
+        "MD5_ASM",
+        "OPENSSL_BN_ASM_GF2m",
+        "OPENSSL_BN_ASM_MONT",
+        "OPENSSL_BN_ASM_MONT5",
+        "OPENSSL_CPUID_OBJ",
+        "OPENSSL_IA32_SSE2",
+        "POLY1305_ASM",
+        "RC4_ASM",
+        "SHA1_ASM",
+        "SHA256_ASM",
+        "SHA512_ASM",
+        "VPAES_ASM",
+        "WHIRLPOOL_ASM",
+        "X25519_ASM"
+    )
+end
+
+add_includedirs("build/generate/include", "build/generate/providers/common/include", "crypto", ".", "include")
 
 local crypto_dirs = {
     "crypto/aes",
@@ -139,19 +159,36 @@ local crypto_dirs = {
 }
 
 local crypto_asm_dirs = {
-    "crypto",
-    "crypto/aes",
-    "crypto/bn",
-    "crypto/camellia",
-    "crypto/chacha",
-    "crypto/ec",
-    "crypto/md5",
-    "crypto/modes",
-    "crypto/poly1305",
-    "crypto/rc4",
-    "crypto/sha",
-    "crypto/whrlpool"
+    "crypto"
 }
+
+if is_arch("x86_64", "x64") then
+    table.join2(crypto_asm_dirs, {
+        "crypto/aes",
+        "crypto/bn",
+        "crypto/camellia",
+        "crypto/chacha",
+        "crypto/ec",
+        "crypto/md5",
+        "crypto/modes",
+        "crypto/poly1305",
+        "crypto/rc4",
+        "crypto/sha",
+        "crypto/whrlpool"
+    })
+elseif is_arch("arm64.*") then
+    table.join2(crypto_asm_dirs, {
+        "crypto/aes",
+        "crypto/bn",
+        "crypto/chacha",
+        "crypto/ec",
+        "crypto/md5",
+        "crypto/modes",
+        "crypto/sha",
+        "crypto/sm3",
+        "crypto/sm4"
+    })
+end
 
 target("crypto")
     set_kind("$(kind)")
@@ -161,22 +198,34 @@ target("crypto")
     end
     for _, dir in ipairs(crypto_asm_dirs) do
         add_files(path.join("build", "generate", dir, "*.s"))
+        add_files(path.join("build", "generate", dir, "*.S"))
     end
     add_files(
         "ssl/record/methods/ssl3_cbc.c",
         "ssl/record/methods/tls_pad.c"
     )
+    if not is_arch("arm64.*") then
+        remove_files(
+            "crypto/armcap.c",
+            "crypto/ec/ecp_sm2p256_table.c",
+            "crypto/ec/ecp_sm2p256.c",
+            "crypto/rc4/rc4_skey.c",
+            "crypto/rc4/rc4_enc.c",
+            "crypto/aes/aes_cbc.c",
+            "crypto/aes/aes_core.c",
+            "crypto/camellia/cmll_cbc.c",
+            "crypto/camellia/camellia.c",
+            "crypto/whrlpool/wp_block.c"
+        )
+    end
     remove_files(
         "crypto/LPdir_*.c",
-        "crypto/armcap.c",
         "crypto/loongarchcap.c",
         "crypto/ppccap.c",
         "crypto/sparcv9cap.c",
         "crypto/riscvcap.c",
         "crypto/s390xcap.c",
         "crypto/ec/ecx_s390x.c",
-        "crypto/ec/ecp_sm2p256_table.c",
-        "crypto/ec/ecp_sm2p256.c",
         "crypto/evp/legacy_md2.c",
         "crypto/poly1305/poly1305_base2_44.c",
         "crypto/poly1305/poly1305_ppc.c",
@@ -191,17 +240,10 @@ target("crypto")
 
         "crypto/ec/ecp_ppc.c",
         "crypto/aes/aes_x86core.c",
-        "crypto/aes/aes_core.c",
-        "crypto/aes/aes_cbc.c",
-        "crypto/whrlpool/wp_block.c",
         "crypto/poly1305/poly1305_ieee754.c",
-        "crypto/rc4/rc4_skey.c",
-        "crypto/rc4/rc4_enc.c",
-        "crypto/camellia/camellia.c",
         "crypto/mem_clr.c",
         "crypto/sha/keccak1600.c",
         "crypto/des/ncbc_enc.c",
-        "crypto/camellia/cmll_cbc.c",
         
         "providers/common/securitycheck_fips.c",
         "providers/implementations/digests/md2_prov.c",

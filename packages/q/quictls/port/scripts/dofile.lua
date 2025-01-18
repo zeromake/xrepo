@@ -98,22 +98,6 @@ local function dofile(target, sourcefile, targetfile)
             local openssl_api_defines = {
                 "OPENSSL_CONFIGURED_API "..config.api,
             }
-            local openssl_feature_defines = {
-                "OPENSSL_RAND_SEED_OS",
-                "OPENSSL_THREADS",
-                "OPENSSL_NO_KTLS",
-                "OPENSSL_NO_SCTP",
-                "OPENSSL_NO_BROTLI",
-                "OPENSSL_NO_ZSTD",
-                "OPENSSL_NO_UPLINK",
-                "OPENSSL_NO_MD2",
-                "OPENSSL_NO_RC5",
-                "OPENSSL_NO_AFALGENG",
-                "OPENSSL_NO_STATIC_ENGINE",
-                "OPENSSL_NO_WINSTORE",
-                "OPENSSL_NO_QUIC",
-                "OPENSSL_NO_QLOG",
-            }
             local result = {}
             for _, v in ipairs(openssl_sys_defines) do
                 table.insert(result, string.format("# ifndef %s\n#  define %s 1\n# endif", v, v))
@@ -121,7 +105,7 @@ local function dofile(target, sourcefile, targetfile)
             for _, v in ipairs(openssl_api_defines) do
                 table.insert(result, string.format("# define %s", v))
             end
-            for _, v in ipairs(openssl_feature_defines) do
+            for _, v in ipairs(config['feature_defines']) do
                 table.insert(result, string.format("# ifndef %s\n#  define %s\n# endif", v, v))
             end
             return table.concat(result, "\n")

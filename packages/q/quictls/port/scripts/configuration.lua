@@ -75,8 +75,47 @@ function main(target)
     end
     if target:is_plat("windows") then
         config['asmext'] = ".asm"
+    elseif target:is_plat("android") then
+        config['asmext'] = ".S"
     else
         config['asmext'] = ".s"
+    end
+    if target:is_arch("x86_64", "x64") then
+        config['feature_defines'] = {
+            "OPENSSL_RAND_SEED_OS",
+            "OPENSSL_THREADS",
+            "OPENSSL_NO_KTLS",
+            "OPENSSL_NO_SCTP",
+            "OPENSSL_NO_BROTLI",
+            "OPENSSL_NO_ZSTD",
+            "OPENSSL_NO_UPLINK",
+            "OPENSSL_NO_MD2",
+            "OPENSSL_NO_RC5",
+            "OPENSSL_NO_AFALGENG",
+            "OPENSSL_NO_STATIC_ENGINE",
+            "OPENSSL_NO_WINSTORE",
+            "OPENSSL_NO_QUIC",
+            "OPENSSL_NO_QLOG",
+        }
+    elseif target:is_arch("arm64.*") then
+        config['feature_defines'] = {
+            "OPENSSL_RAND_SEED_OS",
+            "OPENSSL_THREADS",
+            "OPENSSL_NO_KTLS",
+            "OPENSSL_NO_SCTP",
+            "OPENSSL_NO_BROTLI",
+            "OPENSSL_NO_ZSTD",
+            "OPENSSL_NO_UPLINK",
+            "OPENSSL_NO_MD2",
+            "OPENSSL_NO_RC5",
+            "OPENSSL_NO_AFALGENG",
+            "OPENSSL_NO_STATIC_ENGINE",
+            "OPENSSL_NO_WINSTORE",
+            "OPENSSL_NO_QUIC",
+            "OPENSSL_NO_QLOG",
+            "OPENSSL_NO_ZLIB",
+            "OPENSSL_NO_ZLIB_DYNAMIC",
+        }
     end
     return config
 end
