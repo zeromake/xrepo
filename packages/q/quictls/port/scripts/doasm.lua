@@ -32,8 +32,6 @@ local common_arm64_asm = {
     "crypto/arm64cpuid.pl",
 }
 
-local windows_arm64_asm = {}
-
 local common_x86_64_asm = {
     "crypto/aes/asm/aes-x86_64.pl",
     "crypto/aes/asm/aesni-mb-x86_64.pl",
@@ -84,9 +82,10 @@ local common_x86_64_asm = {
 }
 
 local files = {
-    common_arm64_asm = common_arm64_asm,
-    windows_arm64_asm = windows_arm64_asm,
+    windows_arm64_asm = {},
     macosx_arm64_asm = {},
+    windows_x86_asm = {},
+    common_arm64_asm = common_arm64_asm,
     common_x86_64_asm = common_x86_64_asm,
     common_x64_asm = common_x86_64_asm,
 }

@@ -80,7 +80,7 @@ function main(target)
     else
         config['asmext'] = ".s"
     end
-    if target:is_arch("x86_64", "x64") then
+    if target:is_arch("x86", "x86_64", "x64") then
         config['feature_defines'] = {
             "OPENSSL_RAND_SEED_OS",
             "OPENSSL_THREADS",
@@ -111,7 +111,6 @@ function main(target)
             "OPENSSL_NO_RC5",
             "OPENSSL_NO_AFALGENG",
             "OPENSSL_NO_STATIC_ENGINE",
-            "OPENSSL_NO_WINSTORE",
             "OPENSSL_NO_QUIC",
             "OPENSSL_NO_QLOG",
             "OPENSSL_NO_ZLIB",

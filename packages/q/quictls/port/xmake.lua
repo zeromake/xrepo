@@ -23,7 +23,7 @@ local openssldir = path.join(get_config("installdir"), "ssl")
 local openssllibdir = path.join(get_config("installdir"), "ssl/lib")
 local disable_asm = false
 
-if is_plat("windows") and is_arch("arm64") then
+if is_plat("windows") and is_arch("arm64", "x86") then
     disable_asm = true
 end
 
@@ -174,6 +174,7 @@ local crypto_dirs = {
     "crypto",
     "crypto/ec",
     "crypto/ec/curve448",
+    "crypto/ec/curve448/arch_32",
     "crypto/ec/curve448/arch_64",
     "crypto/evp",
     "crypto/poly1305",
@@ -265,6 +266,11 @@ target("crypto")
             "providers/implementations/storemgmt/winstore_store.c"
         )
     end
+    if not disable_asm then
+        remove_files(
+            "crypto/mem_clr.c"
+        )
+    end
     remove_files(
         "crypto/LPdir_*.c",
         "crypto/loongarchcap.c",
@@ -288,7 +294,6 @@ target("crypto")
         "crypto/ec/ecp_ppc.c",
         "crypto/aes/aes_x86core.c",
         "crypto/poly1305/poly1305_ieee754.c",
-        "crypto/mem_clr.c",
         "crypto/sha/keccak1600.c",
         "crypto/des/ncbc_enc.c",
         
@@ -296,7 +301,6 @@ target("crypto")
         "providers/implementations/digests/md2_prov.c",
         "providers/implementations/rands/seeding/rand_vms.c",
         "providers/implementations/rands/seeding/rand_vxworks.c",
-        "providers/implementations/storemgmt/winstore_store.c",
         "providers/implementations/macs/blake2_mac_impl.c",
         "providers/implementations/ciphers/cipher_rc5_hw.c",
         "providers/implementations/ciphers/cipher_rc5.c",
