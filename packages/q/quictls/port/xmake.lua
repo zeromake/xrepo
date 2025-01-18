@@ -27,10 +27,6 @@ if is_plat("windows") and is_arch("arm64", "x86") then
     disable_asm = true
 end
 
-if is_plat("macosx") and is_arch("arm64") then
-    disable_asm = true
-end
-
 if is_plat("windows", "mingw") then
     add_defines("WIN32_LEAN_AND_MEAN", "DSO_WIN32")
 end
@@ -225,7 +221,7 @@ target("crypto")
         add_files(path.join(dir, "*.c"))
     end
     local asmext = "*.s"
-    if is_plat("android") then
+    if is_plat("android") or (is_plat("macosx") and is_arch("arm64")) then
         asmext = "*.S"
     elseif is_plat("windows") then
         asmext = "*.asm"
@@ -433,8 +429,6 @@ target("crypto")
             "crypto/ec/ecp_ppc.c",
             "crypto/aes/aes_x86core.c",
             "crypto/poly1305/poly1305_ieee754.c",
-            "crypto/sha/keccak1600.c",
-            "crypto/mem_clr.c",
             "crypto/des/ncbc_enc.c",
             
             "providers/common/securitycheck_fips.c",
@@ -452,17 +446,6 @@ target("crypto")
             "engines/e_dasync.c",
             "engines/e_ossltest.c",
             "engines/e_loader_attic.c",
-
-            "crypto/armcap.c",
-            "crypto/ec/ecp_sm2p256_table.c",
-            "crypto/ec/ecp_sm2p256.c",
-            "crypto/rc4/rc4_skey.c",
-            "crypto/rc4/rc4_enc.c",
-            "crypto/aes/aes_cbc.c",
-            "crypto/aes/aes_core.c",
-            "crypto/camellia/cmll_cbc.c",
-            "crypto/camellia/camellia.c",
-            "crypto/whrlpool/wp_block.c",
 
             "providers/implementations/storemgmt/winstore_store.c"
         )

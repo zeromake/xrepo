@@ -69,13 +69,17 @@ function main(target)
     elseif target:is_plat("mingw") then
         config['perlasm_scheme'] = "mingw64"
     elseif target:is_plat("macosx", "iphoneos") then
-        config['perlasm_scheme'] = "macosx"
+        if target:is_arch("arm64") then
+            config['perlasm_scheme'] = "ios64"
+        else
+            config['perlasm_scheme'] = "macosx"
+        end
     else
         config['perlasm_scheme'] = "linux64"
     end
     if target:is_plat("windows") then
         config['asmext'] = ".asm"
-    elseif target:is_plat("android") then
+    elseif target:is_plat("android") or (target:is_plat("macosx") and target:is_arch("arm64")) then
         config['asmext'] = ".S"
     else
         config['asmext'] = ".s"
