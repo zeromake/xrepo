@@ -342,7 +342,8 @@ target("crypto")
             
             "crypto/ec/ecp_nistp224.c",
             "crypto/ec/ecp_nistp256.c",
-            "crypto/ec/ecp_nistp384.c"
+            "crypto/ec/ecp_nistp384.c",
+            "crypto/ec/ecp_nistp521.c"
         )
     elseif is_plat("windows") and is_arch("x86") then
         add_files("crypto/chacha/chacha_enc.c")
