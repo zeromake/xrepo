@@ -12,7 +12,9 @@ function main(target)
         bn_ops = "BN_LLONG",
     }
     if target:is_arch("x86_64", "x64", "arm64.*") then
-        if target:is_plat("windows") then
+        if target:is_plat("windows") and target:is_arch("arm64") then
+            openssl_target.bn_ops = "SIXTY_FOUR_BIT RC4_CHAR"
+        elseif target:is_plat("windows") then
             openssl_target.bn_ops = "SIXTY_FOUR_BIT"
         else
             openssl_target.bn_ops = "SIXTY_FOUR_BIT_LONG"

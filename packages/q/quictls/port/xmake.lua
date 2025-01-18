@@ -38,6 +38,14 @@ add_defines(
     "STATIC_LEGACY"
 )
 
+if is_plat("windows") and is_arch("arm64") then
+    add_defines(
+        "_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE",
+        "OPENSSL_SYS_WIN_CORE",
+        "L_ENDIAN"
+    )
+end
+
 if is_arch("arm64.*") then
     add_defines(
         "OPENSSL_PIC",
