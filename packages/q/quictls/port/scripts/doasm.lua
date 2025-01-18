@@ -86,6 +86,7 @@ local common_x86_64_asm = {
 local files = {
     common_arm64_asm = common_arm64_asm,
     windows_arm64_asm = windows_arm64_asm,
+    macosx_arm64_asm = {},
     common_x86_64_asm = common_x86_64_asm,
     common_x64_asm = common_x86_64_asm,
 }
