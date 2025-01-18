@@ -25,7 +25,8 @@ add_defines(
     "OPENSSLDIR=\""..openssldir.."\"",
     "ENGINESDIR=\""..path.join(openssllibdir, "engines-81.3").."\"",
     "MODULESDIR=\""..path.join(openssllibdir, "ossl-modules").."\"",
-    "OPENSSL_BUILDING_OPENSSL"
+    "OPENSSL_BUILDING_OPENSSL",
+    "STATIC_LEGACY"
 )
 
 if is_arch("arm64.*") then
@@ -266,7 +267,7 @@ target("crypto")
         "providers/implementations/macs/blake2_mac_impl.c",
         "providers/implementations/ciphers/cipher_rc5_hw.c",
         "providers/implementations/ciphers/cipher_rc5.c",
-        "providers/legacyprov.c",
+        -- "providers/legacyprov.c",
 
         "engines/e_devcrypto.c",
         "engines/e_afalg.c",
