@@ -9,8 +9,15 @@ end
 
 set_encodings("utf-8")
 
+if is_plat("windows", "mingw") then
+    add_requires("strawberry-perl")
+end
+
 target("_do")
     set_kind("object")
+    if is_plat("windows", "mingw") then
+        add_packages("strawberry-perl")
+    end
     on_build(function (target) 
         import("scripts.dofile")(target)
         import("scripts.doasm")(target)

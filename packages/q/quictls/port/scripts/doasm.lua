@@ -1,4 +1,6 @@
-local arm64_asm = {
+import("lib.detect.find_tool")
+
+local common_arm64_asm = {
     "crypto/aes/asm/aesv8-armx.pl",
     "crypto/aes/asm/bsaes-armv8.pl",
     "crypto/aes/asm/vpaes-armv8.pl",
@@ -30,7 +32,9 @@ local arm64_asm = {
     "crypto/arm64cpuid.pl",
 }
 
-local x86_64_asm = {
+local windows_arm64_asm = {}
+
+local common_x86_64_asm = {
     "crypto/aes/asm/aes-x86_64.pl",
     "crypto/aes/asm/aesni-mb-x86_64.pl",
     "crypto/aes/asm/aesni-sha1-x86_64.pl",
@@ -79,9 +83,23 @@ local x86_64_asm = {
     "crypto/x86_64cpuid.pl"
 }
 
+local files = {
+    common_arm64_asm = common_arm64_asm,
+    windows_arm64_asm = windows_arm64_asm,
+    common_x86_64_asm = common_x86_64_asm,
+    common_x64_asm = common_x86_64_asm,
+}
+
 function main(target)
+    local perl = assert(find_tool("perl"), "perl not found!")
     local config = import("configuration")(target)
-    local asm_files = target:is_arch("arm64.*") and arm64_asm or x86_64_asm
+    local first_key = string.format("%s_%s_asm", target:plat(), target:arch())
+    local asm_files = {}
+    if files[first_key] ~= nil then
+        asm_files = files[first_key]
+    else
+        asm_files = target:is_arch("arm64.*") and files['common_arm64_asm'] or files['common_x86_64_asm']
+    end
     local buildir = "build"
     for _, file in ipairs(asm_files) do
         local sourcefile = file
@@ -99,6 +117,6 @@ function main(target)
         end
         os.mkdir(targetdir)
         targetfile = path.join(targetdir, targetfile)
-        os.vrunv("perl", {sourcefile, config['perlasm_scheme'], targetfile})
+        os.vrunv(perl.program, {sourcefile, config['perlasm_scheme'], targetfile})
     end
 end

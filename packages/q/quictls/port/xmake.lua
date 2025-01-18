@@ -21,9 +21,18 @@ set_encodings("utf-8")
 
 local openssldir = path.join(get_config("installdir"), "ssl")
 local openssllibdir = path.join(get_config("installdir"), "ssl/lib")
+local disable_asm = false
+
+if is_plat("windows") and is_arch("arm64") then
+    disable_asm = true
+end
+
+if is_plat("macosx") and is_arch("arm64") then
+    disable_asm = true
+end
 
 if is_plat("windows", "mingw") then
-    add_defines("WIN32_LEAN_AND_MEAN")
+    add_defines("WIN32_LEAN_AND_MEAN", "DSO_WIN32")
 end
 add_defines(
     "OPENSSLDIR=\""..openssldir.."\"",
@@ -219,9 +228,12 @@ target("crypto")
         asmext = "*.S"
     elseif is_plat("windows") then
         asmext = "*.asm"
+        add_syslinks("user32", "ws2_32", "advapi32", "crypt32", {public = true})
     end
-    for _, dir in ipairs(crypto_asm_dirs) do
-        add_files(path.join("build", "generate", dir, asmext))
+    if not disable_asm then
+        for _, dir in ipairs(crypto_asm_dirs) do
+            add_files(path.join("build", "generate", dir, asmext))
+        end
     end
     add_files(
         "ssl/record/methods/ssl3_cbc.c",
@@ -239,6 +251,18 @@ target("crypto")
             "crypto/camellia/cmll_cbc.c",
             "crypto/camellia/camellia.c",
             "crypto/whrlpool/wp_block.c"
+        )
+    end
+    if is_plat("windows") then
+        remove_files(
+            "crypto/ec/ecp_nistp224.c",
+            "crypto/ec/ecp_nistp256.c",
+            "crypto/ec/ecp_nistp384.c",
+            "crypto/ec/ecp_nistp521.c"
+        )
+    else
+        remove_files(
+            "providers/implementations/storemgmt/winstore_store.c"
         )
     end
     remove_files(

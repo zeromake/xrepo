@@ -94,7 +94,12 @@ local function dofile(target, sourcefile, targetfile)
         ['include/openssl/configuration.h.in#1'] = function ()
             local sys_define = string.format('OPENSSL_SYS_%s', target:plat():upper())
             local openssl_sys_defines = {}
-            if sys_define ~= 'OPENSSL_SYS_WINDOWS' and sys_define ~= 'OPENSSL_SYS_LINUX' then
+            if sys_define == 'OPENSSL_SYS_WINDOWS' then
+                sys_define = 'OPENSSL_SYS_WIN64A'
+            elseif sys_define ~= 'OPENSSL_SYS_LINUX' then
+                sys_define = ''
+            end
+            if sys_define ~= '' then
                 table.insert(openssl_sys_defines, sys_define)
             end
             local openssl_api_defines = {

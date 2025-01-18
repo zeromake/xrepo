@@ -118,7 +118,9 @@ function main(target)
             "OPENSSL_NO_ZLIB_DYNAMIC",
         }
     end
-    if not is_plat("windows", "mingw") then
+    if target:is_plat("windows") then
+        table.insert(config['feature_defines'], "OPENSSL_NO_EC_NISTP_64_GCC_128")
+    else
         table.insert(config['feature_defines'], "OPENSSL_NO_WINSTORE")
     end
     return config
