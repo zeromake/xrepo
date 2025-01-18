@@ -92,9 +92,11 @@ local function dofile(target, sourcefile, targetfile)
             return table.concat(items, ", ")
         end,
         ['include/openssl/configuration.h.in#1'] = function ()
-            local openssl_sys_defines = {
-                string.format('OPENSSL_SYS_%s', target:plat():upper()),
-            }
+            local sys_define = string.format('OPENSSL_SYS_%s', target:plat():upper())
+            local openssl_sys_defines = {}
+            if sys_define ~= 'OPENSSL_SYS_WINDOWS' and sys_define ~= 'OPENSSL_SYS_LINUX' then
+                table.insert(openssl_sys_defines, sys_define)
+            end
             local openssl_api_defines = {
                 "OPENSSL_CONFIGURED_API "..config.api,
             }

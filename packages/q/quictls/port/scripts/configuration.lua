@@ -93,9 +93,10 @@ function main(target)
             "OPENSSL_NO_RC5",
             "OPENSSL_NO_AFALGENG",
             "OPENSSL_NO_STATIC_ENGINE",
-            "OPENSSL_NO_WINSTORE",
             "OPENSSL_NO_QUIC",
             "OPENSSL_NO_QLOG",
+            "OPENSSL_NO_ZLIB",
+            "OPENSSL_NO_ZLIB_DYNAMIC",
         }
     elseif target:is_arch("arm64.*") then
         config['feature_defines'] = {
@@ -116,6 +117,9 @@ function main(target)
             "OPENSSL_NO_ZLIB",
             "OPENSSL_NO_ZLIB_DYNAMIC",
         }
+    end
+    if not is_plat("windows", "mingw") then
+        table.insert(config['feature_defines'], "OPENSSL_NO_WINSTORE")
     end
     return config
 end
