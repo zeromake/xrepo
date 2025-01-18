@@ -7,6 +7,7 @@ package("ssh2")
     --insert version
     add_versions("1.11.1", "d9ec76cbe34db98eec3539fe2c899d26b0c837cb3eb466a56b0f109cabf658f7")
     add_versions("1.11.0", "3736161e41e2693324deb38c26cfdc3efe6209d634ba4258db1cecff6a5ad461")
+    add_configs("quictls", {description = "use quictls", default = false, type = "boolean"})
     if is_plat("windows", "mingw") then
         add_syslinks("user32")
     end
@@ -28,6 +29,9 @@ package("ssh2")
         transforme_configfile("src/libssh2_config_cmake.h.in", "src/libssh2_config.h.in")
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
+        if package:config("quictls") then
+            table.insert(configs, "--quictls=y")
+        end
         import("package.tools.xmake").install(package, configs)
     end)
 

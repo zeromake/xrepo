@@ -5,12 +5,21 @@ else
 end
 add_rules("mode.debug", "mode.release")
 
+option("quictls")
+    set_default(false)
+    set_showmenu(true)
+option_end()
+
 if is_plat("windows") then
     add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
     add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
 end
 
-add_requires("libressl")
+if get_config("quictls") then
+    add_requires("quictls")
+else
+    add_requires("libressl")
+end
 
 function configvar_check_csymbol_exists(define_name, var_name, opt) 
     configvar_check_csnippets(define_name, 'void* a = (void*)'..var_name..';', opt)
@@ -59,7 +68,11 @@ target("ssh2")
     add_includedirs("$(buildir)", "include")
     add_headerfiles("include/*.h")
     add_files("src/*.c")
-    add_packages("libressl")
+    if get_config("quictls") then
+        add_packages("quictls")
+    else
+        add_packages("libressl")
+    end
     add_defines("HAVE_CONFIG_H","LIBSSH2_OPENSSL")
     if is_plat("windows", "mingw") then
         add_syslinks("user32")

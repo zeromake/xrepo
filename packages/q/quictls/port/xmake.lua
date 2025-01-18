@@ -1,5 +1,16 @@
 add_rules("mode.debug", "mode.release")
 
+option("installdir")
+    if is_host("windows") then
+        set_default("C:/Windows")
+    else
+        set_default("/usr/local")
+    end
+    set_description("openssl install dir")
+    set_showmenu(true)
+option_end()
+
+
 if is_plat("windows", "mingw") then
     add_cflags("/TC", {tools = {"clang_cl", "cl"}})
     add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
@@ -8,10 +19,12 @@ end
 
 set_encodings("utf-8")
 
+local openssldir = path.join(get_config("installdir"), "ssl")
+local openssllibdir = path.join(get_config("installdir"), "ssl/lib")
 add_defines(
-    "OPENSSLDIR=\"/usr/local/ssl\"",
-    "ENGINESDIR=\"/usr/local/lib/engines-81.3\"",
-    "MODULESDIR=\"/usr/local/lib/ossl-modules\"",
+    "OPENSSLDIR=\""..openssldir.."\"",
+    "ENGINESDIR=\""..path.join(openssllibdir, "engines-81.3").."\"",
+    "MODULESDIR=\""..path.join(openssllibdir, "ossl-modules").."\"",
     "OPENSSL_BUILDING_OPENSSL"
 )
 
