@@ -8,6 +8,9 @@ package("quictls")
     add_versions("3.3.0-quic1", "78d675d94c0ac3a8b44073f0c2b373d948c5afd12b25c9e245262f563307a566")
     add_configs("installdir", {description = "installdir set", default = nil, type = "string"})
     add_links("ssl", "crypto")
+    if is_plat("windows", "mingw") then
+        add_syslinks("user32", "ws2_32", "advapi32", "crypt32")
+    end
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "generate_xmake.lua"), "xmake.lua")
         os.cp(path.join(os.scriptdir(), "port", "scripts"), "scripts")
