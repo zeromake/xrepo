@@ -296,6 +296,54 @@ target("crypto")
             "crypto/ec/ecp_nistp384.c",
             "crypto/ec/ecp_nistp521.c"
         )
+    elseif is_plat("windows") and is_arch("arm64") then
+        remove_files(
+            "crypto/LPdir_*.c",
+            "crypto/loongarchcap.c",
+            "crypto/ppccap.c",
+            "crypto/sparcv9cap.c",
+            "crypto/riscvcap.c",
+            "crypto/s390xcap.c",
+            "crypto/ec/ecx_s390x.c",
+            "crypto/evp/legacy_md2.c",
+            "crypto/poly1305/poly1305_base2_44.c",
+            "crypto/poly1305/poly1305_ppc.c",
+            "crypto/rsa/rsa_acvp_test_params.c",
+            "crypto/ec/ecp_nistz256_table.c",
+            "crypto/ec/ecp_s390x_nistp.c",
+            "crypto/sha/sha_ppc.c",
+            "crypto/sha/sha_riscv.c",
+            "crypto/bn/bn_sparc.c",
+            "crypto/bn/bn_ppc.c",
+            "crypto/sm3/sm3_riscv.c",
+
+            "crypto/ec/ecp_ppc.c",
+            "crypto/aes/aes_x86core.c",
+            "crypto/poly1305/poly1305_ieee754.c",
+            "crypto/sha/keccak1600.c",
+            "crypto/mem_clr.c",
+            "crypto/des/ncbc_enc.c",
+            
+            "providers/common/securitycheck_fips.c",
+            "providers/implementations/digests/md2_prov.c",
+            "providers/implementations/rands/seeding/rand_vms.c",
+            "providers/implementations/rands/seeding/rand_vxworks.c",
+            "providers/implementations/macs/blake2_mac_impl.c",
+            "providers/implementations/ciphers/cipher_rc5_hw.c",
+            "providers/implementations/ciphers/cipher_rc5.c",
+
+            "engines/e_devcrypto.c",
+            "engines/e_afalg.c",
+            "engines/e_padlock.c",
+            "engines/e_capi.c",
+            "engines/e_dasync.c",
+            "engines/e_ossltest.c",
+            "engines/e_loader_attic.c",
+            
+            "crypto/ec/ecp_nistp224.c",
+            "crypto/ec/ecp_nistp256.c",
+            "crypto/ec/ecp_nistp384.c"
+        )
     elseif is_plat("windows") and is_arch("x86") then
         add_files("crypto/chacha/chacha_enc.c")
         remove_files(
