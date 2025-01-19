@@ -13,6 +13,7 @@ package("sqlite3")
     end})
 
     --insert version
+    add_versions("3.48.0+2025.000", "ac992f7fca3989de7ed1fe99c16363f848794c8c32a158dafd4eb927a2e02fd5")
     add_versions("3.47.0+2024.200", "f1b2ee412c28d7472bc95ba996368d6f0cdcf00362affdadb27ed286c179540b")
     add_versions("3.46.0+2024.100", "67d3fe6d268e6eaddcae3727fce58fcc8e9c53869bdd07a0c61e38ddf2965071")
     add_versions("3.40.0+2022.0", "0333552076d2700c75352256e91c78bf5cd62491589ba0c69aed0a81868980e7")
