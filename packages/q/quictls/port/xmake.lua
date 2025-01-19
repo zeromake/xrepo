@@ -2,9 +2,9 @@ add_rules("mode.debug", "mode.release")
 
 option("installdir")
     if is_host("windows") then
-        set_default("C:/Windows")
+        set_default("C:\\Program Files\\OpenSSL")
     else
-        set_default("/usr/local")
+        set_default("/usr/local/ssl")
     end
     set_description("openssl install dir")
     set_showmenu(true)
@@ -18,12 +18,13 @@ if is_plat("windows", "mingw") then
 end
 
 set_encodings("utf-8")
+add_requires("zeromake.rules")
 
-local openssldir = path.join(get_config("installdir"), "ssl")
-local openssllibdir = path.join(get_config("installdir"), "ssl/lib")
+local openssldir = path.join(get_config("installdir"))
+local openssllibdir = path.join(get_config("installdir"), "lib")
 local disable_asm = false
 
-if is_plat("windows") and is_arch("arm64", "x86") then
+if is_plat("windows") and is_arch("arm64.*", "x86") then
     disable_asm = true
 end
 
@@ -38,15 +39,16 @@ add_defines(
     "STATIC_LEGACY"
 )
 
-if is_plat("windows") and is_arch("arm64") then
+if is_plat("windows") and is_arch("arm64.*") then
     add_defines(
-        "_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE",
+        "L_ENDIAN",
+        "OPENSSL_PIC",
+        "OPENSSL_SYS_WIN32",
         "OPENSSL_SYS_WIN_CORE",
-        "L_ENDIAN"
+        "_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE",
+        "_CRT_SECURE_NO_DEPRECATE"
     )
-end
-
-if is_arch("arm64.*") then
+elseif is_arch("arm64.*") then
     add_defines(
         "OPENSSL_PIC",
         "BSAES_ASM",
@@ -225,6 +227,8 @@ end
 target("crypto")
     set_kind("$(kind)")
     add_includedirs("providers/common/include", "providers/implementations/include")
+    add_packages("zeromake.rules")
+    add_rules("@zeromake.rules/export_symbol", {file = 'scripts/crypto.sym'})
     for _, dir in ipairs(crypto_dirs) do
         add_files(path.join(dir, "*.c"))
     end
@@ -304,7 +308,8 @@ target("crypto")
             "crypto/ec/ecp_nistp384.c",
             "crypto/ec/ecp_nistp521.c"
         )
-    elseif is_plat("windows") and is_arch("arm64") then
+    elseif is_plat("windows") and is_arch("arm64.*") then
+        add_files("crypto/chacha/chacha_enc.c")
         remove_files(
             "crypto/LPdir_*.c",
             "crypto/loongarchcap.c",
@@ -328,8 +333,6 @@ target("crypto")
             "crypto/ec/ecp_ppc.c",
             "crypto/aes/aes_x86core.c",
             "crypto/poly1305/poly1305_ieee754.c",
-            "crypto/sha/keccak1600.c",
-            "crypto/mem_clr.c",
             "crypto/des/ncbc_enc.c",
             
             "providers/common/securitycheck_fips.c",
@@ -615,6 +618,8 @@ target("crypto")
 target("ssl")
     set_kind("$(kind)")
     add_deps("crypto")
+    add_packages("zeromake.rules")
+    add_rules("@zeromake.rules/export_symbol", {file = 'scripts/ssl.sym'})
     add_files(
         "ssl/*.c",
         "ssl/record/*.c",

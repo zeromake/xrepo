@@ -83,6 +83,7 @@ local common_x86_64_asm = {
 
 local files = {
     windows_arm64_asm = {},
+    windows_arm64ec_asm = {},
     macosx_arm64_asm = {
         "crypto/aes/asm/aesv8-armx.pl",
         "crypto/aes/asm/bsaes-armv8.pl",
