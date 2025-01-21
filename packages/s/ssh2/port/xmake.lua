@@ -9,6 +9,10 @@ option("quictls")
     set_default(false)
     set_showmenu(true)
 option_end()
+option("libressl")
+    set_default(false)
+    set_showmenu(true)
+option_end()
 
 if is_plat("windows") then
     add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
@@ -17,7 +21,7 @@ end
 
 if get_config("quictls") then
     add_requires("quictls")
-else
+elseif get_config("libressl") then
     add_requires("libressl")
 end
 
@@ -70,7 +74,7 @@ target("ssh2")
     add_files("src/*.c")
     if get_config("quictls") then
         add_packages("quictls")
-    else
+    elseif get_config("libressl") then
         add_packages("libressl")
     end
     add_defines("HAVE_CONFIG_H","LIBSSH2_OPENSSL")
