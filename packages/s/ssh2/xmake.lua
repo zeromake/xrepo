@@ -12,6 +12,14 @@ package("ssh2")
         add_syslinks("user32")
     end
 
+    on_load(function (package)
+        if package:config("quictls") then
+            package:add("deps", "quictls")
+        else 
+            package:add("deps", "libressl")
+        end
+    end)
+
     on_install(function (package)
         local transforme_configfile = function (input, output)
             output = output or input
@@ -35,6 +43,6 @@ package("ssh2")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    -- on_test(function (package)
-    --     assert(package:has_cfuncs("xxx", {includes = {"xx.h"}}))
-    -- end)
+    on_test(function (package)
+        assert(package:has_cfuncs("libssh2_session_init_ex", {includes = {"libssh2.h"}}))
+    end)
