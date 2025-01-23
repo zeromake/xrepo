@@ -99,6 +99,12 @@ target("breakpad")
             "src/common/mac/macho_id.cc",
             "src/common/mac/file_id.cc"
         )
+        add_headerfiles(
+            "src/(client/mac/handler/exception_handler.h)",
+            "src/(client/mac/crash_generation/*.h)",
+            "src/(client/mac/handler/*.h)",
+            "src/(common/mac/MachIPC.h)"
+        )
         add_frameworks("CoreFoundation")
     end
 
@@ -122,8 +128,14 @@ target("dump_syms")
             end
             if vs ~= nil then
                 local VSInstallDir = vs['VSInstallDir']
+                local archDir = "amd64"
+                if target:is_arch("x86") then
+                    archDir = "x86"
+                elseif target:is_arch("arm64") then
+                    archDir = "arm64"
+                end
                 target:add("includedirs", path.join(VSInstallDir, "DIA SDK/include"))
-                target:add("linkdirs", path.join(VSInstallDir, "DIA SDK/lib/amd64"))
+                target:add("linkdirs", path.join(VSInstallDir, "DIA SDK/lib/" .. archDir))
             end
         end)
     end

@@ -66,6 +66,23 @@ int main() {
 }]],
         }, {configs = {languages = "c++17"}}))
     elseif package:is_plat("macosx") then
+    assert(package:check_cxxsnippets({
+            test = [[
+#include <iostream>
+#include <client/mac/handler/exception_handler.h>
 
+bool Callback(const char* dump_dir,  const char* minidump_id,
+                                   void* context, bool succeeded) {
+    std::cerr << "Crash dump written to " << dump_dir << minidump_id << std::endl;
+    return succeeded;
+}
+
+int main() {
+    google_breakpad::ExceptionHandler eh("dumps", NULL, Callback, NULL, true, NULL);
+    int *p = nullptr;
+    *p = 42;
+    return 0;
+}]],
+        }, {configs = {languages = "c++17"}}))
     end
     end)
