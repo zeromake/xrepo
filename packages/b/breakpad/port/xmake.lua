@@ -128,14 +128,17 @@ target("dump_syms")
             end
             if vs ~= nil then
                 local VSInstallDir = vs['VSInstallDir']
+                local VCToolsInstallDir = vs['VCToolsInstallDir']
                 local archDir = "amd64"
+                local toolDir = "x64"
                 if target:is_arch("x86") then
                     archDir = "x86"
+                    toolDir = "x86"
                 elseif target:is_arch("arm64") then
                     archDir = "arm64"
                 end
-                target:add("includedirs", path.join(VSInstallDir, "DIA SDK/include"))
-                target:add("linkdirs", path.join(VSInstallDir, "DIA SDK/lib/" .. archDir))
+                target:add("includedirs", path.join(VSInstallDir, "DIA SDK/include"), path.join(VCToolsInstallDir, "atlmfc/include"))
+                target:add("linkdirs", path.join(VSInstallDir, "DIA SDK/lib/" .. archDir), path.join(VCToolsInstallDir, "atlmfc/lib/"..toolDir))
             end
         end)
     end
