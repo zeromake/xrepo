@@ -5,7 +5,7 @@ if is_plat("windows", "mingw") then
     add_cflags("/TC", {tools = {"clang_cl", "cl"}})
     add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
     add_defines("UNICODE", "_UNICODE")
-    add_defines("WIN32_LEAN_AND_MEAN")
+    add_defines("WIN32_LEAN_AND_MEAN", "_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING")
 end
 
 set_languages("c99", "c++17")
@@ -52,6 +52,10 @@ target("breakpad")
     set_kind("static")
     add_includedirs("src")
     add_configfiles("config.h.in")
+    if is_plat("windows") then
+        add_files("compat/*.c")
+        add_includedirs("compat")
+    end
     add_files(
         "src/client/minidump_file_writer.cc",
         "src/common/convert_UTF.cc",
@@ -59,11 +63,23 @@ target("breakpad")
         "src/common/string_conversion.cc",
         "src/common/path_helper.cc"
     )
+    add_headerfiles(
+        "src/(common/scoped_ptr.h)",
+        "src/(google_breakpad/common/*.h)",
+        "src/(google_breakpad/processor/*.h)"
+    )
 
     if is_plat("windows", "mingw") then
         add_files(
             "src/client/windows/crash_generation/*.cc",
-            "src/client/windows/handler/*.cc"
+            "src/client/windows/handler/*.cc",
+            "src/common/windows/guid_string.cc"
+        )
+        add_headerfiles(
+            "src/(common/windows/string_utils-inl.h)",
+            "src/(client/windows/crash_generation/*.h)",
+            "src/(client/windows/handler/*.h)",
+            "src/(client/windows/common/*.h)"
         )
     elseif is_plat("linux") then
         add_files(
@@ -89,28 +105,57 @@ target("breakpad")
 target("dump_syms")
     set_kind("binary")
     add_includedirs("src")
-    add_files(
-        "src/common/dwarf/*.cc|*_unittest.cc|functioninfo.cc",
-        "src/common/md5.cc",
-        "src/common/stabs_reader.cc",
-        "src/common/stabs_to_module.cc",
-        "src/common/dwarf_cu_to_module.cc",
-        "src/common/dwarf_cfi_to_module.cc",
-        "src/common/module.cc",
-        "src/common/path_helper.cc",
-        "src/common/language.cc",
-        "src/common/dwarf_line_to_module.cc",
-        "src/common/dwarf_range_list_handler.cc",
-        "src/common/test_assembler.cc"
-    )
+    if is_plat("windows") then
+        add_files("compat/*.c")
+        add_includedirs("compat")
+        add_syslinks("diaguids", "imagehlp", "dbghelp")
+    end
+    if is_plat("windows") then
+        on_config(function (target)
+            import("detect.sdks.find_vstudio")
+            local vs = nil
+            for _, vsinfo in pairs(find_vstudio()) do
+                if vsinfo.vcvarsall then
+                    vs = vsinfo.vcvarsall[target:arch()]
+                    break
+                end
+            end
+            if vs ~= nil then
+                local VSInstallDir = vs['VSInstallDir']
+                target:add("includedirs", path.join(VSInstallDir, "DIA SDK/include"))
+                target:add("linkdirs", path.join(VSInstallDir, "DIA SDK/lib/amd64"))
+            end
+        end)
+    end
     if is_plat("windows", "mingw") then
-        add_files("src/tools/windows/dump_syms/dump_syms.cc")
+        add_files(
+            "src/tools/windows/dump_syms/dump_syms.cc",
+            "src/common/windows/string_utils.cc",
+            "src/common/windows/guid_string.cc",
+            "src/common/windows/pdb_source_line_writer.cc",
+            "src/common/windows/pe_source_line_writer.cc",
+            "src/common/windows/omap.cc",
+            "src/common/windows/dia_util.cc",
+            "src/common/windows/pe_util.cc"
+        )
     elseif is_plat("linux") then
         add_files("src/tools/linux/dump_syms/dump_syms.cc")
     elseif is_plat("macosx") then
         add_defines("HAVE_MACH_O_NLIST_H")
         add_files(
             "src/tools/mac/dump_syms/dump_syms_tool.cc",
+            "src/common/dwarf/*.cc|*_unittest.cc|functioninfo.cc",
+            "src/common/md5.cc",
+            "src/common/dwarf_cfi_to_module.cc",
+            "src/common/module.cc",
+            "src/common/path_helper.cc",
+            "src/common/dwarf_line_to_module.cc",
+            "src/common/dwarf_range_list_handler.cc",
+            "src/common/test_assembler.cc",
+            "src/common/stabs_reader.cc",
+            "src/common/stabs_to_module.cc",
+            "src/common/dwarf_cu_to_module.cc",
+            "src/common/language.cc",
             "src/common/mac/arch_utilities.cc",
             "src/common/mac/dump_syms.cc",
             "src/common/mac/file_id.cc",
@@ -125,6 +170,10 @@ target("dump_syms")
 target("minidump_stackwalk")
     set_kind("binary")
     add_includedirs("src")
+    if is_plat("windows") then
+        add_files("compat/*.c")
+        add_includedirs("compat")
+    end
     add_files("src/third_party/libdisasm/*.c")
     add_files(
         "src/processor/basic_source_line_resolver.cc",
