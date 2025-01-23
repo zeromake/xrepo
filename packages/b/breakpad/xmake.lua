@@ -37,6 +37,13 @@ typedef long long ssize_t;
 
     on_test(function (package)
         if package:is_plat("windows") then
+        -- 生成的 minidump 的报告命令
+        -- dump_syms demo.pdb > demo.sym
+        -- dir = `cat demo.sym | head -n 1 | cut -d ' ' -f 4`
+        -- mkdir -p "demo.pdb/$dir"
+        -- mv demo.sym "demo.pdb/$dir"
+        -- ./demo
+        -- minidump_stackwalk xxx.dmp .
         assert(package:check_cxxsnippets({
             test = [[
 #include <iostream>
@@ -66,6 +73,14 @@ int main() {
 }]],
         }, {configs = {languages = "c++17"}}))
     elseif package:is_plat("macosx") then
+    -- 生成的 minidump 的报告命令
+    -- dsymutil demo -o demo.dSYM
+    -- dump_syms -g demo.dSYM demo > demo.sym
+    -- dir = `cat demo.sym | head -n 1 | cut -d ' ' -f 4`
+    -- mkdir -p "demo/$dir"
+    -- mv demo.sym "demo/$dir"
+    -- ./demo
+    -- minidump_stackwalk xxx.dmp .
     assert(package:check_cxxsnippets({
             test = [[
 #include <iostream>
