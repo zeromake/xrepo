@@ -87,6 +87,8 @@ local sdlSrc = {
     "src/main/*.c",
     "src/dialog/*.c",
     "src/tray/*.c",
+    "src/io/*.c",
+    "src/io/generic/*.c",
 }
 
 if is_plat("windows", "mingw") then
@@ -178,6 +180,7 @@ elseif is_plat("windows", "mingw") then
         "src/locale/windows/*.c",
         "src/misc/windows/*.c",
         "src/tray/windows/*.c",
+        "src/io/windows/*.c",
     })
 elseif is_plat("android") then
     table.join2(sdlSrc, {
@@ -226,6 +229,7 @@ elseif is_plat("linux") then
         "src/sensor/dummy/*.c",
         "src/dialog/unix/*.c",
         "src/tray/unix/*.c",
+        "src/io/io_uring/*.c",
     })
 end
 
