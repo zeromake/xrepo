@@ -9,6 +9,7 @@ package("basis_universal")
     })
 
     --insert version
+    add_versions("1.60", "64ac9363656dc3eb41c59ee52af7e939abe574a92c85fd0ba27008c4a7ec9f40")
     add_versions("1.50.0-release2", "0ef344cc7e3373ca9c15de2bd80512ea4ea17e09ed895febdf9e70f6c789bc27")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")

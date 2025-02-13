@@ -7,6 +7,7 @@ package("curl")
     end})
 
     --insert version
+    add_versions("8.12.0", "5a85adbe401ed3b998ee1128524e9b045feb39577f3c336f6997e7a4afaafcd7")
     add_versions("8.11.1", "e9773ad1dfa21aedbfe8e1ef24c9478fa780b1b3d4f763c98dd04629b5e43485")
     add_versions("8.11.0", "c95d5a1368803729345a632ce42cceeefd5f09c3b4d9582f858f6779f4b8b254")
     add_versions("8.10.1", "3763cd97aae41dcf41950d23e87ae23b2edb2ce3a5b0cf678af058c391b6ae31")

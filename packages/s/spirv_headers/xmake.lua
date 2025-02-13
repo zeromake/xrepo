@@ -11,6 +11,7 @@ package("spirv_headers")
     })
 
     --insert version
+    add_versions("1.4.304-release.1", "66e6cec19e7433fc58ace8cdf4040be0d52bb5920e54109967df2dd9598a8d48")
     add_versions("1.3.296-release.0", "1423d58a1171611d5aba2bf6f8c69c72ef9c38a0aca12c3493e4fda64c9b2dc6")
     add_versions("1.3.290-release.0", "1b9ff8a33e07814671dee61fe246c67ccbcfc9be6581f229e251784499700e24")
     add_versions("1.3.283-release.0", "a68a25996268841073c01514df7bab8f64e2db1945944b45087e5c40eed12cb9")

@@ -172,6 +172,24 @@ local upgrade_transform = {
         local version = string.format("%s.%s.%s+%s.%s", version_code:sub(1, 1), version_code:sub(2, 3), version_code:sub(4, 4), year_code, version_code:sub(5))
         return version, 'https://sqlite.org/'..year_code..'/sqlite-autoconf-'..version_code..'.tar.gz'
     end,
+    sdl2 = function ()
+        local release_url = 'https://github.com/libsdl-org/SDL/releases'
+        local outdata = fetch(release_url)
+        if outdata == nil then
+            return nil, nil
+        end
+        local version = outdata:match('">(2%.%d+%.%d+)</h2>')
+        return version, 'https://github.com/libsdl-org/SDL/releases/download/release-'..version..'/SDL2-'..version..'.tar.gz'
+    end,
+    sdl2_image = function ()
+        local release_url = 'https://github.com/libsdl-org/SDL_image/releases'
+        local outdata = fetch(release_url)
+        if outdata == nil then
+            return nil, nil
+        end
+        local version = outdata:match('">(2%.%d+%.%d+)</h2>')
+        return version, 'https://github.com/libsdl-org/SDL_image/releases/download/release-'..version..'/SDL2_image-'..version..'.tar.gz'
+    end,
 }
 
 local function load_packages(filters)

@@ -14,6 +14,7 @@ package("sdl2_mixer")
     set_urls("https://github.com/libsdl-org/SDL_mixer/releases/download/release-$(version)/SDL2_mixer-$(version).tar.gz")
 
     --insert version
+    add_versions("2.8.1", "cb760211b056bfe44f4a1e180cc7cb201137e4d1572f2002cc1be728efd22660")
     add_versions("2.8.0", "1cfb34c87b26dbdbc7afd68c4f545c0116ab5f90bbfecc5aebe2a9cb4bb31549")
     add_versions("2.6.3", "7a6ba86a478648ce617e3a5e9277181bc67f7ce9876605eea6affd4a0d6eea8f")
     add_versions("2.6.2", "8cdea810366decba3c33d32b8071bccd1c309b2499a54946d92b48e6922aa371")
