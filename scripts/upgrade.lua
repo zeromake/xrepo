@@ -112,7 +112,10 @@ local download_transform = {
     end,
     ['c-ares'] = function (opt)
         return default_transform(opt, 'c-ares-')
-    end
+    end,
+    ['gettext-tools'] = function (opt)
+        return default_transform(opt, 'gettext-tools-windows-', '.zip')
+    end,
 }
 
 function fetch(url)
