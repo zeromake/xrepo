@@ -1,6 +1,6 @@
 add_rules("mode.debug", "mode.release")
 
-set_languages("c99", "c++14")
+set_languages("c99", "c++17")
 
 option("opencl")
     set_default(false)

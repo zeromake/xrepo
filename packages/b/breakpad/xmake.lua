@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2025.01.17-alpha"] = "archive/41b6533e5f3dd7f0320ef58608ee32e8e4f132fb.tar.gz",
+        ["2025.02.19-alpha"] = "archive/4fe678ef96050b2ed97afe3b27bb9f8b660755de.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -15,6 +16,7 @@ package("breakpad")
     })
 
     --insert version
+    add_versions("2025.02.19-alpha", "709a5bed22857960a9c4b03907fdb3bd17c531a054ee53a224c7da26042f0356")
     add_versions("2025.01.17-alpha", "94bc8da487a76fafee778aa92caa679f98cc7ee585b9c1cb44e7debca285ee8c")
     add_patches("2025.01.17-alpha", path.join(os.scriptdir(), "patches/001-osx-skip-ppc.patch"), "7f5cff9067004a7321ca422c961e54970a1f1adf2035432de2c5b97d8364a487")
     if is_plat("macosx") then

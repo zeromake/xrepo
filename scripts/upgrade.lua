@@ -65,6 +65,10 @@ local version_transform = {
         return version:sub(9)
     end,
     basis_universal = function (version)
+        local _, count = string.gsub(version, "_", "")
+        if count < 3 then
+            return version:gsub("_", ".")
+        end
         local index = string.rfind(version, '_', true)
         return version:sub(1, index-1):gsub('_', '.').."-release"..version:sub(index+1)
     end,
@@ -72,6 +76,9 @@ local version_transform = {
         return version..".0"
     end,
     aria2 = function (version)
+        return version:sub(9)
+    end,
+    quictls = function (version)
         return version:sub(9)
     end,
 }

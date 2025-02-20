@@ -5,6 +5,7 @@ package("tree-sitter")
     set_urls("https://github.com/tree-sitter/tree-sitter/archive/refs/tags/v$(version).tar.gz")
 
     --insert version
+    add_versions("0.25.2", "26791f69182192fef179cd58501c3226011158823557a86fe42682cb4a138523")
     add_versions("0.25.1", "99a2446075c2edf60e82755c48415d5f6e40f2d9aacb3423c6ca56809b70fe59")
     add_versions("0.24.6", "03c7ee1e6f9f4f3821fd4af0ae06e1da60433b304a73ff92ee9694933009121a")
     add_versions("0.24.5", "b5ac48acf5a04fd82ccd4246ad46354d9c434be26c9606233917549711e4252c")
