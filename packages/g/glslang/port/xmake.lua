@@ -5,6 +5,9 @@ if is_plat("windows", "mingw") then
     add_cflags("/TC", {tools = {"clang_cl", "cl"}})
     add_cxxflags("/EHsc", {tools = {"clang_cl", "cl"}})
     add_defines("UNICODE", "_UNICODE")
+    add_defines("GLSLANG_OSINCLUDE_WIN32")
+else if is_plat("linux", "android") then
+    add_defines("GLSLANG_OSINCLUDE_UNIX")
 end
 
 set_encodings("utf-8")
