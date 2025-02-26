@@ -34,7 +34,14 @@ target("spirv_cross")
     add_files("spirv_hlsl.cpp")
     add_files("spirv_reflect.cpp")
     add_files("spirv_cross_util.cpp")
-    add_defines("SPIRV_CROSS_VERSION=0.61.0")
+    add_defines(
+        "SPIRV_CROSS_VERSION=0.61.0",
+        "SPIRV_CROSS_C_API_GLSL=1",
+        "SPIRV_CROSS_C_API_HLSL=1",
+        "SPIRV_CROSS_C_API_MSL=1",
+        "SPIRV_CROSS_C_API_CPP=1",
+        "SPIRV_CROSS_C_API_REFLECT=1"
+    )
     set_configvar("spirv-cross-build-version", "0.61.0")
     set_configvar("spirv-cross-timestamp", os.time(os.date("!*t")))
     add_configfiles("cmake/gitversion.in.h")
