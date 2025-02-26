@@ -20,11 +20,7 @@ package("sdl3_shadercross")
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
         import("package.tools.xmake").install(package, configs)
-        if package:is_plat("windows") then
-            os.cp("export_shared/*", package:installdir("bin"))
-        else
-            os.cp("export_shared/*", package:installdir("lib"))
-        end
+        os.cp("export_shared/*", package:installdir("bin"))
     end)
 
     -- on_test(function (package)

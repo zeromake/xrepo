@@ -29,6 +29,10 @@ target("shadercross")
         "zeromake.rules"
     )
     add_rules("@zeromake.rules/export_shared", {dir = "export_shared"})
+    if not is_plat("windows") then
+        -- osx 系统会找不到动态库，需要添加 rpath
+        add_rpathdirs("@executable_path")
+    end
     add_defines("SDL_SHADERCROSS_DXC=1")
     if is_plat("windows", "mingw") then
         add_files("src/version.rc")
