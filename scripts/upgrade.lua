@@ -35,6 +35,7 @@ local version_transform = {
     sdl2_ttf = sdl_version_transform,
     sdl2_mixer = sdl_version_transform,
     sdl3 = function (version) return version:sub(9) end,
+    sdl3_image = function (version) return version:sub(9) end,
     cppwinrt = function (version)
         local index = string.rfind(version, '.', true)
         return version:sub(1, index-1).."-release"..version:sub(index)
@@ -105,6 +106,7 @@ local download_transform = {
     sdl2_mixer = function (opt) return default_transform(opt, 'SDL2_mixer-') end,
     sdl2_ttf = function (opt) return default_transform(opt, 'SDL2_ttf-') end,
     sdl2_image = function (opt) return default_transform(opt, 'SDL2_image-') end,
+    sdl3_image = function (opt) return default_transform(opt, 'SDL3_image-') end,
     sdl3 = function (opt) return default_transform(opt, 'SDL3-') end,
     tweeny = function (opt) return default_transform(opt, 'tweeny-') end,
     unibreak = function (opt) return default_transform(opt, 'libunibreak-') end,
@@ -199,6 +201,15 @@ local upgrade_transform = {
         end
         local version = outdata:match('">(2%.%d+%.%d+)</h2>')
         return version, 'https://github.com/libsdl-org/SDL_image/releases/download/release-'..version..'/SDL2_image-'..version..'.tar.gz'
+    end,
+    sdl3_image = function ()
+        local release_url = 'https://github.com/libsdl-org/SDL_image/releases'
+        local outdata = fetch(release_url)
+        if outdata == nil then
+            return nil, nil
+        end
+        local version = outdata:match('">(3%.%d+%.%d+)</h2>')
+        return version, 'https://github.com/libsdl-org/SDL_image/releases/download/release-'..version..'/SDL3_image-'..version..'.tar.gz'
     end,
 }
 
