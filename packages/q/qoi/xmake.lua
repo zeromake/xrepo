@@ -14,10 +14,23 @@ package("qoi")
     })
 
     --insert version
-    add_versions("2025.02.12-alpha", "sha256")
+    add_versions("2025.02.12-alpha", "16476f43ab4a639185748d13d6bb0a0c2c74c667432882801e53d76d61f3a928")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
+        -- support for jpg and jpeg
+        io.replace(
+            "qoiconv.c",
+            [[(STR_ENDS_WITH(argv[1], ".png")]],
+            [[(STR_ENDS_WITH(argv[1], ".png") || STR_ENDS_WITH(argv[1], ".jpg") || STR_ENDS_WITH(argv[1], ".jpeg")]],
+            { plain = true, encoding = "utf-8" }
+        )
+        io.replace(
+            "qoiconv.c",
+            [[#define STBI_ONLY_PNG]],
+            [[]],
+            { plain = true, encoding = "utf-8" }
+        )
         import("package.tools.xmake").install(package, configs)
         os.cp("qoi.h", package:installdir("include"))
         package:addenv("PATH", "bin")
