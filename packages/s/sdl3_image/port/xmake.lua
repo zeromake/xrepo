@@ -106,6 +106,7 @@ target("sdl3_image")
         add_defines("LOAD_PNG=1")
         add_defines("LOAD_JPG=1")
         add_defines("LOAD_TIF=1")
+        add_syslinks("windowscodecs")
     elseif backend == "imageio" then
         add_defines("PNG_USES_IMAGEIO=1")
         add_defines("JPG_USES_IMAGEIO=1")

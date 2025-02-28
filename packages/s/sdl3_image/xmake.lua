@@ -30,7 +30,9 @@ package("sdl3_image")
 
     add_deps("sdl3")
 
-    if is_plat("macosx") then
+    if is_plat("windows", "mingw") then
+        add_syslinks("windowscodecs")
+    elseif is_plat("macosx") then
         add_frameworks("CoreFoundation", "CoreGraphics", "ImageIO", "CoreServices")
     elseif is_plat("iphoneos") then
         add_frameworks("ImageIO", "CoreServices")
