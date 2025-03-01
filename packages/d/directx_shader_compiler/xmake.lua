@@ -8,8 +8,13 @@ package("directx_shader_compiler")
         set_urls("https://github.com/microsoft/DirectXShaderCompiler/releases/download/v1.8.2502/dxc_2025_02_20.zip")
         add_versions("1.8.2502", "70b1913a1bfce4a3e1a5311d16246f4ecdf3a3e613abec8aa529e57668426f85")
     elseif is_plat("macosx") then
-        set_urls("https://github.com/zeromake/xrepo/releases/download/v0.0.1/darwin_dxc_2025_02_20.x86_64.7z")
-        add_versions("1.8.2502", "d6118c69d442ce928e38f82feb09ce8abf371bdf7766fe7dfafb8d5d6e58af62")
+        if is_arch("arm64") then
+            set_urls("https://github.com/zeromake/xrepo/releases/download/v0.0.1/darwin_dxc_2025_02_20.arm64.7z")
+            add_versions("1.8.2502", "8f62e259eeb2490c0febde85448bc88a9025567c8f9e6fa7a3d9efe17b8591ca")
+        else
+            set_urls("https://github.com/zeromake/xrepo/releases/download/v0.0.1/darwin_dxc_2025_02_20.x86_64.7z")
+            add_versions("1.8.2502", "d6118c69d442ce928e38f82feb09ce8abf371bdf7766fe7dfafb8d5d6e58af62")
+        end
     elseif is_plat("linux") then
         set_urls("https://github.com/microsoft/DirectXShaderCompiler/releases/download/v1.8.2502/linux_dxc_2025_02_20.x86_64.tar.gz")
         add_versions("1.8.2502", "e0580d90dbf6053a783ddd8d5153285f0606e5deaad17a7a6452f03acdf88c71")

@@ -51,8 +51,6 @@ local sdlSrc = {
     "src/cpuinfo/*.c",
     "src/dynapi/*.c",
     "src/events/*.c",
-    "src/file/*.c",
-    "src/file/generic/*.c",
     "src/haptic/*.c",
     "src/hidapi/*.c",
     "src/joystick/*.c",
@@ -93,14 +91,12 @@ local sdlSrc = {
 
 if is_plat("windows", "mingw") then
     table.join2(sdlSrc, {
-        "src/file/windows/*.c",
         "src/process/windows/*.c",
         "src/time/windows/*.c",
         "src/main/windows/*.c",
     })
 else
     table.join2(sdlSrc, {
-        "src/file/io_uring/*.c",
         "src/process/posix/*.c",
         "src/time/unix/*.c",
         "src/main/generic/*.c",
