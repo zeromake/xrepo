@@ -20,9 +20,6 @@ end
 set_encodings("utf-8")
 add_requires("zeromake.rules")
 
-if os.host() == "windows" then
-    add_requires("strawberry-perl")
-end
 
 local openssldir = path.join(get_config("installdir"))
 local openssllibdir = path.join(get_config("installdir"), "lib")
@@ -231,9 +228,6 @@ end
 target("crypto")
     set_kind("$(kind)")
     add_packages("zeromake.rules")
-    if os.host() == "windows" then
-        add_packages("strawberry-perl")
-    end
     add_includedirs("providers/common/include", "providers/implementations/include")
     add_rules("@zeromake.rules/export_symbol", {file = 'scripts/crypto.sym'})
     for _, dir in ipairs(crypto_dirs) do

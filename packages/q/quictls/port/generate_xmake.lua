@@ -9,13 +9,13 @@ end
 
 set_encodings("utf-8")
 
-if is_plat("windows", "mingw") then
+if os.host() == "windows" then
     add_requires("strawberry-perl")
 end
 
 target("_do")
     set_kind("object")
-    if is_plat("windows", "mingw") then
+    if os.host() == "windows" then
         add_packages("strawberry-perl")
     end
     on_build(function (target) 
