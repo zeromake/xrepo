@@ -2,7 +2,18 @@
 import("core.package.package")
 import("core.platform.platform")
 
-local all_platform = {"windows", "linux", "macosx", "iphoneos", "android", "mingw", "msys", "bsd", "wasm", "cross"}
+local all_platform = {
+    "windows",
+    "linux",
+    "macosx",
+    "iphoneos",
+    "android",
+    "mingw",
+    "msys",
+    "bsd",
+    "wasm",
+    "cross"
+}
 
 -- is supported platform and architecture?
 function is_supported(instance, plat, arch, opt)

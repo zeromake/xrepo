@@ -81,10 +81,8 @@ function main(target)
     end
     if target:is_plat("windows") then
         config['asmext'] = ".asm"
-    elseif target:is_plat("android") or (target:is_plat("macosx") and target:is_arch("arm64")) then
-        config['asmext'] = ".S"
     else
-        config['asmext'] = ".s"
+        config['asmext'] = ".S"
     end
     if target:is_arch("x86", "x86_64", "x64") then
         config['feature_defines'] = {

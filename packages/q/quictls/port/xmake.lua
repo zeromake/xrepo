@@ -1,7 +1,7 @@
 add_rules("mode.debug", "mode.release")
 
 option("installdir")
-    if is_host("windows") then
+    if is_plat("windows", "mingw") then
         set_default("C:\\Program Files\\OpenSSL")
     else
         set_default("/usr/local/ssl")
@@ -20,9 +20,13 @@ end
 set_encodings("utf-8")
 add_requires("zeromake.rules")
 
+local function plat_path_join(...)
+    local p = path.join(...):gsub("\\", "/")
+    return p
+end
 
-local openssldir = path.join(get_config("installdir"))
-local openssllibdir = path.join(get_config("installdir"), "lib")
+local openssldir = get_config("installdir") or "/usr/local/ssl"
+local openssllibdir = plat_path_join(get_config("installdir"), "lib")
 local disable_asm = false
 
 if is_plat("windows") and is_arch("arm64.*", "x86") then
@@ -34,8 +38,8 @@ if is_plat("windows", "mingw") then
 end
 add_defines(
     "OPENSSLDIR=\""..openssldir.."\"",
-    "ENGINESDIR=\""..path.join(openssllibdir, "engines-81.3").."\"",
-    "MODULESDIR=\""..path.join(openssllibdir, "ossl-modules").."\"",
+    "ENGINESDIR=\""..plat_path_join(openssllibdir, "engines-81.3").."\"",
+    "MODULESDIR=\""..plat_path_join(openssllibdir, "ossl-modules").."\"",
     "OPENSSL_BUILDING_OPENSSL",
     "STATIC_LEGACY"
 )
@@ -233,10 +237,8 @@ target("crypto")
     for _, dir in ipairs(crypto_dirs) do
         add_files(path.join(dir, "*.c"))
     end
-    local asmext = "*.s"
-    if is_plat("android") or (is_plat("macosx") and is_arch("arm64")) then
-        asmext = "*.S"
-    elseif is_plat("windows") then
+    local asmext = "*.S"
+    if is_plat("windows") then
         asmext = "*.asm"
         add_syslinks("user32", "ws2_32", "advapi32", "crypt32", {public = true})
     end

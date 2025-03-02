@@ -96,7 +96,7 @@ local function dofile(target, sourcefile, targetfile)
             local openssl_sys_defines = {}
             if sys_define == 'OPENSSL_SYS_WINDOWS' then
                 sys_define = 'OPENSSL_SYS_WIN64A'
-            elseif sys_define ~= 'OPENSSL_SYS_LINUX' then
+            elseif sys_define == 'OPENSSL_SYS_LINUX' then
                 sys_define = ''
             end
             if sys_define ~= '' then
