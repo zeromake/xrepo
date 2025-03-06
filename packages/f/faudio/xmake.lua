@@ -9,6 +9,7 @@ package("faudio")
         end
     })
     --insert version
+    add_versions("25.03", "1eeb1d2d6ed038a68e6b0a02614d4c7f859aa0a22c4a64e0bd49c26573823ae8")
     add_versions("25.02", "eab667d231e5036b0e5c3c6f89fb4ea792284493d46161bc056a88a6dadc2683")
     add_versions("25.01", "044a79222ac01eb0e279f0204e403f01dfea03d29163a721ec266135dd09fb95")
     add_versions("24.12", "82feeb58301c4b7316ff6ee2201310073d8c9698ceb3f6f2cf5cc533dee0a415")

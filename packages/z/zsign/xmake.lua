@@ -3,6 +3,7 @@ local function getVersion(version)
         ["2024.09.10-alpha"] = "archive/3c23b6192364c12200ba5950ec363d6877f8c920.tar.gz",
         ["2024.12.19-alpha"] = "archive/9fd2942fa9dc5fc5ba111526686b0e4a35aff3a9.tar.gz",
         ["2025.02.13-alpha"] = "archive/818191e43e230688affa0ca4371aaa536c3fb755.tar.gz",
+        ["2025.02.20-alpha"] = "archive/f3224570687bc91bfdbe62938fcf6f5f779907d8.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -17,6 +18,7 @@ package("zsign")
     })
 
     --insert version
+    add_versions("2025.02.20-alpha", "cd420fc3735f0532e9fc9fef3b0b6aa2c64296e7e0ba7555ece701aab5f1a534")
     add_versions("2025.02.13-alpha", "d780a74c6b2ed36cead7870bf4f15b13a5209982fb169a67d792a4c8874fc614")
     add_versions("2024.12.19-alpha", "1a00368d3a9560981655f9f4e90b062260f030ad246b8febe80b2fc82f642432")
     add_versions("2024.09.10-alpha", "6f60d78cd3c93fef43d02cdc918c674ba62c1a2da7e59b160d830172a3a3c074")

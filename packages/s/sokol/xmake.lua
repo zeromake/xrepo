@@ -7,6 +7,7 @@ local function getVersion(version)
         ["2024.12.17-alpha"] = "archive/789d97071d17cbab4e3835a0b0b8b379e98c114f.tar.gz",
         ["2024.12.29-alpha"] = "archive/c1cc713a48669fb78c8fadc1a3cb9dd6c3bb97d3.tar.gz",
         ["2025.02.11-alpha"] = "archive/b0aa42fa061759908a6c68029703e0988a854b53.tar.gz",
+        ["2025.02.23-alpha"] = "archive/123f30c5166f65844a201246d244bda83ddf5f69.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -23,6 +24,7 @@ package("sokol")
     })
 
     --insert version
+    add_versions("2025.02.23-alpha", "07bb88c2b086c58a7dcbc148167f013e6c0cf5259811741117d5e94f305d7500")
     add_versions("2025.02.11-alpha", "1f8ebef267a55e0db3ff95eb5b1162581927331a7930bc3ea90199b1373e9e3c")
     add_versions("2024.12.29-alpha", "70cc76ba99feac86a71bc5eb44b49b416a3c000ce676450d44bf8fa632514caf")
     add_versions("2024.12.17-alpha", "c67781879f4115587ecc1b31b1bc1e967d0d27f33266dc4d26ba077a51c1ad5c")

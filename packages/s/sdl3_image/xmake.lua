@@ -13,6 +13,7 @@ package("sdl3_image")
     set_urls("https://github.com/libsdl-org/SDL_image/releases/download/release-$(version)/SDL3_image-$(version).tar.gz")
 
     --insert version
+    add_versions("3.2.4", "a725bd6d04261fdda0dd8d950659e1dc15a8065d025275ef460d32ae7dcfc182")
     add_versions("3.2.0", "1690baea71b2b4ded9895126cddbc03a1000b027d099a4fb4669c4d23d73b19f")
     add_configs("backend", {description = "Support backend", default = "", type = "string"})
 

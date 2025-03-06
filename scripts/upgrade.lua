@@ -211,6 +211,24 @@ local upgrade_transform = {
         local version = outdata:match('">(3%.%d+%.%d+)</h2>')
         return version, 'https://github.com/libsdl-org/SDL_image/releases/download/release-'..version..'/SDL3_image-'..version..'.tar.gz'
     end,
+    sdl2_ttf = function ()
+        local release_url = 'https://github.com/libsdl-org/SDL_ttf/releases'
+        local outdata = fetch(release_url)
+        if outdata == nil then
+            return nil, nil
+        end
+        local version = outdata:match('">(2%.%d+%.%d+)</h2>')
+        return version, 'https://github.com/libsdl-org/SDL_ttf/releases/download/release-'..version..'/SDL2_ttf-'..version..'.tar.gz'
+    end,
+    sdl3_ttf = function ()
+        local release_url = 'https://github.com/libsdl-org/SDL_ttf/releases'
+        local outdata = fetch(release_url)
+        if outdata == nil then
+            return nil, nil
+        end
+        local version = outdata:match('">(3%.%d+%.%d+)</h2>')
+        return version, 'https://github.com/libsdl-org/SDL_ttf/releases/download/release-'..version..'/SDL3_ttf-'..version..'.tar.gz'
+    end,
 }
 
 local function load_packages(filters)
