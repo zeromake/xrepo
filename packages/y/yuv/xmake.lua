@@ -11,6 +11,7 @@ local function getVersion(version)
         ["2025.02.11-alpha"] = "archive/61354d2671d9b5c73cc964415fe25bc76cea051a.tar.gz",
         ["2025.02.27-alpha"] = "archive/c060118bea3f28ceb837d3c85e479d3bb4c21726.tar.gz",
         ["2025.03.14-alpha"] = "archive/4ed75166cf1885b9690214b362f8675294505a37.tar.gz",
+        ["2025.04.04-alpha"] = "archive/8c48036d15d66ae951edbbeccfd3d0f268d589b9.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -26,6 +27,7 @@ package("yuv")
         }
     )
     --insert version
+    add_versions("2025.04.04-alpha", "f8f7875f52e45d89c0ba6d37e0cfe905297d3f10fcc7974a9e7268fe87f277be")
     add_versions("2025.03.14-alpha", "4c0ddeb671e66b188aabbebbf56c40735cd3f7a793aff040d4e809d0c81eaf2f")
     add_versions("2025.02.27-alpha", "b509e836fde118b70f5f65b0c6835c724b37b63d4a5d52c2b49f76944645e948")
     add_versions("2025.02.11-alpha", "f44d790826facb7f1879e4691b5daf2415a95039f12fd3b66122b2a0bc018276")

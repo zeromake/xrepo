@@ -33,6 +33,7 @@ package("archive")
     set_urls("https://github.com/libarchive/libarchive/releases/download/v$(version)/libarchive-$(version).tar.xz")
 
     --insert version
+    add_versions("3.7.9", "aa90732c5a6bdda52fda2ad468ac98d75be981c15dde263d7b5cf6af66fd009f")
     add_versions("3.7.7", "4cc540a3e9a1eebdefa1045d2e4184831100667e6d7d5b315bb1cbc951f8ddff")
     add_versions("3.7.6", "b4071807367b15b72777c2eaac80f42c8ea2d20212ab279514a19fe1f6f96ef4")
     add_versions("3.7.5", "37556113fe44d77a7988f1ef88bf86ab68f53d11e85066ffd3c70157cc5110f1")

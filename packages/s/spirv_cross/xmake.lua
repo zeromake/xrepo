@@ -8,6 +8,7 @@ local function getVersion(version)
         ["2025.02.12-alpha"] = "archive/5fce5915d8f6b662501bfeb8b36f9b8918c6f813.tar.gz",
         ["2025.02.18-alpha"] = "archive/2c32b6bf86f3c4a5539aa1f0bacbd59fe61759cf.tar.gz",
         ["2025.03.10-alpha"] = "archive/1823c119c4d7311469199c1afecf2e255e26eb16.tar.gz",
+        ["2025.04.04-alpha"] = "archive/cb71abe3063094bf383379b15473d39cb1144120.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -21,6 +22,7 @@ package("spirv_cross")
     })
 
     --insert version
+    add_versions("2025.04.04-alpha", "0a585ffc35af43e8beadb3d04dad39a79617bffc5652e90bd1530f276b6029d9")
     add_versions("2025.03.10-alpha", "b40d976cf432f198d05fff0792f95213e2ac8927910dacffe90ba3c139d299a7")
     add_versions("2025.02.18-alpha", "1f32df3fc69276d53979f94d253d2b8d7388f55a5ede59f8cc6a308c23e9e0c0")
     add_versions("2025.02.12-alpha", "5a8e6897ac02caf1ed58dbaa8e62f83cc7a9a7630bf2860205f9220d03a13d34")

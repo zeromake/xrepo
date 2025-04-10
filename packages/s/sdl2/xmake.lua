@@ -5,6 +5,7 @@ package("sdl2")
     set_urls("https://github.com/libsdl-org/SDL/releases/download/release-$(version)/SDL2-$(version).tar.gz")
 
     --insert version
+    add_versions("2.32.4", "f15b478253e1ff6dac62257ded225ff4e7d0c5230204ac3450f1144ee806f934")
     add_versions("2.32.2", "c5f30c427fd8107ee4a400c84d4447dd211352512eaf0b6e89cc6a50a2821922")
     add_versions("2.32.0", "f5c2b52498785858f3de1e2996eba3c1b805d08fe168a47ea527c7fc339072d0")
     add_versions("2.30.11", "8b8d4aef2038533da814965220f88f77d60dfa0f32685f80ead65e501337da7f")
