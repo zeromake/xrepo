@@ -47,7 +47,7 @@ rule('mcs51')
         if env == nil then
             raise("mcs51: unsupported model %s", model)
         end
-        target:add("cflags", env.cflags)
-        target:add("ldflags", env.ldflags)
+        target:add("cflags", env.cflags, {force = true})
+        target:add("ldflags", env.ldflags, {force = true})
         target:add("defines", table.unpack(env.defines))
     end)
