@@ -11,7 +11,6 @@ option_end()
 
 target("fwlib_stc8")
     set_kind("$(kind)")
-    add_rules("mcs51")
     add_rules("@zeromake.rules/mcs51", {model = get_config("model")})
     add_files("src/*.c")
     add_includedirs("include")
