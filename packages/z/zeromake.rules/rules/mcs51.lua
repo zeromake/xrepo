@@ -5,7 +5,7 @@ rule('mcs51')
         local envs = {
             ["STC8H1K08"] = {
                 ["cflags"] = "--model-small --opt-code-size --std-sdcc99",
-                ["ldflags"] = "--model-small --opt-code-size --iram-size 256 --xram-size 1024 --code-size 8192 --out-fmt-ihx",
+                ["ldflags"] = "--model-small --opt-code-size --iram-size 256 --xram-size 1024 --code-size 8192",
                 ["defines"] = {
                     "__CONF_FOSC=36864000UL",
                     "__CONF_MCU_MODEL=MCU_MODEL_STC8H1K08",
@@ -18,7 +18,7 @@ rule('mcs51')
             },
             ["STC8H8K64U"] = {
                 ["cflags"] = "--model-small --opt-code-size --std-sdcc99",
-                ["ldflags"] = "--model-small --opt-code-size --iram-size 256 --xram-size 8192 --code-size 65536 --out-fmt-ihx",
+                ["ldflags"] = "--model-small --opt-code-size --iram-size 256 --xram-size 8192 --code-size 65536",
                 ["defines"] = {
                     "__CONF_FOSC=36864000UL",
                     "__CONF_MCU_MODEL=MCU_MODEL_STC8H8K64U",
@@ -31,7 +31,7 @@ rule('mcs51')
             },
             ["STC8G1K08"] = {
                 ["cflags"] = "--model-small --opt-code-size --std-sdcc99",
-                ["ldflags"] = "--model-small --opt-code-size --iram-size 256 --xram-size 1024 --code-size 8192 --out-fmt-ihx",
+                ["ldflags"] = "--model-small --opt-code-size --iram-size 256 --xram-size 1024 --code-size 8192",
                 ["defines"] = {
                     "__CONF_FOSC=11059200UL",
                     "__CONF_MCU_MODEL=MCU_MODEL_STC8G1K08",
