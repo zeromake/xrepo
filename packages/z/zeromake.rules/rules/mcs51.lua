@@ -1,7 +1,6 @@
 rule('mcs51')
     on_config(function(target)
         assert(is_plat("cross"))
-        target:set("policy", "check.auto_ignore_flags", false)
         local model = target:extraconf("rules", "@zeromake.rules/mcs51", "model") or "STC8H1K08"
         local envs = {
             ["STC8H1K08"] = {
