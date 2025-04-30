@@ -5,11 +5,9 @@ package("glslang")
     set_urls("https://github.com/KhronosGroup/glslang/archive/refs/tags/$(version).tar.gz")
 
     --insert version
+    add_versions("15.3.0", "c6c21fe1873c37e639a6a9ac72d857ab63a5be6893a589f34e09a6c757174201")
     add_versions("15.2.0", "45e3920d264d5c2cc3bfaec0e5dbb66cffd549255e0aaaf38cd283918e35c8ba")
     add_versions("15.1.0", "4bdcd8cdb330313f0d4deed7be527b0ac1c115ff272e492853a6e98add61b4bc")
-    add_versions("15.0.0", "c31c8c2e89af907507c0631273989526ee7d5cdf7df95ececd628fd7b811e064")
-    add_versions("14.3.0", "be6339048e20280938d9cb399fcdd06e04f8654d43e170e8cce5a56c9a754284")
-    add_versions("14.2.0", "14a2edbb509cb3e51a9a53e3f5e435dbf5971604b4b833e63e6076e8c0a997b5")
     add_includedirs("include", "include/glslang")
     add_defines("ENABLE_HLSL=1")
     on_install(function (package)

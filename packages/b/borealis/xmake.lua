@@ -1,14 +1,8 @@
 local function getVersion(version)
     local versions ={
-        ["2024.10.22-alpha"] = "archive/a4ab993fbeda78f56dc20e94e256fad6e38ef228.tar.gz",
-        ["2024.11.04-alpha"] = "archive/f45378940601e777fad147c98023d65af153202e.tar.gz",
-        ["2024.11.14-alpha"] = "archive/af41c7eed22c898d2f620e6da6a1477d250a24b5.tar.gz",
-        ["2024.11.19-alpha"] = "archive/53ee60dd655a71353fad07fb505258c39222b264.tar.gz",
-        ["2024.11.28-alpha"] = "archive/4a275c429260ec43f27c07a25cf18453a7e6dcd9.tar.gz",
-        ["2025.02.07-alpha"] = "archive/67439217918510a4467306705b7d5d4bbf79317e.tar.gz",
-        ["2025.02.19-alpha"] = "archive/441efb2789b3bef89cd7e580c40a84111ec77e81.tar.gz",
         ["2025.02.25-alpha"] = "archive/3ecf2de10226392ecb071c470bea9758a24cd6b1.tar.gz",
         ["2025.04.05-alpha"] = "archive/fac8e7ff747b1b96ce62ee7c567f23b7af346503.tar.gz",
+        ["2025.04.10-alpha"] = "archive/9b0a06322c300b5ac07eae97d7fc266e8261ebaf.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -23,15 +17,9 @@ package("borealis")
         version = getVersion
     })
     --insert version
+    add_versions("2025.04.10-alpha", "50bf3fda37aa9b2d410f5933a773a459ee62953cbe0719a558b6d20cc4379d36")
     add_versions("2025.04.05-alpha", "22375f10ee2234b83ca684d9cb0c94f3b0f54796e36ae514237fefba8c250979")
     add_versions("2025.02.25-alpha", "21f9197ca646f7067bcb56f6c28e684ed6b0f9cc049cbd4d1a2ded0af8c1296e")
-    add_versions("2025.02.19-alpha", "af1c39f248975c38c1341e3960fe450335002850172552259a40822066132354")
-    add_versions("2025.02.07-alpha", "4ad6e66c63595384e024ef01f7db1784acf177a6530642b0460d4cb1b691f4b0")
-    add_versions("2024.11.28-alpha", "f1eb1935cbe62509861e9ae01e0c14ea9f69d95be2add4caa63e925971922921")
-    add_versions("2024.11.19-alpha", "f9d8be5febeea23193c49f00c0ed33373821d36d8ed11d6f3fe7af748007f3cf")
-    add_versions("2024.11.14-alpha", "c00a85b7a82ccde9adec70bb3da04b3e1ead7778d264226b578eac34995d1b97")
-    add_versions("2024.11.04-alpha", "d7ef46623b4b5b9268ad863877beadfc32876a3ddfb7de5b13686b2f11444b44")
-    add_versions("2024.10.22-alpha", "2ad052ff92f791894bcb6f89f700ddd213fc33429a2890ad22f19a7b7891f82e")
 
     add_configs("window", {description = "use window lib", default = "glfw", type = "string"})
     add_configs("driver", {description = "use driver lib", default = "opengl", type = "string"})

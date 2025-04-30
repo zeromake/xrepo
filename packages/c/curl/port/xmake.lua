@@ -531,7 +531,7 @@ target("curl")
         set_configvar("HAVE_ZSTD", 1)
     end
     if get_config("ssh2") then
-        add_packages("ssh2")
+        add_packages("ssh2", {public = true})
         set_configvar("HAVE_LIBSSH2", 1)
         set_configvar("USE_LIBSSH2", 1)
     end
@@ -570,7 +570,11 @@ target("curl_cli")
         "HAVE_CONFIG_H=1",
         "CURL_STATICLIB",
         "BUILDING_LIBCURL",
-        "BUILDING_CURL_CLI"
+        "BUILDING_CURL_CLI",
+        "curlx_now=Curl_now",
+        "curlx_timediff=Curl_timediff",
+        "curlx_timediff_ceil=Curl_timediff_ceil",
+        "curlx_timediff_us=Curl_timediff_us"
     )
     on_config(function (target)
         target:add("defines", "CURL_OS="..vformat('"$(arch)-pc-$(os)"'))

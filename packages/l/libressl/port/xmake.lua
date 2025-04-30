@@ -35,9 +35,9 @@ option("merge_archive")
     set_showmenu(true)
 option_end()
 
-option("version4")
-    set_default(true)
-    set_description("version 4")
+option("file_version")
+    set_default("")
+    set_description("file version")
     set_showmenu(true)
 option_end()
 
@@ -48,6 +48,7 @@ option("ca")
 option_end()
 
 set_installdir(get_config('installdir'))
+local has_file_version = get_config('file_version') ~= nil and get_config('file_version') ~= ""
 
 if is_plat("windows") then
     add_cxflags("/execution-charset:utf-8", "/source-charset:utf-8", {tools = {"clang_cl", "cl"}})
@@ -96,8 +97,8 @@ add_defines(
     "__BEGIN_HIDDEN_DECLS=",
     "__END_HIDDEN_DECLS="
 )
-if get_config("version4") then
-    includes("files4.lua")
+if has_file_version then
+    includes("files-"..get_config("file_version")..".lua")
 else
     includes("files.lua")
 end
@@ -153,7 +154,7 @@ target("crypto")
         add_files(table.unpack(CRYPTO_ASM_FILE[asm_host]))
         add_defines(table.unpack(CRYPTO_ASM_DEFINE[asm_host]))
     end
-    if not get_config("version4") and
+    if not has_file_version and
         not host_asm_check.HOST_ASM_ELF_X86_64 and 
         not host_asm_check.HOST_ASM_MACOSX_X86_64 and
         not host_asm_check.HOST_ASM_MASM_X86_64 and
@@ -165,7 +166,7 @@ target("crypto")
         not host_asm_check.HOST_ASM_MACOSX_X86_64 and
         not host_asm_check.HOST_ASM_MASM_X86_64 and
         not host_asm_check.HOST_ASM_MINGW64_X86_64 then
-        if get_config("version4") then
+        if has_file_version then
             add_files("crypto/camellia/camellia.c")
         else
             add_files(

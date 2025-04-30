@@ -2,6 +2,7 @@ local function getVersion(version)
     local versions = {
         ["2023.12.07-alpha"] = "archive/7e2c57b9648d140bee47bec9b74f9fe8eeca2663.tar.gz",
         ["2024.07.19-alpha"] = "archive/c072e53645e0bb75cd4ab1901df8df861874ac45.tar.gz",
+        ["2025.04.23-alpha"] = "archive/6064600530622733bb588053a9393e86e23277da.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -14,6 +15,7 @@ package("toml-c")
         version = getVersion
     })
     --insert version
+    add_versions("2025.04.23-alpha", "503bb2a11160513c3eed03a62476784d52c9a9db1859b11f6b9649053cc1803c")
     add_versions("2024.07.19-alpha", "b4e1e9042eca3e4928ee13187f1d14c5ee26b218a614a43877957a4f8f53e202")
     add_versions("2024.06.20-alpha", "d7ee1ef3a4cd9c98a234f19b4fe9a6985f713de5aeedaeecf0c589a613d29f90")
     add_versions("2023.12.07-alpha", "3ed7a1c5fb4f9f5e921aa8590277fc0985d79d64b7456cb40d7399317de9d1fc")

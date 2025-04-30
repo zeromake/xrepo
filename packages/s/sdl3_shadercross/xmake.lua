@@ -4,6 +4,7 @@ local function getVersion(version)
         ["2025.03.05-alpha"] = "archive/db758697661c59718ae02786d667d24f94d3c88b.tar.gz",
         ["2025.03.10-alpha"] = "archive/63026450dedbf7d8aeee99d9086719f425b2bb4d.tar.gz",
         ["2025.04.07-alpha"] = "archive/3e4431a44027057fae06cecdc6819d5251896ea7.tar.gz",
+        ["2025.04.18-alpha"] = "archive/378f742d3023f6be7d9278908d0e47bf33fac361.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -18,6 +19,7 @@ package("sdl3_shadercross")
         version = getVersion
     })
     --insert version
+    add_versions("2025.04.18-alpha", "0bc32ecb5ac9cff56048222943e0e4a9e9b36341c3466c777a132221d7c1c4e3")
     add_versions("2025.04.07-alpha", "996e31dba002bd74f1f6e7feea181ca6f6c6639d669c2214cc7c5f0661ad3fea")
     add_versions("2025.03.10-alpha", "6c7cddf99dc0dee5dbe4a50aac1c3e8c492072d69e3ca7f8ae7544867896e8ad")
     add_versions("2025.03.05-alpha", "e7069ac732a9a22fa70cd29689d93d5743e50751094c471f30a9cf5f4a7c55b6")
