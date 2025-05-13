@@ -4,6 +4,7 @@ local function getVersion(version)
         ["2025.02.19-alpha"] = "archive/4fe678ef96050b2ed97afe3b27bb9f8b660755de.tar.gz",
         ["2025.03.15-alpha"] = "archive/87b8e4526a50a683672e51b3af413515ff2e4abd.tar.gz",
         ["2025.04.09-alpha"] = "archive/232a723f5096ab02d53d87931efa485fa77d3b03.tar.gz",
+        ["2025.05.09-alpha"] = "archive/9eeece27b727d2ffac4b7042bb69d7c140e58312.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -18,6 +19,7 @@ package("breakpad")
     })
 
     --insert version
+    add_versions("2025.05.09-alpha", "22ae2e091bc8e433e9a3fae6759a381afae3850eff85d95fb9687430f50c6c8d")
     add_versions("2025.04.09-alpha", "759d56b72860733a117d0b2b727ace0ab81d36fecfc17a9a7fa873dd68448adb")
     add_versions("2025.03.15-alpha", "ed9f52b115842c76c3d61ff8c04d57a8232bd0c7a8bbd08767d4ce3df42ff227")
     add_versions("2025.02.19-alpha", "709a5bed22857960a9c4b03907fdb3bd17c531a054ee53a224c7da26042f0356")

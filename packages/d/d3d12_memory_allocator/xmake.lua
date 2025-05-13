@@ -5,6 +5,7 @@ package("d3d12_memory_allocator")
     set_urls("https://github.com/GPUOpen-LibrariesAndSDKs/D3D12MemoryAllocator/archive/refs/tags/v$(version).tar.gz")
 
     --insert version
+    add_versions("3.0.1", "5182c59068e31183490f5c28b7257e6d46bdeb91c215eb54eb88b2ed4683f4a2")
     add_versions("2.0.1", "7ce1f1dfb8821d0116eccf425b3558e6d4b28d192f4efb6e6bdb3d916d853574")
     on_install("windows", "mingw", function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")

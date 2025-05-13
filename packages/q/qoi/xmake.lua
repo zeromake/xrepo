@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2025.02.12-alpha"] = "archive/d0cf1dfcc371f894da88a8d5fb3b08c2e8ad7474.tar.gz",
+        ["2025.05.09-alpha"] = "archive/4461cc37ef08b24f157a5ab7c3f7d6c9e6caa6c0.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -14,6 +15,7 @@ package("qoi")
     })
 
     --insert version
+    add_versions("2025.05.09-alpha", "b1daf276b81b737de50ab3f49a17f6a0ae6b13ad6af9d38fa1be052a2e5c59c1")
     add_versions("2025.02.12-alpha", "16476f43ab4a639185748d13d6bb0a0c2c74c667432882801e53d76d61f3a928")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")

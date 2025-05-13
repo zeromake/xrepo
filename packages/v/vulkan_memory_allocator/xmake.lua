@@ -5,6 +5,7 @@ package("vulkan_memory_allocator")
     set_license("MIT")
     set_urls("https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/archive/refs/tags/v$(version).tar.gz")
     --insert version
+    add_versions("3.3.0", "c4f6bbe6b5a45c2eb610ca9d231158e313086d5b1a40c9922cb42b597419b14e")
     add_versions("3.2.1", "5e7749504cb802427ffb7bec38a0b6a15db46ae253f00560acb3e624d9fe695c")
     add_versions("3.2.0", "e59a80307daa1d048e48f62bfee8c02e4a60180ca0d14b9b28181fc17eb36b07")
     add_versions("3.1.0", "ae134ecc37c55634f108e926f85d5d887b670360e77cd107affaf3a9539595f2")
