@@ -116,6 +116,7 @@ package("arm-toolchain")
 
     on_install(function (package)
         os.vcp("*", package:installdir())
+        os.rm(path.join(package:installdir(), "manifest.txt"))
     end)
 
     on_test(function (package)
