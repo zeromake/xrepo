@@ -42,5 +42,10 @@ package("sdcc")
             os.rm(package:originfile())
             os.rm("$PLUGINSDIR")
         end
-        os.cp("./*", package:installdir())
+        os.cp("*", package:installdir())
+        package:addenv("PATH", "bin")
+    end)
+
+    on_test(function (package)
+        os.vrunv("sdcc", {"--version"})
     end)
