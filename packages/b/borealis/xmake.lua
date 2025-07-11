@@ -37,6 +37,8 @@ package("borealis")
     if is_plat("windows") then
         add_includedirs("include/compat")
         add_syslinks("wlanapi", "iphlpapi", "ws2_32")
+    elseif is_plat("linux") the,
+        add_deps("dbus")
     end
     on_load(function (package)
         local window = package:config("window")
