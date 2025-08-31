@@ -20,6 +20,8 @@ option("with_simd")
     set_showmenu(true)
 option_end()
 
+local JPEG_SOURCES_DIR = "src/"
+
 local JPEG16_SOURCES = {
     "jcapistd.c",
     "jccolor.c",
@@ -319,7 +321,7 @@ end
 
 set_configdir("$(buildir)/config")
 add_includedirs("$(buildir)/config")
-add_includedirs(".")
+add_includedirs(JPEG_SOURCES_DIR)
 add_configfiles("build/jversion.h.in")
 add_configfiles("build/jconfig.h.in")
 add_configfiles("build/jconfigint.h.in")
@@ -329,11 +331,11 @@ add_configfiles("build/neon-compat.h.in")
 target("turbojpeg12")
     set_kind("object")
     for _, f in ipairs(JPEG12_SOURCES) do
-        add_files(f)
+        add_files(JPEG_SOURCES_DIR..f)
     end
     add_files(
-       "rdppm.c",
-       "wrppm.c" 
+       JPEG_SOURCES_DIR.."rdppm.c",
+       JPEG_SOURCES_DIR.."wrppm.c" 
     )
     add_defines(
         "BITS_IN_JSAMPLE=12",
@@ -343,11 +345,11 @@ target("turbojpeg12")
 target("turbojpeg16")
     set_kind("object")
     for _, f in ipairs(JPEG16_SOURCES) do
-        add_files(f)
+        add_files(JPEG_SOURCES_DIR..f)
     end
     add_files(
-       "rdppm.c",
-       "wrppm.c" 
+       JPEG_SOURCES_DIR.."rdppm.c",
+       JPEG_SOURCES_DIR.."wrppm.c" 
     )
     add_defines(
         "BITS_IN_JSAMPLE=16",
@@ -361,11 +363,11 @@ target("turbojpeg")
         "$(buildir)/config/jconfig.h",
         "$(buildir)/config/jversion.h",
         "$(buildir)/config/jconfigint.h",
-        "jerror.h",
-        "jmorecfg.h",
-        "jpegint.h",
-        "jpeglib.h",
-        "jinclude.h"
+        JPEG_SOURCES_DIR.."jerror.h",
+        JPEG_SOURCES_DIR.."jmorecfg.h",
+        JPEG_SOURCES_DIR.."jpegint.h",
+        JPEG_SOURCES_DIR.."jpeglib.h",
+        JPEG_SOURCES_DIR.."jinclude.h"
     )
     add_deps("turbojpeg12", "turbojpeg16")
     if SIMD_DIR then
@@ -402,19 +404,19 @@ target("turbojpeg")
         end
     end
     for _, f in ipairs(JPEG_SOURCES) do
-        add_files(f)
+        add_files(JPEG_SOURCES_DIR..f)
     end
     add_defines(
         "BMP_SUPPORTED",
         "PPM_SUPPORTED"
     )
     add_files(
-        "turbojpeg.c",
-        "transupp.c",
-        "jdatadst-tj.c",
-        "jdatasrc-tj.c",
-        "rdbmp.c",
-        "rdppm.c",
-        "wrbmp.c",
-        "wrppm.c"
+        JPEG_SOURCES_DIR.."turbojpeg.c",
+        JPEG_SOURCES_DIR.."transupp.c",
+        JPEG_SOURCES_DIR.."jdatadst-tj.c",
+        JPEG_SOURCES_DIR.."jdatasrc-tj.c",
+        JPEG_SOURCES_DIR.."rdbmp.c",
+        JPEG_SOURCES_DIR.."rdppm.c",
+        JPEG_SOURCES_DIR.."wrbmp.c",
+        JPEG_SOURCES_DIR.."wrppm.c"
     )

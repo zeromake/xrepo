@@ -3,6 +3,7 @@ local function getVersion(version)
         ["2023.07.01-alpha"] = "archive/1adfdf5cd5447c68e11b0ab9f74318a4e364e7c9.tar.gz",
         ["2024.08.12-alpha"] = "archive/a9e2f30b04f10df1912d06ff5a610edda4677ba5.tar.gz",
         ["2025.01.11-alpha"] = "archive/fd7e70a7a25c80b09e697c8e9256d51c370d5496.tar.gz",
+        ["2025.08.04-alpha"] = "archive/485967ff83fbdff96ad0d46c68ec27977be53f4c.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -16,6 +17,7 @@ package("mojoal")
     })
 
     --insert version
+    add_versions("2025.08.04-alpha", "5986bc4981519badacb22e39816dca6ea5c4760f58640064918bf79755978d48")
     add_versions("2025.01.11-alpha", "a64c60357f15eebba18ead06f4c8bbca5c90a6542095d38e1e4b77138b04af76")
     add_versions("2024.08.12-alpha", "06bdc0dc73fd8143aa22f1af04b419451ba7637fdc6ff5a9f078e1e36784d15a")
     add_versions("2023.07.01-alpha", "83620b1a78a76cdb7e2c51f1e41e0978e0ef4071e4bbc48fe251a2fee2c69e3c")

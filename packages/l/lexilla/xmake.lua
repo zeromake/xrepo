@@ -10,6 +10,7 @@ package("lexilla")
     })
 
     --insert version
+    add_versions("5.4.5", "81d6c8965bfd7c157ee6b969592e6c7c3025c9704b342db1095af366d34cf308")
     add_versions("5.4.4", "9df65d5283ebce2b907cd72cfb2f97d3f162c143122e8d5e57f4da23ff129205")
     add_versions("5.4.3", "62959dbaedddee5786c45a2106b6d46ed6b88a5eaea6a7b670bedda97152d701")
     add_versions("5.4.2", "d3787bc97ae10f3d12bd286c49ca75e38808dd77dc502fa38dfaefa4ac5e2d89")

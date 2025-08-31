@@ -10,6 +10,7 @@ package("sevenzip")
         end
     })
     --insert version
+    add_versions("25.01.0", "ed087f83ee789c1ea5f39c464c55a5c9d4008deb0efe900814f2df262b82c36e")
     add_versions("24.09.0", "49c05169f49572c1128453579af1632a952409ced028259381dac30726b6133a")
     add_versions("24.08.0", "aa04aac906a04df59e7301f4c69e9f48808e6c8ecae4eb697703a47bfb0ac042")
     if is_plat("windows", "mingw") then

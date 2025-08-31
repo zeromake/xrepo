@@ -5,10 +5,7 @@ package("turbojpeg")
     set_urls("https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/$(version).tar.gz")
 
     --insert version
-    add_versions("3.1.0", "35fec2e1ddfb05ecf6d93e50bc57c1e54bc81c16d611ddf6eff73fff266d8285")
-    add_versions("3.0.4", "0270f9496ad6d69e743f1e7b9e3e9398f5b4d606b6a47744df4b73df50f62e38")
-    add_versions("3.0.3", "a649205a90e39a548863a3614a9576a3fb4465f8e8e66d54999f127957c25b21")
-    add_versions("3.0.2", "29f2197345aafe1dcaadc8b055e4cbec9f35aad2a318d61ea081f835af2eebe9")
+    add_versions("3.1.1", "304165ae11e64ab752e9cfc07c37bfdc87abd0bfe4bc699e59f34036d9c84f72")
     on_install(function (package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         os.mkdir("build")
@@ -25,9 +22,9 @@ package("turbojpeg")
             end
             out:close()
         end
-        transforme_configfile("jversion.h.in", "build/jversion.h.in")
-        transforme_configfile("jconfig.h.in", "build/jconfig.h.in")
-        transforme_configfile("jconfigint.h.in", "build/jconfigint.h.in")
+        transforme_configfile("src/jversion.h.in", "build/jversion.h.in")
+        transforme_configfile("src/jconfig.h.in", "build/jconfig.h.in")
+        transforme_configfile("src/jconfigint.h.in", "build/jconfigint.h.in")
         transforme_configfile("simd/arm/neon-compat.h.in", "build/neon-compat.h.in")
         local configs = {}
         import("package.tools.xmake").install(package, configs)

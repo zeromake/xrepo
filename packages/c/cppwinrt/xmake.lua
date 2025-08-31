@@ -12,6 +12,7 @@ package("cppwinrt")
     })
 
     --insert version
+    add_versions("2.0.250303-release.1", "84ed5c54bb807b256b213156a34378f57e47bd24edb161bda7d170c9ca05023d")
     add_versions("2.0.240405-release.15", "6bd1642b10ebac88d6c74352fa2c82eceae77039b5d6df76d08b31de6e5abb07")
     add_versions("2.0.240111-release.5", "e0e9076b0c8d5a85212015a8abcfa7c92fda28ef5fd9a25be4de221fce65446d")
     add_versions("2.0.230706-release.1", "e4a827fee480291d4598ea3bb751cb5696a42ded0b795c16f52da729502e07e8")

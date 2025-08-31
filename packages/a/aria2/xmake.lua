@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2024.06.30-alpha"] = "archive/b519ce04e3f3a0651fcec43550bc71f09771b069.tar.gz",
+        ["2025.08.18-alpha"] = "archive/d372b788ec2891164a93556c4a7dd4b0cf74c669.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)] or format('releases/download/release-%s/aria2-%s.tar.xz', version, version)
@@ -26,6 +27,7 @@ package("aria2")
     set_urls("https://github.com/aria2/aria2/$(version)", {version = getVersion})
 
     --insert version
+    add_versions("2025.08.18-alpha", "571ee034f81802d18eb1db55656ebb75d3e9705197afa86d44160c088971b798")
     add_versions("2024.06.30-alpha", "4776effe32746a0c930d8b68bac1d8872dae514fe5372e1949eafb4fef29851d")
     add_versions("1.37.0", "60a420ad7085eb616cb6e2bdf0a7206d68ff3d37fb5a956dc44242eb2f79b66b")
 

@@ -5,6 +5,7 @@ package("msdfgen")
     set_urls("https://github.com/Chlumsky/msdfgen/archive/refs/tags/v$(version).tar.gz")
 
     --insert version
+    add_versions("1.12.1", "24541c9fbb459e8c62adeb3eb22cb21fa07a4b5091e2ae1f041d144a4baf08cd")
     add_versions("1.12", "f058117496097217d12e4ea86adbff8467adaf6f12af793925d243b86b0c4f57")
     add_versions("1.11", "fad74e33274f591e72511bc0546189e7aec439f2a512ef1b2fde243554d457cb")
     add_configs("cli", {description = "build cli", default = false, type = "boolean"})

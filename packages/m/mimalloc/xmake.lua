@@ -5,6 +5,7 @@ package("mimalloc")
     set_urls("https://github.com/microsoft/mimalloc/archive/refs/tags/v$(version).tar.gz")
 
     --insert version
+    add_versions("3.0.8", "5a51dfe8e07a1cdfa2e1bff924ed996f5910f3135c5a9dec7c9da83d97e6edb7")
     add_versions("3.0.3", "baf343041420e2924e1760bbbc0c111101c44e1cecb998e7951f646a957ee05f")
     add_versions("3.0.1", "6a514ae31254b43e06e2a89fe1cbc9c447fdbf26edc6f794f3eb722f36e28261")
     add_versions("2.1.7", "0eed39319f139afde8515010ff59baf24de9e47ea316a315398e8027d198202d")

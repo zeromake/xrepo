@@ -10,6 +10,7 @@ package("scintilla")
     })
 
     --insert version
+    add_versions("5.5.7", "b37e1a239ff8c77cebd72db6ce25264b35cbecbbffad60f9ce7e838f5195a21e")
     add_versions("5.5.6", "d6eda23a127f4987f0509fda8bf649e6ee2c888e1c6fc5530a40b248c9dd289b")
     add_versions("5.5.5", "0941a8c309a172da9cbb2a2731f97950cb60446cb4709073f9e296e9a6d4c1ae")
     add_versions("5.5.4", "7994a854a3012269f35ecc2cb725b8f7e209e410dc96fe141c9a15ccfebd41fc")

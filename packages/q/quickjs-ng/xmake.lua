@@ -12,6 +12,7 @@ local function getVersion(version)
         ["2025.04.08-alpha"] = "archive/28fa43d3ddff2c1ba91b6e3a788b2d7ba82d1465.tar.gz",
         ["2025.04.25-alpha"] = "archive/09d76edc2edf782ac2a7514549f55198b422260b.tar.gz",
         ["2025.05.13-alpha"] = "archive/3c9afc9943323ee9c7dbd123c0cd991448f4b6c2.tar.gz",
+        ["2025.08.04-alpha"] = "archive/5299e09100b97a5dd0ea0e73fa5caa4aa0b2d97c.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -25,6 +26,7 @@ package("quickjs-ng")
     })
 
     --insert version
+    add_versions("2025.08.04-alpha", "3589fa853948156264a19d1989749037e89119404ca5a8507d509505eb2c152d")
     add_versions("2025.05.13-alpha", "0af6f985be7030a7a9d12b92c25c2bc9f7dd716829c5074a81d7c4a4452040c8")
     add_versions("2025.04.25-alpha", "b146aa982f01d0074534cd512947664a776ecc6ce5ddaa6cf1abc27d7a88ffea")
     add_versions("2025.04.08-alpha", "9fba7870547db75a2c43a931ff6dc24e7e59c63ae5268ee6fcedf32ca1ca4c2b")

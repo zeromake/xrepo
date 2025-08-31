@@ -5,6 +5,7 @@ package("png")
 
     set_urls("https://github.com/pnggroup/libpng/archive/refs/tags/v$(version).tar.gz")
     --insert version
+    add_versions("1.6.50", "71158e53cfdf2877bc99bcab33641d78df3f48e6e0daad030afe9cb8c031aa46")
     add_versions("1.6.48", "b17e99026055727e8cba99160c3a9a7f9af788e9f786daeadded5a42243f1dd0")
     add_versions("1.6.47", "631a4c58ea6c10c81f160c4b21fa8495b715d251698ebc2552077e8450f30454")
     add_versions("1.6.46", "767b01936f9620d4ab4cdf6ec348f6526f861f825648b610b1d604167dc738d2")

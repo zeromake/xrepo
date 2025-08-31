@@ -6,6 +6,7 @@ package("plutosvg")
     set_urls("https://github.com/sammycage/plutosvg/archive/refs/tags/v0.0.6.tar.gz")
 
     --insert version
+    add_versions("0.0.7", "78561b571ac224030cdc450ca2986b4de915c2ba7616004a6d71a379bffd15f3")
     add_versions("0.0.6", "01f8aee511bd587a602a166642a96522cc9522efd1e38c2d00e4fbc0aa22d7a0")
     add_deps("plutovg")
     add_configs("freetype", {description = "Support freetype", default = false, type = "boolean"})

@@ -496,7 +496,7 @@ target("curl")
     if is_plat("windows", "mingw") then
         set_configvar("USE_WIN32_IDN", 1)
         set_configvar("USE_SCHANNEL", 1)
-        add_syslinks("crypt32", "bcrypt", "advapi32", "ws2_32", "normaliz")
+        add_syslinks("crypt32", "bcrypt", "advapi32", "ws2_32", "normaliz", "secur32")
         add_files("lib/libcurl.rc")
     elseif is_plat("macosx") then
         -- http3 不支持多 tls 后端
@@ -559,7 +559,8 @@ target("curl")
         "lib/vtls/*.c",
         "lib/vauth/*.c",
         "lib/vquic/*.c",
-        "lib/vssh/*.c"
+        "lib/vssh/*.c",
+        "lib/curlx/*.c"
     )
 
 target("curl_cli")
@@ -569,12 +570,7 @@ target("curl_cli")
     add_defines(
         "HAVE_CONFIG_H=1",
         "CURL_STATICLIB",
-        "BUILDING_LIBCURL",
-        "BUILDING_CURL_CLI",
-        "curlx_now=Curl_now",
-        "curlx_timediff=Curl_timediff",
-        "curlx_timediff_ceil=Curl_timediff_ceil",
-        "curlx_timediff_us=Curl_timediff_us"
+        "BUILDING_CURL_CLI"
     )
     on_config(function (target)
         target:add("defines", "CURL_OS="..vformat('"$(arch)-pc-$(os)"'))

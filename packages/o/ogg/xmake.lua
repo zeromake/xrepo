@@ -5,6 +5,7 @@ package("ogg")
     set_urls("https://github.com/xiph/ogg/releases/download/v$(version)/libogg-$(version).tar.gz")
 
     --insert version
+    add_versions("1.3.6", "95b643da661155d79db9de2fca55daed3a8d491039829def246aacb3d9201c81")
     add_versions("1.3.5", "0eb4b4b9420a0f51db142ba3f9c64b333f826532dc0f48c6410ae51f4799b664")
     on_install(function (package)
         local transforme_configfile = function (input, output) 
