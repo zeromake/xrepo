@@ -74,14 +74,18 @@ package("sokol-shdc")
     end
     on_install(function (package)
         local bin = package:installdir("bin")
-        local exec_file = "../sokol-shdc-"..package:version()
-        if is_host("windows") then
-            exec_file = exec_file..".exe"
-            os.cp(exec_file, path.join(bin, "sokol-shdc.exe"))
-        else
-            os.run("chmod 755 "..exec_file)
-            os.cp(exec_file, path.join(bin, "sokol-shdc"))
+        local exec_file = "../sokol-shdc"
+        local suffix = is_host("windows") and ".exe" or ""
+        if not os.exists(exec_file..suffix) then
+            exec_file = exec_file.."-"..package:version()
         end
+        if not is_host("windows") then
+            os.vrun("chmod +x "..exec_file..suffix)
+        end
+        local source = exec_file..suffix
+        local target = path.join(bin, "sokol-shdc"..suffix)
+        print("install "..source.." -> "..target)
+        os.cp(source, target)
     end)
     on_test(function (package)
         os.vrun("sokol-shdc --help")
