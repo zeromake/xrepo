@@ -74,11 +74,13 @@ package("sokol-shdc")
     end
     on_install(function (package)
         local bin = package:installdir("bin")
+        local exec_file = "../sokol-shdc-"..package:version()
         if is_host("windows") then
-            os.cp("../sokol-shdc.exe", bin)
+            exec_file = exec_file..".exe"
+            os.cp(exec_file, path.join(bin, "sokol-shdc.exe"))
         else
-            os.run("chmod 755 ../sokol-shdc")
-            os.cp("../sokol-shdc", bin)
+            os.run("chmod 755 "..exec_file)
+            os.cp(exec_file, path.join(bin, "sokol-shdc"))
         end
     end)
     on_test(function (package)
