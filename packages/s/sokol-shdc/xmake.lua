@@ -4,6 +4,7 @@ local function getVersion(version)
         ["2024.09.05-alpha"] = "0732ba3f61dcfd0d0988f4c351421d84ec8b67e4",
         ["2024.12.10-alpha"] = "d80b1d8f20fef813092ba37f26723d3880839651",
         ["2025.02.10-alpha"] = "339ff0314f19414c248cd540b7c72de1873f3a4b",
+        ["2025.10.22-alpha"] = "466c6dd7906a33ccb7633ab7b03e9e48361be248",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -41,8 +42,8 @@ package("sokol-shdc")
             windows = "64138ba4fcf3317483efdacdeb04cb33f7c1776ceb29d9e5fb9f5284cdec7210",
         },
         ["2025.10.22-alpha"] = {
-            osx = "e259a445968180c01f3f0ae9987e4b381a7afda1e3c342e38422d5f7e218b337",
             osx_arm64 = "effb4e459763b8581d53b2fd552fa52ee1cafeaae4a52a66a0a341e02868dcdb",
+            osx = "e259a445968180c01f3f0ae9987e4b381a7afda1e3c342e38422d5f7e218b337",
             linux = "8677d2c3cb9683be7d88440c6fd20b8dba25d2062669c628dfa6f6d2ae488a8c",
             windows = "44ecd7bb0101164fe6cc8d96130e0ffd6a3289dd4533e06fb02f176074d03176",
         },
