@@ -40,6 +40,12 @@ package("sokol-shdc")
             linux = "a43361773f6b21af550b67428cc7c382adce729c582c6cc2aee922cf9db17488",
             windows = "64138ba4fcf3317483efdacdeb04cb33f7c1776ceb29d9e5fb9f5284cdec7210",
         },
+        ["2025.10.22-alpha"] = {
+            osx = "e259a445968180c01f3f0ae9987e4b381a7afda1e3c342e38422d5f7e218b337",
+            osx_arm64 = "effb4e459763b8581d53b2fd552fa52ee1cafeaae4a52a66a0a341e02868dcdb",
+            linux = "8677d2c3cb9683be7d88440c6fd20b8dba25d2062669c628dfa6f6d2ae488a8c",
+            windows = "44ecd7bb0101164fe6cc8d96130e0ffd6a3289dd4533e06fb02f176074d03176",
+        },
     }
     local url_suffix = "win32/sokol-shdc.exe"
     if is_host("macosx") then
