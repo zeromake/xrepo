@@ -6,6 +6,7 @@ package("harfbuzz")
     set_urls("https://github.com/harfbuzz/harfbuzz/releases/download/$(version)/harfbuzz-$(version).tar.xz")
 
     --insert version
+    add_versions("12.1.0", "e5c81b7f6e0b102dfb000cfa424538b8e896ab78a2f4b8a5ec8cae62ab43369e")
     add_versions("11.4.5", "0f052eb4ab01d8bae98ba971c954becb32be57d7250f18af343b1d27892e03fa")
     add_versions("11.2.1", "093714c8548a285094685f0bdc999e202d666b59eeb3df2ff921ab68b8336a49")
     add_versions("11.2.0", "50f7d0a208367e606dbf6eecc5cfbecc01a47be6ee837ae7aff2787e24b09b45")

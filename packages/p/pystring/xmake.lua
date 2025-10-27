@@ -5,6 +5,7 @@ local function getVersion(version)
         ["2023.07.23-alpha"] = "archive/76a2024e132bcc83bec1ecfebeacd5d20d490bfe.tar.gz",
         ["2024.08.18-alpha"] = "archive/c5ca4f569d7d99ed42dfc54130f9cabd183ec657.tar.gz",
         ["2025.06.23-alpha"] = "archive/02ef1186d6b77bc35f385bd4db2da75b4736adb7.tar.gz",
+        ["2025.10.06-alpha"] = "archive/a09708a4870db7862e1a1aa42658c8e6e36547e7.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -18,6 +19,7 @@ package("pystring")
         version = getVersion,
     })
     --insert version
+    add_versions("2025.10.06-alpha", "0f86e5c782b5c4fc643fdb351eed4206b7026149bab29467cc888ec752a81abe")
     add_versions("2025.06.23-alpha", "d39ec34ae6f503f58d59171d4fbfdd847d191295530913afb50be1139c33e2bd")
     add_versions("2024.08.18-alpha", "3ccb200de50edbdcf32881db05c756ffa7a261cddaa387b0be0571453c2ed2af")
     add_versions("2023.07.23-alpha", "40a694bb42b41e245ff68712db59b67fcd59091cb7cb933c0873c20a75354f9d")

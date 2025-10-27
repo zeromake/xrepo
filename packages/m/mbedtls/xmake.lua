@@ -5,6 +5,7 @@ package("mbedtls")
     set_urls("https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(version)/mbedtls-$(version).tar.bz2")
 
     --insert version
+    add_versions("4.0.0", "2f3a47f7b3a541ddef450e4867eeecb7ce2ef7776093f3a11d6d43ead6bf2827")
     add_versions("3.6.4", "ec35b18a6c593cf98c3e30db8b98ff93e8940a8c4e690e66b41dfc011d678110")
     add_versions("3.6.3", "64cd73842cdc05e101172f7b437c65e7312e476206e1dbfd644433d11bc56327")
     add_versions("3.6.2", "8b54fb9bcf4d5a7078028e0520acddefb7900b3e66fec7f7175bb5b7d85ccdca")

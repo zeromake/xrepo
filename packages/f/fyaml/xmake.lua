@@ -8,6 +8,7 @@ local function getVersion(version)
         ["2024.09.27-alpha"] = "archive/2bd292c87afaeda6d2fa54e3851da054adb8a6f3.tar.gz",
         ["2024.09.30-alpha"] = "archive/997b480cc4239a7f55771535dff52ad69bd4eb5b.tar.gz",
         ["2024.12.12-alpha"] = "archive/6e52e4d8b6adb01cc2fc377fab7b7fd523364438.tar.gz",
+        ["2025.10.27-alpha"] = "archive/1a22c03c0047c5d7de27aac80df44964eea42897.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -21,6 +22,7 @@ package("fyaml")
     })
 
     --insert version
+    add_versions("2025.10.27-alpha", "ed2b7f54068a025119b7b92d889f7c53b3cfc17d5b1eb93a9faf1c09d11d6b5d")
     add_versions("2024.12.12-alpha", "12dc9f9905117cacefc0046a3954a33944577d5f3171d93fd2353b4add507b19")
     add_versions("2024.09.30-alpha", "73491a63c83fcbe338865feb3b3e998f4fb039e5179726eba31ecade68cd7d41")
     add_versions("2024.09.27-alpha", "60352f2248843017639a98e38e8bf5b30277de73cafeaafcb756cd59013dbfe7")

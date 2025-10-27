@@ -5,6 +5,7 @@ package("ngtcp2")
     set_urls("https://github.com/ngtcp2/ngtcp2/releases/download/v$(version)/ngtcp2-$(version).tar.gz")
 
     --insert version
+    add_versions("1.17.0", "a3db48725fb5f96548476d746d29479be1bcd1335648e8e706fca319d78a9fee")
     add_versions("1.15.0", "7dee899a05334a10cb4945aff030c0bed7079663ec00d6ebc7d67f1f01b544bf")
     add_versions("1.12.0", "c08af5c9bfc019f36681775ff07f5623587ca352694943f49133e670dea4ef10")
     add_versions("1.11.0", "41fc390d07b89e2285e1107279518e755cdd5cd046630da3301a9cadcfc9e4b6")

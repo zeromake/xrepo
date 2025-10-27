@@ -382,12 +382,21 @@ function otherReleaseVersion(xmakePath, xmakeContext, versions, packageName, arg
     end
 end
 
+local packageSkips = {
+    tweeny = true,
+    hdiffpatch = true,
+    ffmpeg = true,
+}
+
 function main(...)
     -- parse arguments
     local argv = option.parse({...}, options, "检查是否有包需要更新")
     local packageDirs = load_packages(argv.packages or {})
     for _, packageDir in ipairs(packageDirs) do
         local packageName = path.filename(packageDir)
+        if packageSkips[packageName] ~= nil then
+            goto continue
+        end
         local xmakePath = path.join(packageDir, "xmake.lua")
         if not os.exists(xmakePath) then
             goto continue

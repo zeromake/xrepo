@@ -6,6 +6,7 @@ package("inja")
     set_urls("https://github.com/pantor/inja/archive/refs/tags/v$(version).tar.gz")
 
     --insert version
+    add_versions("3.5.0", "a5f0266673c59028eab6ceeddd8b862c70abfeb32fb7a5387c16bf46f3269ab2")
     add_versions("3.4.0", "7155f944553ca6064b26e88e6cae8b71f8be764832c9c7c6d5998e0d5fd60c55")
     add_deps("nlohmann_json")
 

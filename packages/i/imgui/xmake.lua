@@ -14,6 +14,7 @@ package("imgui")
     set_urls("https://github.com/ocornut/imgui/archive/refs/tags/v$(version).tar.gz")
 
     --insert version
+    add_versions("1.92.4", "0e175d4d941112532549b418ced0bd546abe9024ecb9b5f431f8a67a2197b0ba")
     add_versions("1.92.2b", "da3d453cce74e0fb3d67f8d798a2a8d04fcaf0b33ce0e0131d0695dfc4f64191")
     add_versions("1.91.9b", "8e1bbc76c71d74fef2fb85db7e7ca8eba13d6a86623c54992b60162db554ffdb")
     add_versions("1.91.9", "3872a5f90df78fced023c1945f4466b654fd74573370b77b17742149763a7a7c")

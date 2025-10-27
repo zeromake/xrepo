@@ -5,6 +5,7 @@ package("editorconfig-core")
     set_urls("https://github.com/editorconfig/editorconfig-core-c/archive/refs/tags/v$(version).tar.gz")
 
     --insert version
+    add_versions("0.12.10", "ab9f897a90fb36cfc34e5b67221e55ab0e3119b3512de8e31029d376c6bab870")
     add_versions("0.12.9", "4aaa4e3883332aac7ec19c169dcf128f5f0f963f61d09beb299eb2bce5944e2c")
     add_versions("0.12.7", "f89d2e144fd67bdf0d7acfb2ac7618c6f087e1b3f2c3a707656b4180df422195")
     if is_plat("windows", "mingw") then

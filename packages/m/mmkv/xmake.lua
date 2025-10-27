@@ -5,6 +5,7 @@ package("mmkv")
     set_urls("https://github.com/Tencent/MMKV/archive/refs/tags/v$(version).tar.gz")
 
     --insert version
+    add_versions("2.2.4", "0a10ccd61295aa4ff0eecb40db58dee01b02b14774ce05d884f666697b6ebebc")
     add_versions("2.2.3", "200698a2f508b311347d6a4f7aa3f59135564a7e803f188ee4d2708316741966")
     add_versions("2.2.2", "0c7dcff4a94386c917bd1c0d3c7e53c90e12a1d68543a3486d576ccedceaaa31")
     add_versions("2.2.1", "c188f47c15539d1d3cea38cbc0d7e6ee2c3e4805f9617420425abeeae81546b9")

@@ -5,6 +5,7 @@ package("nghttp3")
     set_urls("https://github.com/ngtcp2/nghttp3/releases/download/v$(version)/nghttp3-$(version).tar.gz")
 
     --insert version
+    add_versions("1.12.0", "6bb92a886f57951ba836224f7c44c9e3b0bf527c3237601c265b1d355f6b6979")
     add_versions("1.11.0", "3cd20bda2a2de87b3715724a0c1633156b9926e93935a7f24a5daa7b0504ba11")
     add_versions("1.9.0", "dbc7ad9e5dfa4788439e1e5fe072345fe2a48f68516374937be95c6a893451bd")
     add_versions("1.8.0", "fb07eb37865a1ca7a608eae77034ffcbd91f4f4b4e50a6fcc1b8d9b056c4f63e")

@@ -5,6 +5,7 @@ package("pcre2")
     set_urls("https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(version)/pcre2-$(version).tar.bz2")
 
     --insert version
+    add_versions("10.47", "47fe8c99461250d42f89e6e8fdaeba9da057855d06eb7fc08d9ca03fd08d7bc7")
     add_versions("10.46", "15fbc5aba6beee0b17aecb04602ae39432393aba1ebd8e39b7cabf7db883299f")
     add_versions("10.45", "21547f3516120c75597e5b30a992e27a592a31950b5140e7b8bfde3f192033c4")
     add_versions("10.44", "d34f02e113cf7193a1ebf2770d3ac527088d485d4e047ed10e5d217c6ef5de96")

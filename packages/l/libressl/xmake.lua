@@ -6,6 +6,7 @@ package("libressl")
     add_urls("https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-$(version).tar.gz")
 
     --insert version
+    add_versions("4.2.0", "0f7dba44d7cb8df8d53f2cfbf1955254bc128e0089595f1aba2facfaee8408b2")
     add_versions("4.1.0", "0f71c16bd34bdaaccdcb96a5d94a4921bfb612ec6e0eba7a80d8854eefd8bb61")
     add_versions("4.0.0", "4d841955f0acc3dfc71d0e3dd35f283af461222350e26843fea9731c0246a1e4")
     add_versions("3.9.2", "7b031dac64a59eb6ee3304f7ffb75dad33ab8c9d279c847f92c89fb846068f97")
