@@ -1,6 +1,7 @@
 local function getVersion(version)
     local versions ={
         ["2025.01.07-alpha"] = "archive/baf37b1b49847f18a5cd8f03310777487469a3b3.tar.gz",
+        ["2026.06.10-alpha"] = "archive/c37c9cb86e073a7da76e6dc1bcffebf5cf17e692.tar.gz",
         --insert getVersion
     }
     return versions[tostring(version)]
@@ -17,6 +18,7 @@ package("boost.intl")
             version = getVersion
         })
         --insert version
+        add_versions("2026.06.10-alpha", "cf448cc47ea309634d179651fe8c7afd0a77afb1a7dca26dbe5733a33a15afe8")
         add_versions("2025.01.07-alpha", "79f76fa95234f7a7b2d6672fe78c458685bfe9f6d47fc2e89a415364d5661a14")
     end
     add_deps("nonstd.string-view")
