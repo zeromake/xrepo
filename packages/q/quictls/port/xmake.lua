@@ -314,6 +314,7 @@ target("crypto")
     elseif is_plat("windows") and is_arch("arm64.*") then
         add_files("crypto/chacha/chacha_enc.c")
         remove_files(
+            "crypto/armcap.c",
             "crypto/LPdir_*.c",
             "crypto/loongarchcap.c",
             "crypto/ppccap.c",
